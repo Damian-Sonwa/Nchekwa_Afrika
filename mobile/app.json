@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "GBV Support",
+    "slug": "gbv-support-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5F5F5"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gbv.support",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We need your location to send emergency alerts.",
+        "NSCameraUsageDescription": "We need camera access to capture evidence.",
+        "NSPhotoLibraryUsageDescription": "We need photo library access to save evidence.",
+        "NSMicrophoneUsageDescription": "We need microphone access for voice messages."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F5F5F5"
+      },
+      "package": "com.gbv.support",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-location",
+      "expo-camera",
+      "expo-document-picker",
+      "expo-secure-store",
+      "expo-local-authentication"
+    ]
+  }
+}
+
+
