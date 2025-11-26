@@ -379,17 +379,47 @@ router.get('/confirm-email', async (req, res) => {
       return res.status(400).json({ error: 'Confirmation token is required' });
     }
 
+    console.log('🔍 Validating confirmation token:', token.substring(0, 16) + '...');
+
     // Find user with matching confirmation token
     // In production, use a proper EmailConfirmation model
     const users = await User.find({ 'settings.emailConfirmationToken': token });
+    console.log(`📊 Found ${users.length} user(s) with matching token`);
+
+    if (users.length === 0) {
+      console.error('❌ No user found with token:', token.substring(0, 16) + '...');
+      // Try to find users with similar tokens for debugging
+      const allUsers = await User.find({ 'settings.emailConfirmationToken': { $exists: true } });
+      console.log(`📊 Total users with confirmation tokens: ${allUsers.length}`);
+      if (allUsers.length > 0) {
+        console.log('📋 Sample tokens:', allUsers.slice(0, 3).map(u => ({
+          token: u.settings?.emailConfirmationToken?.substring(0, 16) + '...',
+          expiry: u.settings?.emailConfirmationExpiry,
+          expired: u.settings?.emailConfirmationExpiry ? new Date(u.settings.emailConfirmationExpiry) < new Date() : 'no expiry'
+        })));
+      }
+      return res.status(400).json({ error: 'Invalid or expired confirmation token' });
+    }
+
     const user = users.find(u => {
       const expiry = u.settings?.emailConfirmationExpiry;
-      return expiry && new Date(expiry) > new Date();
+      const isValid = expiry && new Date(expiry) > new Date();
+      if (!isValid) {
+        console.log('⏰ Token expired for user:', {
+          expiry: expiry,
+          now: new Date(),
+          expired: expiry ? new Date(expiry) < new Date() : 'no expiry set'
+        });
+      }
+      return isValid;
     });
 
     if (!user) {
+      console.error('❌ Token expired or invalid');
       return res.status(400).json({ error: 'Invalid or expired confirmation token' });
     }
+
+    console.log('✅ Token is valid, confirming email for user');
 
     // Mark email as confirmed and clear token (token can only be used once)
     user.settings.emailConfirmed = true;
@@ -398,12 +428,15 @@ router.get('/confirm-email', async (req, res) => {
     user.lastActive = new Date();
     await user.save();
 
+    console.log('✅ Email confirmed successfully');
+
     res.json({
       success: true,
       message: 'Email confirmed successfully'
     });
   } catch (error) {
     console.error('Confirm email error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ error: 'Failed to confirm email' });
   }
 });
@@ -417,17 +450,37 @@ router.post('/confirm-email', async (req, res) => {
       return res.status(400).json({ error: 'Confirmation token is required' });
     }
 
+    console.log('🔍 Validating confirmation token (POST):', token.substring(0, 16) + '...');
+
     // Find user with matching confirmation token
     // In production, use a proper EmailConfirmation model
     const users = await User.find({ 'settings.emailConfirmationToken': token });
+    console.log(`📊 Found ${users.length} user(s) with matching token`);
+
+    if (users.length === 0) {
+      console.error('❌ No user found with token:', token.substring(0, 16) + '...');
+      return res.status(400).json({ error: 'Invalid or expired confirmation token' });
+    }
+
     const user = users.find(u => {
       const expiry = u.settings?.emailConfirmationExpiry;
-      return expiry && new Date(expiry) > new Date();
+      const isValid = expiry && new Date(expiry) > new Date();
+      if (!isValid) {
+        console.log('⏰ Token expired for user:', {
+          expiry: expiry,
+          now: new Date(),
+          expired: expiry ? new Date(expiry) < new Date() : 'no expiry set'
+        });
+      }
+      return isValid;
     });
 
     if (!user) {
+      console.error('❌ Token expired or invalid');
       return res.status(400).json({ error: 'Invalid or expired confirmation token' });
     }
+
+    console.log('✅ Token is valid, confirming email for user');
 
     // Mark email as confirmed and clear token (token can only be used once)
     user.settings.emailConfirmed = true;
@@ -436,12 +489,15 @@ router.post('/confirm-email', async (req, res) => {
     user.lastActive = new Date();
     await user.save();
 
+    console.log('✅ Email confirmed successfully');
+
     res.json({
       success: true,
       message: 'Email confirmed successfully'
     });
   } catch (error) {
     console.error('Confirm email error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ error: 'Failed to confirm email' });
   }
 });
@@ -470,10 +526,14 @@ router.post('/resend-confirmation', async (req, res) => {
     const confirmationToken = generateSecureToken();
     const confirmationExpiry = createTokenExpiry(24 * 7); // 7 days expiry
 
+    console.log('🔑 Generated confirmation token for resend:', confirmationToken.substring(0, 16) + '...');
+    console.log('📅 Token expires:', confirmationExpiry);
+
     user.settings = user.settings || {};
     user.settings.emailConfirmationToken = confirmationToken;
     user.settings.emailConfirmationExpiry = confirmationExpiry;
     await user.save();
+    console.log('✅ Token saved to database for resend');
 
     // Generate confirmation link
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
@@ -536,12 +596,16 @@ router.post('/register', async (req, res) => {
       const confirmationToken = generateSecureToken();
       const confirmationExpiry = createTokenExpiry(24 * 7); // 7 days expiry
       
+      console.log('🔑 Generated confirmation token for existing user:', confirmationToken.substring(0, 16) + '...');
+      console.log('📅 Token expires:', confirmationExpiry);
+      
       existingUser.settings = existingUser.settings || {};
       existingUser.settings.emailConfirmationToken = confirmationToken;
       existingUser.settings.emailConfirmationExpiry = confirmationExpiry;
       existingUser.settings.emailConfirmed = false;
       
       await existingUser.save();
+      console.log('✅ Token saved to database for user');
 
       // Generate confirmation link
       const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
@@ -583,6 +647,9 @@ router.post('/register', async (req, res) => {
     const confirmationToken = generateSecureToken();
     const confirmationExpiry = createTokenExpiry(24 * 7); // 7 days expiry
 
+    console.log('🔑 Generated confirmation token for new user:', confirmationToken.substring(0, 16) + '...');
+    console.log('📅 Token expires:', confirmationExpiry);
+
     const user = new User({
       anonymousId,
       emailHash,
@@ -594,6 +661,7 @@ router.post('/register', async (req, res) => {
       }
     });
     await user.save();
+    console.log('✅ Token saved to database for new user');
 
     // Generate confirmation link
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';

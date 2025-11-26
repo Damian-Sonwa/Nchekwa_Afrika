@@ -145,7 +145,7 @@ export default function ConfirmEmail() {
             Confirm Your Email
           </h1>
           <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
-            {token ? 'Verifying your email...' : confirmationLink ? 'Email service not configured. Use the link below to confirm your email:' : 'Please check your email for a confirmation link'}
+            {token ? 'Verifying your email...' : confirmationLink ? 'Click the link below to confirm your email, or enter your email to receive a new confirmation link:' : 'Please check your email for a confirmation link, or enter your email below to receive a new one'}
           </p>
         </div>
 
@@ -181,7 +181,7 @@ export default function ConfirmEmail() {
                   📧 Confirmation Link
                 </p>
                 <p className="text-xs font-inter text-text-secondary dark:text-text-main/70 mb-3">
-                  Email service is not configured yet. Use this link to confirm your email:
+                  Confirmation link (click to confirm your email):
                 </p>
                 <div className="space-y-2">
                   <a
