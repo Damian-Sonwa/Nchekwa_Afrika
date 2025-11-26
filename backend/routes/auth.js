@@ -522,8 +522,6 @@ router.post('/reset-password', async (req, res) => {
       return res.status(400).json({ error: 'Invalid or expired reset token' });
     }
 
-    console.log('✅ Token is valid, resetting password for user');
-    
     // Check if user had a password before (for logging)
     const hadPassword = !!user.passwordHash;
     const hasSocialLogin = !!(user.googleId || user.appleId);
@@ -536,13 +534,21 @@ router.post('/reset-password', async (req, res) => {
     }
 
     // Update password and clear reset token (token can only be used once)
-    // Use the decoded token for the update
-    const finalToken = decodedToken;
     user.passwordHash = await bcrypt.hash(newPassword, 10);
     user.settings.resetToken = undefined;
     user.settings.resetTokenExpiry = undefined;
     user.lastActive = new Date();
+    
+    // Save user and verify token was cleared
     await user.save();
+
+    // Verify the token was cleared (single-use enforcement)
+    const verifyUser = await User.findById(user._id);
+    if (verifyUser && verifyUser.settings?.resetToken) {
+      console.error('⚠️  WARNING: Token was not cleared after password reset!');
+    } else {
+      console.log('✅ Token cleared successfully (single-use enforced)');
+    }
 
     console.log('✅ Password reset successfully');
 
@@ -555,7 +561,7 @@ router.post('/reset-password', async (req, res) => {
       }
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: message
     });
