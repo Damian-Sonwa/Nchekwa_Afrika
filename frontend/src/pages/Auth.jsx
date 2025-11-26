@@ -324,9 +324,13 @@ export default function Auth() {
                     }}
                     style={{ 
                       transformStyle: 'preserve-3d',
-                      backfaceVisibility: 'hidden'
+                      backfaceVisibility: 'hidden',
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      backdropFilter: 'blur(20px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
                     }}
-                    className="bg-white dark:bg-dark backdrop-blur-lg rounded-2xl shadow-md p-6 md:p-10 border border-light dark:border-light/30"
+                    className="dark:bg-background-dark/95 rounded-2xl shadow-2xl p-6 md:p-10 border border-white/20 dark:border-white/10"
                   >
                     {/* Logo/Header */}
                     <motion.div
@@ -347,16 +351,16 @@ export default function Auth() {
                           />
                         </motion.div>
                       </div>
-                      <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
+                      <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2 drop-shadow-sm">
                         {isLogin ? 'Welcome Back' : 'Create Account'}
                       </h1>
-                      <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+                      <p className="text-lg font-body text-text-secondary dark:text-white/90 leading-relaxed drop-shadow-sm">
                         {isLogin 
                           ? 'Sign in to your Nchekwa_Afrika account'
                           : 'Start your journey to safety and support'
                         }
                       </p>
-                      <p className="font-body text-primary text-sm italic mt-2">
+                      <p className="font-body text-primary dark:text-primary-light text-sm italic mt-2 drop-shadow-sm">
                         Together, we stand strong. Your hands in ours, your safety our promise.
                       </p>
                     </motion.div>
@@ -404,7 +408,7 @@ export default function Auth() {
                             </label>
                             <div className="relative">
                               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Mail className="w-5 h-5 text-light" />
+                                <Mail className="w-5 h-5 text-text-secondary dark:text-white/60" />
                               </div>
                               <input
                                 id="email"
@@ -414,7 +418,7 @@ export default function Auth() {
                                   setFormData({ ...formData, email: e.target.value })
                                   setErrors({ ...errors, email: '' })
                                 }}
-                                className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white dark:bg-background-dark text-text-main dark:text-white font-body ${
+                                className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-main dark:text-white font-body ${
                                   errors.email
                                     ? 'border-error focus:border-error focus:ring-error/20'
                                     : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
@@ -446,7 +450,7 @@ export default function Auth() {
                             </label>
                             <div className="relative">
                               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Lock className="w-5 h-5 text-light" />
+                                <Lock className="w-5 h-5 text-text-secondary dark:text-white/60" />
                               </div>
                               <input
                                 id="password"
@@ -456,7 +460,7 @@ export default function Auth() {
                                   setFormData({ ...formData, password: e.target.value })
                                   setErrors({ ...errors, password: '' })
                                 }}
-                                className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white dark:bg-background-dark text-text-main dark:text-white font-body ${
+                                className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-main dark:text-white font-body ${
                                   errors.password
                                     ? 'border-error focus:border-error focus:ring-error/20'
                                     : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
@@ -467,7 +471,7 @@ export default function Auth() {
                               <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-light hover:text-dark dark:hover:text-light transition-colors"
+                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-secondary dark:text-white/60 hover:text-text-main dark:hover:text-white transition-colors"
                               >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                               </button>
@@ -507,7 +511,7 @@ export default function Auth() {
                                     setFormData({ ...formData, confirmPassword: e.target.value })
                                     setErrors({ ...errors, confirmPassword: '' })
                                   }}
-                                  className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white dark:bg-background-dark text-text-main dark:text-white font-body ${
+                                  className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-main dark:text-white font-body ${
                                   errors.confirmPassword
                                     ? 'border-error focus:border-error focus:ring-error/20'
                                     : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
@@ -518,7 +522,7 @@ export default function Auth() {
                                 <button
                                   type="button"
                                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-light hover:text-dark dark:hover:text-light transition-colors"
+                                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-secondary dark:text-white/60 hover:text-text-main dark:hover:text-white transition-colors"
                                 >
                                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                 </button>
@@ -604,7 +608,7 @@ export default function Auth() {
                               <div className="w-full border-t border-light dark:border-light/30"></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
-                              <span className="px-4 bg-white dark:bg-background-dark text-text-secondary dark:text-white/80 font-body">Or continue with</span>
+                              <span className="px-4 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-secondary dark:text-white/90 font-body">Or continue with</span>
                             </div>
                           </div>
 
@@ -670,7 +674,13 @@ export default function Auth() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="bg-white dark:bg-dark backdrop-blur-lg rounded-2xl shadow-md p-6 md:p-10 border border-light dark:border-light/30"
+                    style={{
+                      background: 'rgba(11, 47, 42, 0.95)',
+                      backdropFilter: 'blur(20px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                      boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+                    }}
+                    className="bg-white/95 dark:bg-background-dark/95 rounded-2xl shadow-2xl p-6 md:p-10 border border-white/20 dark:border-white/10"
                   >
                     <div className="text-center mb-8">
                       <div className="flex justify-center mb-4">
@@ -714,7 +724,7 @@ export default function Auth() {
                               setFormData({ ...formData, email: e.target.value })
                               setErrors({ ...errors, email: '' })
                             }}
-                            className="w-full pl-12 pr-4 py-3.5 border-2 border-primary-light dark:border-primary/30 rounded-xl focus:outline-none focus:ring-2 focus:border-primary focus:ring-accent/20 bg-white dark:bg-background-dark text-text-main dark:text-white font-body transition-all duration-300"
+                            className="w-full pl-12 pr-4 py-3.5 border-2 border-primary-light dark:border-primary/30 rounded-xl focus:outline-none focus:ring-2 focus:border-primary focus:ring-accent/20 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-main dark:text-white font-body transition-all duration-300"
                             placeholder="your.email@example.com"
                             required
                           />
