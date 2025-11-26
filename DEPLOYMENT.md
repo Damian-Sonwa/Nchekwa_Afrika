@@ -55,7 +55,20 @@ This guide will help you deploy the GBV App to Vercel (frontend) and Render (bac
    JWT_SECRET=your-super-secret-jwt-key-min-32-chars
    ENCRYPTION_KEY=your-32-character-encryption-key
    ALLOWED_ORIGINS=https://your-frontend-url.vercel.app
+   EMAIL_PROVIDER=resend
+   RESEND_API_KEY=re_xxxxxxxxxxxxx
+   EMAIL_FROM=noreply@yourdomain.com
+   FRONTEND_URL=https://your-frontend-url.vercel.app
    ```
+   
+   **How to add each variable:**
+   - Click **"Add Environment Variable"** button
+   - Enter the **Key** (e.g., `EMAIL_PROVIDER`)
+   - Enter the **Value** (e.g., `resend`)
+   - Click **"Save"**
+   - Repeat for each variable
+   
+   See `RENDER_ENV_VARS.md` for detailed step-by-step instructions with screenshots.
 
    **Important Notes:**
    - `MONGODB_URI`: Your MongoDB Atlas connection string
