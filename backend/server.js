@@ -21,11 +21,37 @@ if (envResult.error) {
 
 const app = express();
 
+// CORS configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',').map(origin => origin.trim()).filter(Boolean) || ['*'];
+console.log('🌐 Allowed CORS origins:', allowedOrigins);
+
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // If ALLOWED_ORIGINS is set to '*', allow all origins
+    if (allowedOrigins.includes('*')) {
+      return callback(null, true);
+    }
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn('⚠️  Blocked CORS request from origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range']
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -125,8 +151,25 @@ const server = app.listen(PORT, () => {
 // Socket.IO for real-time chat
 const io = require('socket.io')(server, {
   cors: {
-    origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
-    methods: ['GET', 'POST']
+    origin: function(origin, callback) {
+      // Allow requests with no origin
+      if (!origin) return callback(null, true);
+      
+      // If ALLOWED_ORIGINS is set to '*', allow all origins
+      if (allowedOrigins.includes('*')) {
+        return callback(null, true);
+      }
+      
+      // Check if origin is in allowed list
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.warn('⚠️  Blocked Socket.IO CORS request from origin:', origin);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
