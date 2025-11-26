@@ -6,44 +6,71 @@ import {
   CheckCircle, AlertCircle, Loader2, ArrowLeft
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
-import { register, login, socialLogin, forgotPassword } from '../services/api'
+import { supabase } from '../lib/supabase'
 
 /**
- * Nchekwa_Afrika Authentication Page with Flip Animation
+ * Nchekwa_Afrika Authentication Page with Supabase Integration
  * 
  * Features:
+ * - Supabase OAuth (Google)
+ * - Supabase email/password signup with email confirmation
+ * - Supabase email/password login with email verification check
+ * - Supabase password reset
  * - Flip animation between login and signup forms
- * - Nchekwa_Afrika logo integration
- * - Email confirmation flow
- * - Forgot password flow
  * - Smooth animations and transitions
  */
 
-// Flip Animation Variants
-const flipVariants = {
-  front: {
-    rotateY: 0,
-    opacity: 1,
-    transition: { duration: 0.6, ease: 'easeInOut' }
-  },
-  back: {
-    rotateY: 180,
-    opacity: 0,
-    transition: { duration: 0.6, ease: 'easeInOut' }
-  }
-}
-
 export default function Auth() {
   const navigate = useNavigate()
-  const { login: setAuth, setAnonymousId, isAuthenticated, user } = useAuthStore()
+  const { login: setAuth, setAnonymousId, isAuthenticated, logout } = useAuthStore()
+  
+  // Check for email confirmation callback
+  useEffect(() => {
+    const handleAuthCallback = async () => {
+      const { data, error } = await supabase.auth.getSession()
+      
+      if (data?.session) {
+        // User is authenticated via Supabase
+        const user = data.session.user
+        
+        // Check if email is confirmed
+        if (user.email_confirmed_at) {
+          // Store auth data
+          const userData = {
+            email: user.email,
+            id: user.id,
+            emailConfirmed: true
+          }
+          
+          // Use Supabase user ID as anonymousId for compatibility with existing app
+          setAuth(userData, data.session.access_token, user.id)
+          setAnonymousId(user.id)
+          
+          localStorage.setItem('supabase_session', JSON.stringify(data.session))
+          localStorage.setItem('anonymousId', user.id)
+          localStorage.setItem('isOnboarded', 'true')
+          
+          // Navigate based on user details completion
+          const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+          if (userDetailsCompleted) {
+            navigate('/app', { replace: true })
+          } else {
+            navigate('/user-details', { replace: true })
+          }
+        }
+      }
+    }
+    
+    handleAuthCallback()
+  }, [navigate, setAuth, setAnonymousId])
   
   // Redirect authenticated users to dashboard
   useEffect(() => {
-    // Only redirect if we're actually on the auth page and user is authenticated
-    const checkAuth = () => {
+    const checkAuth = async () => {
       try {
+        const { data: { session } } = await supabase.auth.getSession()
         const token = localStorage.getItem('token')
-        const isAuth = isAuthenticated || token
+        const isAuth = isAuthenticated || token || session
         
         if (isAuth && window.location.pathname === '/auth') {
           const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
@@ -58,7 +85,6 @@ export default function Auth() {
       }
     }
     
-    // Small delay to ensure store is initialized
     const timer = setTimeout(checkAuth, 100)
     return () => clearTimeout(timer)
   }, [isAuthenticated, navigate])
@@ -125,120 +151,165 @@ export default function Auth() {
     setMessage('')
     
     try {
-      let response
       if (isLogin) {
-        response = await login(formData.email, formData.password)
-      } else {
-        response = await register(formData.email, formData.password)
-      }
-
-      if (response.success) {
-        // Store auth data
-        const userData = {
-          email: formData.email,
-          anonymousId: response.anonymousId
-        }
-        
-        setAuth(userData, response.token, response.anonymousId)
-        setAnonymousId(response.anonymousId)
-        
-        localStorage.setItem('anonymousId', response.anonymousId)
-        localStorage.setItem('isOnboarded', 'true')
-        if (response.token) {
-          localStorage.setItem('token', response.token)
-        }
-        
-        setSuccess(true)
-        
-        // If email confirmation is required, show the link immediately
-        if (!isLogin && response.requiresEmailConfirmation && response.confirmationLink) {
-          setMessage(`Account created! Click the link below to confirm your email:\n\n${response.confirmationLink}`)
-          
-          // Navigate to confirm email page with the link
-          const confirmParams = new URLSearchParams({
-            email: formData.email,
-            link: response.confirmationLink
-          })
-          if (response.confirmationToken) {
-            confirmParams.set('token', response.confirmationToken)
+        // Check if user is updating password after reset
+        if (isUpdatingPassword) {
+          if (!formData.password || formData.password.length < 8) {
+            setErrors({ password: 'Password must be at least 8 characters' })
+            setLoading(false)
+            return
           }
-          setTimeout(() => {
-            navigate('/confirm-email?' + confirmParams.toString())
-          }, 3000) // Give user time to see the message
-        } else {
-          setMessage(isLogin ? 'Welcome back!' : 'Account created! Please check your email to confirm your account.')
+
+          const { error: updateError } = await supabase.auth.updateUser({
+            password: formData.password
+          })
+
+          if (updateError) {
+            setErrors({ submit: updateError.message || 'Failed to update password. Please try again.' })
+            setLoading(false)
+            return
+          }
+
+          setSuccess(true)
+          setMessage('Your password has been updated successfully! You can now sign in with your new password.')
           
-          // Navigate after brief success animation
+          // Clear the form and reset state
+          setFormData({ email: '', password: '', confirmPassword: '' })
+          setErrors({})
+          setIsUpdatingPassword(false)
+          
           setTimeout(() => {
-            if (!isLogin && response.requiresEmailConfirmation) {
-              // Show email confirmation message
-              const confirmParams = new URLSearchParams({
-                email: formData.email
-              })
-              if (response.confirmationLink) {
-                confirmParams.set('link', response.confirmationLink)
-              }
-              if (response.confirmationToken) {
-                confirmParams.set('token', response.confirmationToken)
-              }
-              navigate('/confirm-email?' + confirmParams.toString())
+            setSuccess(false)
+            setMessage('')
+            // User can now login with new password
+          }, 3000)
+          
+          setLoading(false)
+          return
+        }
+
+        // Regular login with Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        })
+
+        if (error) {
+          if (error.message.includes('Email not confirmed')) {
+            setErrors({ 
+              submit: 'Please verify your email address before signing in. Check your inbox for the confirmation link.' 
+            })
+          } else if (error.message.includes('Invalid login credentials')) {
+            setErrors({ submit: 'Invalid email or password' })
+          } else {
+            setErrors({ submit: error.message || 'Failed to sign in. Please try again.' })
+          }
+          setLoading(false)
+          return
+        }
+
+        if (data.user && data.session) {
+          // Check if email is confirmed
+          if (!data.user.email_confirmed_at) {
+            setErrors({ 
+              submit: 'Please verify your email address before signing in. Check your inbox for the confirmation link.' 
+            })
+            setLoading(false)
+            return
+          }
+
+          // Store auth data
+          const userData = {
+            email: data.user.email,
+            id: data.user.id,
+            emailConfirmed: true
+          }
+          
+          setAuth(userData, data.session.access_token, data.user.id)
+          setAnonymousId(data.user.id)
+          
+          localStorage.setItem('supabase_session', JSON.stringify(data.session))
+          localStorage.setItem('anonymousId', data.user.id)
+          localStorage.setItem('isOnboarded', 'true')
+          
+          setSuccess(true)
+          setMessage('Welcome back!')
+          
+          setTimeout(() => {
+            const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+            if (userDetailsCompleted) {
+              navigate('/app')
             } else {
-              // For login: always go to app (profile form is only for first-time signups)
-              // For signup: show profile form only if userDetailsCompleted is not set
-              if (isLogin) {
-                navigate('/app')
-              } else {
-                // Signup: check if user details are completed
-                const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
-                if (!userDetailsCompleted) {
-                  navigate('/user-details') // First-time signup: show profile form
-                } else {
-                  navigate('/app') // Returning signup: go to app
-                }
-              }
+              navigate('/user-details')
             }
-          }, 2000)
+          }, 1500)
+        }
+      } else {
+        // Signup with Supabase
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth?verified=true`,
+          }
+        })
+
+        if (error) {
+          if (error.message.includes('already registered')) {
+            setErrors({ submit: 'An account with this email already exists. Please sign in instead.' })
+          } else {
+            setErrors({ submit: error.message || 'Failed to create account. Please try again.' })
+          }
+          setLoading(false)
+          return
+        }
+
+        if (data.user) {
+          setSuccess(true)
+          setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
+          
+          // Check if email confirmation is required
+          if (data.user.email_confirmed_at) {
+            // Email already confirmed (shouldn't happen normally, but handle it)
+            const userData = {
+              email: data.user.email,
+              id: data.user.id,
+              emailConfirmed: true
+            }
+            
+            setAuth(userData, data.session?.access_token, data.user.id)
+            setAnonymousId(data.user.id)
+            
+            if (data.session) {
+              localStorage.setItem('supabase_session', JSON.stringify(data.session))
+            }
+            localStorage.setItem('anonymousId', data.user.id)
+            localStorage.setItem('isOnboarded', 'true')
+            
+            setTimeout(() => {
+              navigate('/user-details')
+            }, 2000)
+          } else {
+            // Email confirmation required
+            setMessage('Account created! Please check your email to confirm your account. We sent a confirmation link to ' + formData.email)
+            
+            // Show success message for 5 seconds before allowing user to continue
+            setTimeout(() => {
+              setSuccess(false)
+              setMessage('')
+              setIsLogin(true) // Switch to login form
+            }, 5000)
+          }
         }
       }
     } catch (error) {
       console.error('Auth error:', error)
-      console.error('Error details:', {
-        message: error.message,
-        code: error.code,
-        response: error.response?.data,
-        status: error.response?.status,
-        config: {
-          url: error.config?.url,
-          baseURL: error.config?.baseURL,
-          method: error.config?.method
-        }
-      })
-      
-      let errorMessage = 'Something went wrong. Please try again.'
-      
-      if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
-        const apiUrl = import.meta.env.VITE_API_URL || '/api'
-        if (import.meta.env.DEV) {
-          errorMessage = 'Cannot connect to server. Please make sure the backend server is running on http://localhost:3000'
-        } else {
-          errorMessage = 'Cannot connect to server. Please check your internet connection and try again.'
-        }
-      } else if (error.code === 'ETIMEDOUT') {
-        errorMessage = 'Request timed out. Please check your connection and try again.'
-      } else if (error.response?.data?.error) {
-        errorMessage = error.response.data.error
-      } else if (error.response?.status === 401) {
-        errorMessage = 'Invalid email or password'
-      } else if (error.response?.status === 400) {
-        errorMessage = error.response.data.error || 'Please check your information'
-      } else if (error.response?.status === 409) {
-        errorMessage = 'An account with this email already exists'
-      } else if (!error.response) {
-        errorMessage = `Connection error: ${error.message || 'Unable to reach server'}. Please check that the backend is running.`
-      }
-      
-      setErrors({ submit: errorMessage })
+      setErrors({ submit: error.message || 'Something went wrong. Please try again.' })
       setLoading(false)
+    } finally {
+      if (!success) {
+        setLoading(false)
+      }
     }
   }
 
@@ -252,19 +323,29 @@ export default function Auth() {
 
     setLoading(true)
     setErrors({})
+    setMessage('')
     
     try {
-      const response = await forgotPassword(formData.email)
-      if (response.success) {
-        setMessage('Password reset email sent! Please check your inbox.')
-        setShowForgotPassword(false)
+      const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
+        redirectTo: `${window.location.origin}/auth?reset=true`,
+      })
+
+      if (error) {
+        setErrors({ 
+          submit: error.message || 'Failed to send reset email. Please try again.' 
+        })
+        setLoading(false)
+        return
       }
+
+      setMessage('Password reset email sent! Please check your inbox and follow the instructions to reset your password.')
+      setShowForgotPassword(false)
+      setLoading(false)
     } catch (error) {
       console.error('Forgot password error:', error)
       setErrors({ 
-        submit: error.response?.data?.error || 'Failed to send reset email. Please try again.' 
+        submit: error.message || 'Failed to send reset email. Please try again.' 
       })
-    } finally {
       setLoading(false)
     }
   }
@@ -272,45 +353,147 @@ export default function Auth() {
   const handleSocialLogin = async (provider) => {
     setLoading(true)
     setErrors({})
+    setMessage('')
     
     try {
-      const providerId = `mock_${provider}_${Date.now()}`
-      const response = await socialLogin(provider, providerId, formData.email || null)
-      
-      if (response.success) {
-        const userData = {
-          email: formData.email || null,
-          anonymousId: response.anonymousId,
-          provider
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: provider === 'apple' ? 'apple' : 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth?oauth=true`,
         }
-        
-        setAuth(userData, response.token, response.anonymousId)
-        setAnonymousId(response.anonymousId)
-        
-        localStorage.setItem('anonymousId', response.anonymousId)
-        localStorage.setItem('isOnboarded', 'true')
-        
-        setSuccess(true)
-        setMessage('Signed in successfully!')
-        
-        setTimeout(() => {
-          // For authenticated users, go to dashboard
-          const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
-          if (!userDetailsCompleted) {
-            navigate('/user-details')
-          } else {
-            navigate('/app')
-          }
-        }, 1500)
+      })
+
+      if (error) {
+        setErrors({ 
+          submit: `Unable to sign in with ${provider}. Please try again.` 
+        })
+        setLoading(false)
+        return
       }
+
+      // OAuth redirect will happen automatically
+      // The callback will be handled in the useEffect above
     } catch (error) {
       console.error('Social login error:', error)
       setErrors({ 
-        submit: 'Unable to sign in with ' + provider + '. Please try another method.' 
+        submit: `Unable to sign in with ${provider}. Please try another method.` 
       })
       setLoading(false)
     }
   }
+
+  // Handle password reset callback
+  useEffect(() => {
+    const handlePasswordReset = async () => {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1))
+      const accessToken = hashParams.get('access_token')
+      const type = hashParams.get('type')
+
+      if (type === 'recovery' && accessToken) {
+        // User clicked password reset link - set session with the token
+        const { error: sessionError } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: hashParams.get('refresh_token') || ''
+        })
+
+        if (sessionError) {
+          setErrors({ submit: 'Invalid or expired reset token. Please request a new password reset link.' })
+          return
+        }
+
+        // User is now authenticated with recovery token
+        setShowForgotPassword(false)
+        setIsLogin(true)
+        setIsUpdatingPassword(true)
+        setMessage('Please enter your new password below.')
+        
+        // Clear the hash from URL
+        window.history.replaceState(null, '', window.location.pathname)
+      }
+    }
+
+    handlePasswordReset()
+  }, [])
+
+  // Handle email verification callback
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const verified = urlParams.get('verified')
+    const reset = urlParams.get('reset')
+    const oauth = urlParams.get('oauth')
+
+    if (verified === 'true') {
+      setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
+      setSuccess(true)
+      
+      // Clear the query parameter
+      window.history.replaceState(null, '', window.location.pathname)
+      
+      // Check session after verification
+      setTimeout(async () => {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+          const userData = {
+            email: session.user.email,
+            id: session.user.id,
+            emailConfirmed: true
+          }
+          
+          setAuth(userData, session.access_token, session.user.id)
+          setAnonymousId(session.user.id)
+          
+          localStorage.setItem('supabase_session', JSON.stringify(session))
+          localStorage.setItem('anonymousId', session.user.id)
+          localStorage.setItem('isOnboarded', 'true')
+          
+          setTimeout(() => {
+            navigate('/user-details')
+          }, 2000)
+        }
+      }, 1000)
+    }
+
+    if (reset === 'true') {
+      setMessage('Your password has been updated successfully! You can now sign in with your new password.')
+      setIsLogin(true)
+      setShowForgotPassword(false)
+      
+      // Clear the query parameter
+      window.history.replaceState(null, '', window.location.pathname)
+    }
+
+    if (oauth === 'true') {
+      // OAuth callback - session should be set automatically
+      // Check session and redirect
+      setTimeout(async () => {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session?.user) {
+          const userData = {
+            email: session.user.email,
+            id: session.user.id,
+            emailConfirmed: !!session.user.email_confirmed_at
+          }
+          
+          setAuth(userData, session.access_token, session.user.id)
+          setAnonymousId(session.user.id)
+          
+          localStorage.setItem('supabase_session', JSON.stringify(session))
+          localStorage.setItem('anonymousId', session.user.id)
+          localStorage.setItem('isOnboarded', 'true')
+          
+          const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+          if (userDetailsCompleted) {
+            navigate('/app', { replace: true })
+          } else {
+            navigate('/user-details', { replace: true })
+          }
+        }
+      }, 500)
+      
+      // Clear the query parameter
+      window.history.replaceState(null, '', window.location.pathname)
+    }
+  }, [navigate, setAuth, setAnonymousId])
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden" style={{ background: '#0a0a0a' }}>
@@ -448,7 +631,8 @@ export default function Auth() {
                           onSubmit={handleSubmit}
                           className="space-y-6"
                         >
-                          {/* Email Input */}
+                          {/* Email Input - Hide if updating password after reset */}
+                          {!isUpdatingPassword && (
                           <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -509,6 +693,7 @@ export default function Auth() {
                               </motion.p>
                             )}
                           </motion.div>
+                          )}
 
                           {/* Password Input */}
                           <motion.div
@@ -517,7 +702,7 @@ export default function Auth() {
                             transition={{ delay: 0.1 }}
                           >
                             <label htmlFor="password" className="block text-sm font-body font-medium mb-2" style={{ color: '#f0f0f0' }}>
-                              Password
+                              {isUpdatingPassword ? 'New Password' : 'Password'}
                             </label>
                             <div className="relative">
                               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -655,8 +840,8 @@ export default function Auth() {
                             </motion.div>
                           )}
 
-                          {/* Forgot Password (Login only) */}
-                          {isLogin && (
+                          {/* Forgot Password (Login only, hide if updating password) */}
+                          {isLogin && !isUpdatingPassword && (
                             <motion.div
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
@@ -666,6 +851,9 @@ export default function Auth() {
                                 type="button"
                                 onClick={() => setShowForgotPassword(true)}
                                 className="text-sm font-inter text-primary hover:text-primary-light dark:text-primary-light dark:hover:text-primary font-medium transition-colors"
+                                style={{ color: '#b0ff9e' }}
+                                onMouseEnter={(e) => e.currentTarget.style.color = '#a3ff7f'}
+                                onMouseLeave={(e) => e.currentTarget.style.color = '#b0ff9e'}
                               >
                                 Forgot password?
                               </button>
@@ -732,7 +920,7 @@ export default function Auth() {
                               </>
                             ) : (
                               <>
-                                <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+                                <span>{isUpdatingPassword ? 'Update Password' : (isLogin ? 'Sign In' : 'Create Account')}</span>
                                 <ArrowRight className="w-5 h-5" />
                               </>
                             )}
