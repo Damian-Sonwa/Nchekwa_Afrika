@@ -97,20 +97,20 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-white dark:bg-background-dark rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+          className="bg-background rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
         >
           {/* Header */}
-          <div className="sticky top-0 bg-white dark:bg-background-dark border-b border-primary-light p-6 flex items-center justify-between z-10">
-            <h2 className="text-2xl font-heading font-bold text-text-main dark:text-white">
+          <div className="sticky top-0 bg-background border-b border-primary-light p-6 flex items-center justify-between z-10">
+            <h2 className="text-2xl font-heading font-bold text-text-main">
               Create New Post
             </h2>
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={onClose}
-              className="p-2 rounded-lg hover:bg-background-light dark:hover:bg-primary/20 transition-colors"
+              className="p-2 rounded-lg hover:bg-background-light dark:hover:bg-accent/20 transition-colors"
             >
-              <X className="w-5 h-5 text-text-main dark:text-white" />
+              <X className="w-5 h-5 text-text-main" />
             </motion.button>
           </div>
 
@@ -123,9 +123,9 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
                 id="anonymous"
                 checked={isAnonymous}
                 onChange={(e) => setIsAnonymous(e.target.checked)}
-                className="w-4 h-4 text-primary rounded focus:ring-primary focus:ring-2"
+                className="w-4 h-4 text-accent rounded focus:ring-primary focus:ring-2"
               />
-              <label htmlFor="anonymous" className="text-sm font-body text-text-secondary dark:text-white/80">
+              <label htmlFor="anonymous" className="text-sm font-body text-text-secondary">
                 Post anonymously
               </label>
             </div>
@@ -133,7 +133,7 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
             {/* Name field (if not anonymous) */}
             {!isAnonymous && (
               <div>
-                <label className="block text-sm font-body font-semibold text-text-main dark:text-white mb-2">
+                <label className="block text-sm font-body font-semibold text-text-main mb-2">
                   Display Name (optional)
                 </label>
                 <input
@@ -142,20 +142,20 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
                   maxLength={50}
-                  className="w-full px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-white dark:bg-background-dark text-text-main dark:text-white"
+                  className="w-full px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-background text-text-main"
                 />
               </div>
             )}
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-body font-semibold text-text-main dark:text-white mb-2">
+              <label className="block text-sm font-body font-semibold text-text-main mb-2">
                 Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-white dark:bg-background-dark text-text-main dark:text-white"
+                className="w-full px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-background text-text-main"
               >
                 {CATEGORIES.filter(c => c.value !== 'all').map(cat => (
                   <option key={cat.value} value={cat.value}>
@@ -167,7 +167,7 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
 
             {/* Title */}
             <div>
-              <label className="block text-sm font-body font-semibold text-text-main dark:text-white mb-2">
+              <label className="block text-sm font-body font-semibold text-text-main mb-2">
                 Title <span className="text-red-500">*</span>
               </label>
               <input
@@ -177,16 +177,16 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
                 placeholder="What's on your mind?"
                 maxLength={200}
                 required
-                className="w-full px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-white dark:bg-background-dark text-text-main dark:text-white"
+                className="w-full px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-background text-text-main"
               />
-              <p className="text-xs text-text-secondary dark:text-white/60 mt-1">
+              <p className="text-xs text-text-secondary dark:text-text-main/60 mt-1">
                 {title.length}/200 characters
               </p>
             </div>
 
             {/* Content */}
             <div>
-              <label className="block text-sm font-body font-semibold text-text-main dark:text-white mb-2">
+              <label className="block text-sm font-body font-semibold text-text-main mb-2">
                 Content <span className="text-red-500">*</span>
               </label>
               <textarea
@@ -196,9 +196,9 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
                 rows={6}
                 maxLength={5000}
                 required
-                className="w-full px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-white dark:bg-background-dark text-text-main dark:text-white resize-none"
+                className="w-full px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-background text-text-main resize-none"
               />
-              <p className="text-xs text-text-secondary dark:text-white/60 mt-1">
+              <p className="text-xs text-text-secondary dark:text-text-main/60 mt-1">
                 {content.length}/5000 characters
               </p>
             </div>
@@ -210,7 +210,7 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onClose}
-                className="px-6 py-2 rounded-xl border border-primary-light text-text-main dark:text-white hover:bg-background-light dark:hover:bg-primary/20 transition-colors font-body font-semibold"
+                className="px-6 py-2 rounded-xl border border-primary-light text-text-main hover:bg-background-light dark:hover:bg-accent/20 transition-colors font-body font-semibold"
               >
                 Cancel
               </motion.button>
@@ -219,7 +219,7 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 disabled={loading || !title.trim() || !content.trim()}
-                className="px-6 py-2 rounded-xl bg-primary text-white font-body font-semibold hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="px-6 py-2 rounded-xl bg-accent text-text-main font-body font-semibold hover:bg-accent-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
               >
                 {loading ? (
                   <>
@@ -300,17 +300,17 @@ function CommentList({ postId, comments, onAddComment, anonymousId }) {
               key={comment._id || index}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-background-light dark:bg-primary/10 rounded-xl p-3"
+              className="bg-background-light dark:bg-accent/10 rounded-xl p-3"
             >
               <div className="flex items-start justify-between mb-1">
-                <span className="text-sm font-body font-semibold text-text-main dark:text-white">
+                <span className="text-sm font-body font-semibold text-text-main">
                   {comment.name || 'Anonymous'}
                 </span>
-                <span className="text-xs text-text-secondary dark:text-white/60">
+                <span className="text-xs text-text-secondary dark:text-text-main/60">
                   {formatDate(comment.createdAt)}
                 </span>
               </div>
-              <p className="text-sm font-body text-text-secondary dark:text-white/80">
+              <p className="text-sm font-body text-text-secondary">
                 {comment.content}
               </p>
             </motion.div>
@@ -324,7 +324,7 @@ function CommentList({ postId, comments, onAddComment, anonymousId }) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setShowInput(true)}
-          className="w-full text-left px-4 py-2 border border-primary-light rounded-xl hover:bg-background-light dark:hover:bg-primary/20 transition-colors text-sm font-body text-text-secondary dark:text-white/80 flex items-center space-x-2"
+          className="w-full text-left px-4 py-2 border border-primary-light rounded-xl hover:bg-background-light dark:hover:bg-accent/20 transition-colors text-sm font-body text-text-secondary flex items-center space-x-2"
         >
           <MessageCircle className="w-4 h-4" />
           <span>Add a comment...</span>
@@ -343,9 +343,9 @@ function CommentList({ postId, comments, onAddComment, anonymousId }) {
               id={`anonymous-comment-${postId}`}
               checked={isAnonymous}
               onChange={(e) => setIsAnonymous(e.target.checked)}
-              className="w-3 h-3 text-primary rounded focus:ring-primary"
+              className="w-3 h-3 text-accent rounded focus:ring-primary"
             />
-            <label htmlFor={`anonymous-comment-${postId}`} className="text-xs font-body text-text-secondary dark:text-white/60">
+            <label htmlFor={`anonymous-comment-${postId}`} className="text-xs font-body text-text-secondary dark:text-text-main/60">
               Comment anonymously
             </label>
           </div>
@@ -358,7 +358,7 @@ function CommentList({ postId, comments, onAddComment, anonymousId }) {
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name (optional)"
               maxLength={50}
-              className="w-full px-3 py-2 text-sm border border-primary-light rounded-lg focus:ring-2 focus:ring-primary focus:outline-none bg-white dark:bg-background-dark text-text-main dark:text-white"
+              className="w-full px-3 py-2 text-sm border border-primary-light rounded-lg focus:ring-2 focus:ring-primary focus:outline-none bg-background text-text-main"
             />
           )}
 
@@ -370,14 +370,14 @@ function CommentList({ postId, comments, onAddComment, anonymousId }) {
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Write a comment..."
               maxLength={1000}
-              className="flex-1 px-3 py-2 text-sm border border-primary-light rounded-lg focus:ring-2 focus:ring-primary focus:outline-none bg-white dark:bg-background-dark text-text-main dark:text-white"
+              className="flex-1 px-3 py-2 text-sm border border-primary-light rounded-lg focus:ring-2 focus:ring-primary focus:outline-none bg-background text-text-main"
             />
             <motion.button
               type="submit"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               disabled={loading || !commentText.trim()}
-              className="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 rounded-lg bg-accent text-text-main hover:bg-accent-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -395,7 +395,7 @@ function CommentList({ postId, comments, onAddComment, anonymousId }) {
                 setName('')
                 setIsAnonymous(true)
               }}
-              className="px-4 py-2 rounded-lg border border-primary-light text-text-main dark:text-white hover:bg-background-light dark:hover:bg-primary/20 transition-colors"
+              className="px-4 py-2 rounded-lg border border-primary-light text-text-main hover:bg-background-light dark:hover:bg-accent/20 transition-colors"
             >
               <X className="w-4 h-4" />
             </motion.button>
@@ -462,7 +462,7 @@ function CommunityPostCard({ post, onLike, onComment, onReport, anonymousId }) {
 
   const getCategoryColor = (category) => {
     const colors = {
-      support: 'bg-primary/20 text-primary',
+      support: 'bg-accent/20 text-accent',
       advice: 'bg-accent/20 text-accent',
       resources: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
       healing: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
@@ -482,7 +482,7 @@ function CommunityPostCard({ post, onLike, onComment, onReport, anonymousId }) {
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
-            <span className="text-lg font-heading font-bold text-text-main dark:text-white">
+            <span className="text-lg font-heading font-bold text-text-main">
               {post.name || 'Anonymous'}
             </span>
             {post.category && (
@@ -491,7 +491,7 @@ function CommunityPostCard({ post, onLike, onComment, onReport, anonymousId }) {
               </span>
             )}
           </div>
-          <div className="flex items-center space-x-2 text-sm text-text-secondary dark:text-white/60">
+          <div className="flex items-center space-x-2 text-sm text-text-secondary dark:text-text-main/60">
             <Clock className="w-3 h-3" />
             <span>{formatDate(post.createdAt)}</span>
           </div>
@@ -499,12 +499,12 @@ function CommunityPostCard({ post, onLike, onComment, onReport, anonymousId }) {
       </div>
 
       {/* Title */}
-      <h3 className="text-xl font-heading font-bold text-text-main dark:text-white mb-2">
+      <h3 className="text-xl font-heading font-bold text-text-main mb-2">
         {post.title}
       </h3>
 
       {/* Content */}
-      <p className="text-base font-body text-text-secondary dark:text-white/80 leading-relaxed mb-4 whitespace-pre-wrap break-words">
+      <p className="text-base font-body text-text-secondary leading-relaxed mb-4 whitespace-pre-wrap break-words">
         {post.content}
       </p>
 
@@ -517,8 +517,8 @@ function CommunityPostCard({ post, onLike, onComment, onReport, anonymousId }) {
           onClick={handleLike}
           className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-colors ${
             isLiked
-              ? 'bg-primary/20 text-primary'
-              : 'hover:bg-background-light dark:hover:bg-primary/20 text-text-secondary dark:text-white/80'
+              ? 'bg-accent/20 text-accent'
+              : 'hover:bg-background-light dark:hover:bg-accent/20 text-text-secondary'
           }`}
         >
           <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
@@ -530,7 +530,7 @@ function CommunityPostCard({ post, onLike, onComment, onReport, anonymousId }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowComments(!showComments)}
-          className="flex items-center space-x-2 px-4 py-2 rounded-xl hover:bg-background-light dark:hover:bg-primary/20 text-text-secondary dark:text-white/80 transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 rounded-xl hover:bg-background-light dark:hover:bg-accent/20 text-text-secondary transition-colors"
         >
           <MessageCircle className="w-5 h-5" />
           <span className="text-sm font-body font-semibold">
@@ -579,7 +579,7 @@ function CommunityFeed({ posts, onLike, onComment, onReport, anonymousId, loadin
     return (
       <div className="flex flex-col items-center justify-center py-12 space-y-4">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        <p className="text-lg font-body text-text-secondary dark:text-white/80">Loading posts...</p>
+        <p className="text-lg font-body text-text-secondary">Loading posts...</p>
       </div>
     )
   }
@@ -591,11 +591,11 @@ function CommunityFeed({ posts, onLike, onComment, onReport, anonymousId, loadin
         animate={{ opacity: 1 }}
         className="text-center py-12 bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg"
       >
-        <Users className="w-16 h-16 text-text-secondary dark:text-white/60 mx-auto mb-4" />
-        <h3 className="text-xl font-heading font-bold text-text-main dark:text-white mb-2">
+        <Users className="w-16 h-16 text-text-secondary dark:text-text-main/60 mx-auto mb-4" />
+        <h3 className="text-xl font-heading font-bold text-text-main mb-2">
           No posts yet
         </h3>
-        <p className="text-lg font-body text-text-secondary dark:text-white/80">
+        <p className="text-lg font-body text-text-secondary">
           Be the first to share and start the conversation!
         </p>
       </motion.div>
@@ -732,10 +732,10 @@ export default function Community() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
+          <h1 className="text-3xl font-heading font-bold text-text-main mb-2">
             Community & Support
           </h1>
-          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
             Connect with others, share experiences, and find strength together
           </p>
         </div>
@@ -743,7 +743,7 @@ export default function Community() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowNewPostModal(true)}
-          className="px-6 py-3 rounded-xl bg-primary text-white font-body font-semibold hover:bg-primary-dark transition-colors flex items-center space-x-2 w-full sm:w-auto justify-center"
+          className="px-6 py-3 rounded-xl bg-accent text-text-main font-body font-semibold hover:bg-accent-dark transition-colors flex items-center space-x-2 w-full sm:w-auto justify-center"
         >
           <Plus className="w-5 h-5" />
           <span>New Post</span>
@@ -754,11 +754,11 @@ export default function Community() {
       <div className="flex flex-wrap items-center gap-4 p-4 bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg">
         {/* Category filter */}
         <div className="flex items-center space-x-2">
-          <Filter className="w-5 h-5 text-text-secondary dark:text-white/60" />
+          <Filter className="w-5 h-5 text-text-secondary dark:text-text-main/60" />
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-white dark:bg-background-dark text-text-main dark:text-white font-body"
+            className="px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-background text-text-main font-body"
           >
             {CATEGORIES.map(cat => (
               <option key={cat.value} value={cat.value}>
@@ -770,11 +770,11 @@ export default function Community() {
 
         {/* Sort filter */}
         <div className="flex items-center space-x-2">
-          <TrendingUp className="w-5 h-5 text-text-secondary dark:text-white/60" />
+          <TrendingUp className="w-5 h-5 text-text-secondary dark:text-text-main/60" />
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-white dark:bg-background-dark text-text-main dark:text-white font-body"
+            className="px-4 py-2 border border-primary-light rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-background text-text-main font-body"
           >
             <option value="newest">Newest First</option>
             <option value="popular">Most Popular</option>
