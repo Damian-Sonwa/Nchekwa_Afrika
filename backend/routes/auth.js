@@ -3,7 +3,19 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const { sendConfirmationEmail } = require('../services/emailService');
+const { sendConfirmationEmail, sendPasswordResetEmail } = require('../services/emailService');
+
+// Helper function to generate secure token
+function generateSecureToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+// Helper function to create token expiry date
+function createTokenExpiry(hours = 1) {
+  const expiry = new Date();
+  expiry.setHours(expiry.getHours() + hours);
+  return expiry;
+}
 
 // Hash email for privacy (one-way, can't reverse)
 const hashEmail = (email) => {
@@ -243,25 +255,34 @@ router.post('/forgot-password', async (req, res) => {
       });
     }
 
-    // Generate reset token
-    const resetToken = crypto.randomBytes(32).toString('hex');
-    const resetTokenExpiry = new Date();
-    resetTokenExpiry.setHours(resetTokenExpiry.getHours() + 1); // 1 hour expiry
+    // Generate reset token securely
+    const resetToken = generateSecureToken();
+    const resetTokenExpiry = createTokenExpiry(1); // 1 hour expiry
 
-    // Store reset token in user settings (or create a separate ResetToken model)
+    // Store reset token in user settings
     user.settings = user.settings || {};
     user.settings.resetToken = resetToken;
     user.settings.resetTokenExpiry = resetTokenExpiry;
     await user.save();
 
-    // TODO: Send email with reset link
-    // In production, use a service like SendGrid, AWS SES, or Nodemailer
-    const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:3002'}/reset-password?token=${resetToken}`;
-    console.log('Password reset link:', resetLink); // Remove in production
+    // Generate reset link using consistent FRONTEND_URL
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`;
+    
+    // Send password reset email
+    try {
+      await sendPasswordResetEmail(email, resetLink, resetToken);
+    } catch (emailError) {
+      console.error('⚠️  Failed to send password reset email:', emailError);
+      // Continue anyway - link is still returned in response for development
+    }
 
     res.json({
       success: true,
-      message: 'If an account exists with this email, a password reset link has been sent.'
+      message: 'If an account exists with this email, a password reset link has been sent.',
+      // Return reset link in response (for development or if email fails)
+      resetLink: resetLink,
+      resetToken: resetToken
     });
   } catch (error) {
     console.error('Forgot password error:', error);
@@ -269,7 +290,39 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
-// Reset Password
+// Reset Password (GET - token in query string for direct link clicks)
+router.get('/reset-password', async (req, res) => {
+  try {
+    const { token } = req.query;
+
+    if (!token) {
+      return res.status(400).json({ error: 'Reset token is required' });
+    }
+
+    // Find user with matching reset token
+    const users = await User.find({ 'settings.resetToken': token });
+    const user = users.find(u => {
+      const expiry = u.settings?.resetTokenExpiry;
+      return expiry && new Date(expiry) > new Date();
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid or expired reset token' });
+    }
+
+    // Token is valid - return success (frontend will handle the form)
+    res.json({
+      success: true,
+      message: 'Token is valid. You can now reset your password.',
+      valid: true
+    });
+  } catch (error) {
+    console.error('Reset password token validation error:', error);
+    res.status(500).json({ error: 'Failed to validate reset token' });
+  }
+});
+
+// Reset Password (POST - token and new password in body)
 router.post('/reset-password', async (req, res) => {
   try {
     const { token, newPassword } = req.body;
@@ -293,10 +346,11 @@ router.post('/reset-password', async (req, res) => {
       return res.status(400).json({ error: 'Invalid or expired reset token' });
     }
 
-    // Update password
+    // Update password and clear reset token (token can only be used once)
     user.passwordHash = await bcrypt.hash(newPassword, 10);
     user.settings.resetToken = undefined;
     user.settings.resetTokenExpiry = undefined;
+    user.lastActive = new Date();
     await user.save();
 
     res.json({
@@ -330,10 +384,11 @@ router.get('/confirm-email', async (req, res) => {
       return res.status(400).json({ error: 'Invalid or expired confirmation token' });
     }
 
-    // Mark email as confirmed
+    // Mark email as confirmed and clear token (token can only be used once)
     user.settings.emailConfirmed = true;
     user.settings.emailConfirmationToken = undefined;
     user.settings.emailConfirmationExpiry = undefined;
+    user.lastActive = new Date();
     await user.save();
 
     res.json({
@@ -367,10 +422,11 @@ router.post('/confirm-email', async (req, res) => {
       return res.status(400).json({ error: 'Invalid or expired confirmation token' });
     }
 
-    // Mark email as confirmed
+    // Mark email as confirmed and clear token (token can only be used once)
     user.settings.emailConfirmed = true;
     user.settings.emailConfirmationToken = undefined;
     user.settings.emailConfirmationExpiry = undefined;
+    user.lastActive = new Date();
     await user.save();
 
     res.json({
@@ -403,10 +459,9 @@ router.post('/resend-confirmation', async (req, res) => {
       });
     }
 
-    // Generate confirmation token
-    const confirmationToken = crypto.randomBytes(32).toString('hex');
-    const confirmationExpiry = new Date();
-    confirmationExpiry.setDate(confirmationExpiry.getDate() + 7); // 7 days expiry
+    // Generate confirmation token securely
+    const confirmationToken = generateSecureToken();
+    const confirmationExpiry = createTokenExpiry(24 * 7); // 7 days expiry // 7 days expiry
 
     user.settings = user.settings || {};
     user.settings.emailConfirmationToken = confirmationToken;
@@ -463,10 +518,9 @@ router.post('/register', async (req, res) => {
       existingUser.passwordHash = passwordHash;
       existingUser.lastActive = new Date();
       
-      // Generate confirmation token
-      const confirmationToken = crypto.randomBytes(32).toString('hex');
-      const confirmationExpiry = new Date();
-      confirmationExpiry.setDate(confirmationExpiry.getDate() + 7);
+      // Generate confirmation token securely
+      const confirmationToken = generateSecureToken();
+      const confirmationExpiry = createTokenExpiry(24 * 7); // 7 days expiry
       
       existingUser.settings = existingUser.settings || {};
       existingUser.settings.emailConfirmationToken = confirmationToken;
@@ -504,10 +558,9 @@ router.post('/register', async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
     const anonymousId = crypto.randomBytes(16).toString('hex');
     
-    // Generate confirmation token
-    const confirmationToken = crypto.randomBytes(32).toString('hex');
-    const confirmationExpiry = new Date();
-    confirmationExpiry.setDate(confirmationExpiry.getDate() + 7);
+    // Generate confirmation token securely
+    const confirmationToken = generateSecureToken();
+    const confirmationExpiry = createTokenExpiry(24 * 7); // 7 days expiry
 
     const user = new User({
       anonymousId,
