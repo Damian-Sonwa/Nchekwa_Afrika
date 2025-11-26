@@ -915,6 +915,28 @@ export default function Auth() {
                       <p className="font-body text-sm italic mt-2 drop-shadow-sm" style={{ color: '#b0ff9e' }}>
                         Together, we stand strong. Your hands in ours, your safety our promise.
                       </p>
+                      
+                      {/* Sign Up / Sign In Toggle Link */}
+                      {isLogin && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="mt-4 text-center"
+                        >
+                          <p className="text-sm font-body mb-2" style={{ color: '#888888' }}>
+                            Don't have an account?{' '}
+                            <motion.button
+                              onClick={handleFlip}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="font-semibold underline hover:no-underline transition-all"
+                              style={{ color: '#a3ff7f' }}
+                            >
+                              Sign Up
+                            </motion.button>
+                          </p>
+                        </motion.div>
+                      )}
                     </motion.div>
 
                     <AnimatePresence mode="wait">

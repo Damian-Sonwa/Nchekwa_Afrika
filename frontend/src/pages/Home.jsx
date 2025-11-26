@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
   AlertCircle, MessageSquare, MapPin, Shield, Lock, Phone, Heart,
-  TrendingUp, FileText, Calendar, Activity, Users, Clock, CheckCircle2
+  TrendingUp, FileText, Calendar, Activity, Users, Clock, CheckCircle2, LogOut
 } from 'lucide-react'
 import { useApp } from '../context/AppContext'
 import { sendSOSAlert, getEvidence, getSafetyPlans } from '../services/api'
+import { useAuthStore } from '../store/authStore'
+import { supabase } from '../lib/supabase'
 
 /**
  * Modern Dashboard/Home Page
@@ -49,7 +51,8 @@ const quickActions = [
 
 export default function Home() {
   const navigate = useNavigate()
-  const { anonymousId } = useApp()
+  const { anonymousId, wipeAllData } = useApp()
+  const { logout } = useAuthStore()
   const [sosPressed, setSosPressed] = useState(false)
   const [stats, setStats] = useState({
     evidenceCount: 0,
@@ -58,6 +61,27 @@ export default function Home() {
     lastActivity: null
   })
   const [loading, setLoading] = useState(true)
+
+  const handleSignOut = async () => {
+    if (confirm('Sign out? You will need to log in again to access your account.')) {
+      try {
+        // Sign out from Supabase
+        await supabase.auth.signOut()
+        // Clear auth state
+        logout()
+        // Clear all app data
+        await wipeAllData()
+        // Redirect to auth page
+        navigate('/auth', { replace: true })
+      } catch (error) {
+        console.error('Sign out error:', error)
+        // Still proceed with logout even if Supabase signout fails
+        logout()
+        await wipeAllData()
+        navigate('/auth', { replace: true })
+      }
+    }
+  }
 
   useEffect(() => {
     loadDashboardData()
@@ -155,18 +179,45 @@ export default function Home() {
 
   return (
     <div className="w-full max-w-full overflow-x-hidden box-border space-y-4 sm:space-y-5 md:space-y-6 pb-20 md:pb-8">
-      {/* Welcome Header */}
+      {/* Welcome Header with Sign Out Button */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="space-y-2"
       >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-main">
-          Welcome back, you're safe here
-        </h1>
-        <p className="text-lg font-body text-text-secondary leading-relaxed text-text-secondary">
-          How can we support you today?
-        </p>
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-main">
+              Welcome back, you're safe here
+            </h1>
+            <p className="text-lg font-body text-text-secondary leading-relaxed text-text-secondary">
+              How can we support you today?
+            </p>
+          </div>
+          <motion.button
+            onClick={handleSignOut}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+            style={{
+              background: 'rgba(163, 255, 127, 0.1)',
+              border: '1px solid rgba(163, 255, 127, 0.3)',
+              color: '#a3ff7f'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(163, 255, 127, 0.2)'
+              e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.5)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(163, 255, 127, 0.1)'
+              e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+            }}
+            title="Sign Out"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="hidden sm:inline">Sign Out</span>
+          </motion.button>
+        </div>
       </motion.div>
 
       {/* SOS Emergency Button - Compact Design */}
