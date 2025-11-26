@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const { sendConfirmationEmail } = require('../services/emailService');
 
 // Hash email for privacy (one-way, can't reverse)
 const hashEmail = (email) => {
@@ -379,15 +380,18 @@ router.post('/resend-confirmation', async (req, res) => {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
     const confirmationLink = `${frontendUrl}/confirm-email?token=${confirmationToken}`;
     
-    // TODO: Send confirmation email via email service (SendGrid, AWS SES, etc.)
-    console.log('📧 Email confirmation link:', confirmationLink);
-    console.log('📧 Confirmation token:', confirmationToken);
-    console.log('💡 Note: Email service not configured. Link is returned in response for now.');
+    // Send confirmation email
+    try {
+      await sendConfirmationEmail(user.emailHash ? email : undefined, confirmationLink, confirmationToken);
+    } catch (emailError) {
+      console.error('⚠️  Failed to send confirmation email:', emailError);
+      // Continue anyway - link is still returned in response
+    }
 
     res.json({
       success: true,
       message: 'If an account exists with this email, a confirmation link has been sent.',
-      // Return confirmation link in response (until email service is configured)
+      // Return confirmation link in response (for development or if email fails)
       confirmationLink: confirmationLink,
       confirmationToken: confirmationToken
     });
@@ -438,10 +442,13 @@ router.post('/register', async (req, res) => {
       const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
       const confirmationLink = `${frontendUrl}/confirm-email?token=${confirmationToken}`;
       
-      // TODO: Send confirmation email via email service (SendGrid, AWS SES, etc.)
-      console.log('📧 Email confirmation link:', confirmationLink);
-      console.log('📧 Confirmation token:', confirmationToken);
-      console.log('💡 Note: Email service not configured. Link is returned in response for now.');
+      // Send confirmation email
+      try {
+        await sendConfirmationEmail(email, confirmationLink, confirmationToken);
+      } catch (emailError) {
+        console.error('⚠️  Failed to send confirmation email:', emailError);
+        // Continue anyway - link is still returned in response
+      }
       
       const token = existingUser.anonymousId; // In production, use JWT here
       
@@ -451,7 +458,7 @@ router.post('/register', async (req, res) => {
         token: token,
         requiresEmailConfirmation: true,
         message: 'Password set successfully. Please check your email to confirm your account.',
-        // Return confirmation link in response (until email service is configured)
+        // Return confirmation link in response (for development or if email fails)
         confirmationLink: confirmationLink,
         confirmationToken: confirmationToken
       });
@@ -481,10 +488,13 @@ router.post('/register', async (req, res) => {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
     const confirmationLink = `${frontendUrl}/confirm-email?token=${confirmationToken}`;
     
-    // TODO: Send confirmation email via email service (SendGrid, AWS SES, etc.)
-    console.log('📧 Email confirmation link:', confirmationLink);
-    console.log('📧 Confirmation token:', confirmationToken);
-    console.log('💡 Note: Email service not configured. Link is returned in response for now.');
+    // Send confirmation email
+    try {
+      await sendConfirmationEmail(email, confirmationLink, confirmationToken);
+    } catch (emailError) {
+      console.error('⚠️  Failed to send confirmation email:', emailError);
+      // Continue anyway - link is still returned in response
+    }
     
     const token = anonymousId; // In production, use JWT here
     
@@ -494,7 +504,7 @@ router.post('/register', async (req, res) => {
       token: token,
       requiresEmailConfirmation: true,
       message: 'Account created successfully. Please check your email to confirm your account.',
-      // Return confirmation link in response (until email service is configured)
+      // Return confirmation link in response (for development or if email fails)
       confirmationLink: confirmationLink,
       confirmationToken: confirmationToken
     });
