@@ -385,6 +385,20 @@ async function sendPasswordResetViaResend(email, resetLink, resetToken) {
     if (error) {
       console.error('❌ Resend API error:', error);
       console.error('❌ Error details:', JSON.stringify(error, null, 2));
+      
+      // Handle Resend free tier limitation
+      if (error.statusCode === 403 && error.message && error.message.includes('testing emails')) {
+        const errorMsg = '⚠️  RESEND FREE TIER LIMITATION: You can only send emails to your verified email address.\n' +
+          '💡 Solutions:\n' +
+          '   1. For testing: Only send emails to your verified email (madudamian25@gmail.com)\n' +
+          '   2. For production: Verify a domain at https://resend.com/domains and use an email from that domain\n' +
+          '   3. Alternative: Use SMTP/Nodemailer instead (set EMAIL_PROVIDER=nodemailer)\n' +
+          '   4. Development: Use EMAIL_PROVIDER=console to log emails to console';
+        console.error(errorMsg);
+        // Don't throw - allow the reset link to be returned in the response
+        return false;
+      }
+      
       throw error;
     }
 

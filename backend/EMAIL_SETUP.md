@@ -2,17 +2,41 @@
 
 The email confirmation system supports multiple email providers. Configure one of the following:
 
+## ⚠️ Important: Resend Free Tier Limitation
+
+**Resend's free tier only allows sending emails to your verified email address.**
+
+- ✅ You can send to: `madudamian25@gmail.com` (your verified email)
+- ❌ You cannot send to: Other email addresses (without domain verification)
+
+**Solutions:**
+1. **For testing**: Only use `madudamian25@gmail.com` for test accounts
+2. **For production**: Verify a domain at [resend.com/domains](https://resend.com/domains)
+3. **Alternative**: Use SMTP/Nodemailer (see Option 2 below)
+
+See [RESEND_LIMITATIONS.md](./RESEND_LIMITATIONS.md) for detailed solutions.
+
 ## Option 1: Resend (Recommended)
 
 1. Sign up at [resend.com](https://resend.com)
 2. Get your API key from the dashboard
-3. Add to your `.env` file:
+3. **For testing (free tier)**: Use your verified email
    ```
    EMAIL_PROVIDER=resend
    RESEND_API_KEY=re_xxxxxxxxxxxxx
-   EMAIL_FROM=noreply@yourdomain.com
+   EMAIL_FROM=onboarding@resend.dev
    FRONTEND_URL=https://your-frontend-url.com
    ```
+   ⚠️ **Limitation**: Can only send to `madudamian25@gmail.com`
+
+4. **For production**: Verify a domain first at [resend.com/domains](https://resend.com/domains)
+   ```
+   EMAIL_PROVIDER=resend
+   RESEND_API_KEY=re_xxxxxxxxxxxxx
+   EMAIL_FROM=noreply@yourdomain.com  # Must use verified domain
+   FRONTEND_URL=https://your-frontend-url.com
+   ```
+   ✅ **After domain verification**: Can send to any email address
 
 ## Option 2: Nodemailer (SMTP)
 
