@@ -255,6 +255,17 @@ router.post('/forgot-password', async (req, res) => {
       });
     }
 
+    // Check if user has a password set
+    const hasPassword = !!user.passwordHash;
+    const hasSocialLogin = !!(user.googleId || user.appleId);
+    
+    if (!hasPassword && hasSocialLogin) {
+      console.log('ℹ️  User signed up with social login, allowing password creation via reset flow');
+      // Allow social login users to set a password - this is a feature, not a bug
+    } else if (!hasPassword) {
+      console.log('ℹ️  User has no password set, allowing password creation via reset flow');
+    }
+
     // Generate reset token securely
     const resetToken = generateSecureToken();
     const resetTokenExpiry = createTokenExpiry(1); // 1 hour expiry
@@ -299,12 +310,22 @@ router.post('/forgot-password', async (req, res) => {
       // Continue anyway - link is still returned in response for development
     }
 
+    // Provide appropriate message based on whether user has a password
+    let message = 'If an account exists with this email, a password reset link has been sent.';
+    if (!hasPassword && hasSocialLogin) {
+      message = 'A link to set a password for your account has been sent to your email. You can use this password to log in with email in the future.';
+    } else if (!hasPassword) {
+      message = 'A link to set a password for your account has been sent to your email.';
+    }
+
     res.json({
       success: true,
-      message: 'If an account exists with this email, a password reset link has been sent.',
+      message: message,
       // Return reset link in response (for development or if email fails)
       resetLink: resetLink,
-      resetToken: resetToken
+      resetToken: resetToken,
+      // Include info about whether this is setting a new password or resetting
+      isSettingPassword: !hasPassword
     });
   } catch (error) {
     console.error('Forgot password error:', error);
@@ -421,6 +442,17 @@ router.post('/reset-password', async (req, res) => {
     }
 
     console.log('✅ Token is valid, resetting password for user');
+    
+    // Check if user had a password before (for logging)
+    const hadPassword = !!user.passwordHash;
+    const hasSocialLogin = !!(user.googleId || user.appleId);
+    
+    if (!hadPassword) {
+      console.log('ℹ️  User is setting a password for the first time');
+      if (hasSocialLogin) {
+        console.log('ℹ️  User previously signed up with social login, now adding email/password login option');
+      }
+    }
 
     // Update password and clear reset token (token can only be used once)
     user.passwordHash = await bcrypt.hash(newPassword, 10);
@@ -431,9 +463,18 @@ router.post('/reset-password', async (req, res) => {
 
     console.log('✅ Password reset successfully');
 
+    // Provide appropriate message
+    let message = 'Password has been reset successfully';
+    if (!hadPassword) {
+      message = 'Password has been set successfully. You can now log in with your email and password.';
+      if (hasSocialLogin) {
+        message = 'Password has been set successfully. You can now log in with your email and password, or continue using Google/Apple sign-in.';
+      }
+    }
+
     res.json({
       success: true,
-      message: 'Password has been reset successfully'
+      message: message
     });
   } catch (error) {
     console.error('Reset password error:', error);

@@ -37,6 +37,7 @@ export default function ResetPassword() {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
   const [success, setSuccess] = useState(false)
+  const [response, setResponse] = useState(null)
 
   useEffect(() => {
     if (!token) {
@@ -80,9 +81,11 @@ export default function ResetPassword() {
       const response = await resetPassword(token, formData.password)
       if (response.success) {
         setSuccess(true)
+        // Store response message for display
+        setResponse(response)
         setTimeout(() => {
           navigate('/auth')
-        }, 2000)
+        }, 3000) // Give user time to read the message
       }
     } catch (error) {
       console.error('Reset password error:', error)
@@ -111,10 +114,10 @@ export default function ResetPassword() {
             <CheckCircle className="w-16 h-16 text-success" />
           </motion.div>
           <h2 className="text-2xl font-heading font-bold text-text-main">
-            Password Updated!
+            Password {token ? 'Set' : 'Updated'}!
           </h2>
           <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
-            Your password has been successfully reset. Redirecting to login...
+            {response?.message || 'Your password has been successfully set. Redirecting to login...'}
           </p>
         </motion.div>
       </div>
@@ -132,10 +135,10 @@ export default function ResetPassword() {
         <div className="text-center mb-8">
           <NchekwaLogo size="w-20 h-20" />
           <h1 className="text-3xl font-heading font-bold text-text-main mt-4 mb-2">
-            Reset Password
+            {token ? 'Set Password' : 'Reset Password'}
           </h1>
           <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
-            Enter your new password below
+            {token ? 'Enter a password to secure your account' : 'Enter your new password below'}
           </p>
         </div>
 
