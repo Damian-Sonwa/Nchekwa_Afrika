@@ -221,6 +221,31 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Catch-all for undefined API routes - provide helpful error message
+// This must be AFTER all route definitions
+app.use('/api/*', (req, res) => {
+  res.status(404).json({
+    error: 'Endpoint not found',
+    message: `Cannot ${req.method} ${req.path}`,
+    suggestion: 'Check the API documentation at GET /api for available endpoints',
+    availableEndpoints: {
+      info: 'GET /api - View all available endpoints',
+      health: 'GET /health - Health check',
+      auth: {
+        base: 'GET /api/auth - View auth endpoints',
+        login: 'POST /api/auth/login',
+        register: 'POST /api/auth/register',
+        forgotPassword: 'POST /api/auth/forgot-password',
+        resetPassword: 'POST /api/auth/reset-password',
+        confirmEmail: 'POST /api/auth/confirm-email',
+        resendConfirmation: 'POST /api/auth/resend-confirmation',
+        testEmail: 'GET /api/auth/test-email'
+      }
+    },
+    tip: 'Most endpoints require POST method. Only /api, /health, /api/auth, /api/auth/test-email, /api/auth/reset-password?token=..., and /api/auth/confirm-email?token=... support GET.'
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
