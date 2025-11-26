@@ -60,7 +60,14 @@ export const initializeSocket = (sessionId, onMessage, onConnectionChange) => {
   currentSessionId = sessionId
 
   // Add connection timeout detection
-  let connectionTimeout = null
+  let connectionTimeout = setTimeout(() => {
+    if (!socket.connected) {
+      console.error('❌ Socket connection timeout after 10 seconds')
+      connectionCallbacks.forEach(cb => cb(false))
+      // Try to reconnect
+      socket.connect()
+    }
+  }, 10000)
 
   socket.on('connect', () => {
     console.log('✅ Socket connected, ID:', socket.id)
@@ -71,16 +78,6 @@ export const initializeSocket = (sessionId, onMessage, onConnectionChange) => {
     socket.emit('join-chat', sessionId)
     connectionCallbacks.forEach(cb => cb(true))
   })
-
-  // Set connection timeout
-  connectionTimeout = setTimeout(() => {
-    if (!socket.connected) {
-      console.error('❌ Socket connection timeout after 10 seconds')
-      connectionCallbacks.forEach(cb => cb(false))
-      // Try to reconnect
-      socket.connect()
-    }
-  }, 10000)
 
   socket.on('disconnect', (reason) => {
     console.log('❌ Socket disconnected:', reason)
