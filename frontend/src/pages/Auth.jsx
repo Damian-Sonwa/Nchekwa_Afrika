@@ -653,6 +653,57 @@ export default function Auth() {
       setPendingEmailConfirmation(false)
       setPendingEmail('')
       
+      console.log('✅ Email verification callback detected (verified=true)')
+      
+      // Check for session tokens in URL hash first (Supabase puts them there)
+      const hashParams = new URLSearchParams(window.location.hash.substring(1))
+      const accessToken = hashParams.get('access_token')
+      const type = hashParams.get('type')
+      
+      if (accessToken && type === 'signup') {
+        console.log('📧 Setting session from email confirmation tokens')
+        const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: hashParams.get('refresh_token') || ''
+        })
+        
+        if (sessionError) {
+          console.error('❌ Error setting session:', sessionError)
+          setErrors({ submit: 'Failed to complete email verification. Please try logging in.' })
+          return
+        }
+        
+        if (sessionData?.session) {
+          console.log('✅ Session created successfully from email confirmation')
+          const user = sessionData.session.user
+          
+          const userData = {
+            email: user.email,
+            id: user.id,
+            emailConfirmed: true
+          }
+          
+          setAuth(userData, sessionData.session.access_token, user.id)
+          setAnonymousId(user.id)
+          
+          localStorage.setItem('supabase_session', JSON.stringify(sessionData.session))
+          localStorage.setItem('anonymousId', user.id)
+          localStorage.setItem('isOnboarded', 'true')
+          
+          setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
+          setSuccess(true)
+          
+          // Clear URL parameters and hash
+          window.history.replaceState(null, '', window.location.pathname)
+          
+          setTimeout(() => {
+            navigate('/user-details')
+          }, 2000)
+          return
+        }
+      }
+      
+      // Fallback: Check for existing session
       setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
       setSuccess(true)
       
@@ -679,6 +730,10 @@ export default function Auth() {
           setTimeout(() => {
             navigate('/user-details')
           }, 2000)
+        } else {
+          console.warn('⚠️ No session found after email verification')
+          setMessage('Email verified! You can now sign in with your email and password.')
+          setSuccess(false)
         }
       }, 1000)
     }
