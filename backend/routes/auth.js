@@ -411,10 +411,10 @@ router.get('/reset-password', async (req, res) => {
 // Reset Password (POST - token and new password in body)
 router.post('/reset-password', async (req, res) => {
   try {
-    const { token, newPassword } = req.body;
+    let { token, newPassword } = req.body;
 
     console.log('📥 Reset password request received');
-    console.log('🔑 Token provided:', token ? token.substring(0, 16) + '...' : 'MISSING');
+    console.log('🔑 Token provided (raw):', token ? token.substring(0, 16) + '...' : 'MISSING');
     console.log('🔑 Token length:', token ? token.length : 0);
     console.log('🔒 Password provided:', newPassword ? 'YES (length: ' + newPassword.length + ')' : 'MISSING');
 
@@ -434,13 +434,31 @@ router.post('/reset-password', async (req, res) => {
       });
     }
 
-    console.log('🔍 Validating reset token (POST):', token.substring(0, 16) + '...');
-    console.log('🔍 Full token length:', token.length);
-    console.log('🔍 Full token (for debugging):', token);
+    // Try to decode the token if it's URL encoded (frontend might send it encoded)
+    let decodedToken = token;
+    try {
+      // If token contains % characters, it's likely URL encoded
+      if (token.includes('%')) {
+        decodedToken = decodeURIComponent(token);
+        console.log('🔓 Token was URL encoded, decoded:', decodedToken.substring(0, 16) + '...');
+      }
+    } catch (decodeError) {
+      console.log('ℹ️  Token is not URL encoded, using as-is');
+    }
 
-    // Find user with matching reset token
-    const users = await User.find({ 'settings.resetToken': token });
-    console.log(`📊 Found ${users.length} user(s) with matching token`);
+    console.log('🔍 Validating reset token (POST):', decodedToken.substring(0, 16) + '...');
+    console.log('🔍 Full token length:', decodedToken.length);
+    console.log('🔍 Full token (for debugging):', decodedToken);
+
+    // Try to find user with both encoded and decoded token
+    let users = await User.find({ 'settings.resetToken': decodedToken });
+    console.log(`📊 Found ${users.length} user(s) with decoded token`);
+    
+    // If not found with decoded token, try with original token
+    if (users.length === 0 && token !== decodedToken) {
+      users = await User.find({ 'settings.resetToken': token });
+      console.log(`📊 Found ${users.length} user(s) with original token`);
+    }
     
     // Also try to find by email hash to see if user exists
     if (users.length === 0) {
@@ -518,6 +536,8 @@ router.post('/reset-password', async (req, res) => {
     }
 
     // Update password and clear reset token (token can only be used once)
+    // Use the decoded token for the update
+    const finalToken = decodedToken;
     user.passwordHash = await bcrypt.hash(newPassword, 10);
     user.settings.resetToken = undefined;
     user.settings.resetTokenExpiry = undefined;

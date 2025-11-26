@@ -132,8 +132,11 @@ export const resetPassword = async (token, newPassword) => {
     console.log('📤 Sending reset password request');
     console.log('🔑 Token (first 16 chars):', token ? token.substring(0, 16) + '...' : 'MISSING');
     console.log('🔑 Token length:', token ? token.length : 0);
+    console.log('🔑 Full token (for debugging):', token);
     console.log('🔒 Password length:', newPassword ? newPassword.length : 0);
     
+    // Send token as-is (should already be decoded from URL)
+    // Don't encode it again - backend will handle both encoded and decoded
     const response = await api.post('/auth/reset-password', { token, newPassword })
     console.log('✅ Reset password response:', response.data)
     return response.data
