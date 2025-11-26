@@ -111,10 +111,10 @@ export default function Auth() {
     
     // Skip email validation if updating password after reset
     if (!isUpdatingPassword) {
-      if (!formData.email) {
-        newErrors.email = 'Email is required'
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = 'Please enter a valid email'
+    if (!formData.email) {
+      newErrors.email = 'Email is required'
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email'
       }
     }
     
@@ -205,7 +205,7 @@ export default function Auth() {
             })
           } else if (error.message.includes('Invalid login credentials')) {
             setErrors({ submit: 'Invalid email or password' })
-          } else {
+      } else {
             setErrors({ submit: error.message || 'Failed to sign in. Please try again.' })
           }
           setLoading(false)
@@ -222,24 +222,24 @@ export default function Auth() {
             return
           }
 
-          // Store auth data
-          const userData = {
+        // Store auth data
+        const userData = {
             email: data.user.email,
             id: data.user.id,
             emailConfirmed: true
-          }
-          
+        }
+        
           setAuth(userData, data.session.access_token, data.user.id)
           setAnonymousId(data.user.id)
-          
+        
           localStorage.setItem('supabase_session', JSON.stringify(data.session))
           localStorage.setItem('anonymousId', data.user.id)
-          localStorage.setItem('isOnboarded', 'true')
-          
-          setSuccess(true)
+        localStorage.setItem('isOnboarded', 'true')
+        
+        setSuccess(true)
           setMessage('Welcome back!')
-          
-          setTimeout(() => {
+        
+        setTimeout(() => {
             const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
             if (userDetailsCompleted) {
               navigate('/app')
@@ -312,7 +312,7 @@ export default function Auth() {
       setLoading(false)
     } finally {
       if (!success) {
-        setLoading(false)
+      setLoading(false)
       }
     }
   }
@@ -360,10 +360,19 @@ export default function Auth() {
     setMessage('')
     
     try {
+      // Get redirect parameter from current URL query string
+      const urlParams = new URLSearchParams(window.location.search)
+      const redirectPath = urlParams.get('redirect') || ''
+      
+      // Construct redirect URL with the redirect parameter preserved
+      const redirectTo = redirectPath 
+        ? `${window.location.origin}/auth?oauth=true&redirect=${encodeURIComponent(redirectPath)}`
+        : `${window.location.origin}/auth?oauth=true`
+      
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: provider === 'apple' ? 'apple' : 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth?oauth=true`,
+          redirectTo: redirectTo,
         }
       })
 
@@ -437,7 +446,7 @@ export default function Auth() {
       setTimeout(async () => {
         const { data: { session } } = await supabase.auth.getSession()
         if (session) {
-          const userData = {
+        const userData = {
             email: session.user.email,
             id: session.user.id,
             emailConfirmed: true
@@ -448,8 +457,8 @@ export default function Auth() {
           
           localStorage.setItem('supabase_session', JSON.stringify(session))
           localStorage.setItem('anonymousId', session.user.id)
-          localStorage.setItem('isOnboarded', 'true')
-          
+        localStorage.setItem('isOnboarded', 'true')
+        
           setTimeout(() => {
             navigate('/user-details')
           }, 2000)
@@ -470,7 +479,15 @@ export default function Auth() {
       // OAuth callback - session should be set automatically
       // Check session and redirect
       setTimeout(async () => {
-        const { data: { session } } = await supabase.auth.getSession()
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        
+        if (sessionError) {
+          setErrors({ 
+            submit: 'Failed to authenticate. Please try signing in again.' 
+          })
+          return
+        }
+        
         if (session?.user) {
           const userData = {
             email: session.user.email,
@@ -485,18 +502,43 @@ export default function Auth() {
           localStorage.setItem('anonymousId', session.user.id)
           localStorage.setItem('isOnboarded', 'true')
           
+          // Get redirect path from query parameter
+          const redirectPath = urlParams.get('redirect')
+          
+          // Show success message
+        setSuccess(true)
+          setMessage('Successfully signed in with Google!')
+        
+          // Navigate after a brief delay to show success message
+        setTimeout(() => {
+            if (redirectPath) {
+              // Navigate to the specified redirect path
+              const decodedPath = decodeURIComponent(redirectPath)
+              // Ensure path starts with / and handle homepage
+              const finalPath = decodedPath === '/' || decodedPath === '' 
+                ? '/' 
+                : (decodedPath.startsWith('/') ? decodedPath : `/${decodedPath}`)
+              navigate(finalPath, { replace: true })
+            } else {
+              // Default navigation logic
           const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
-          if (userDetailsCompleted) {
-            navigate('/app', { replace: true })
+              if (userDetailsCompleted) {
+                navigate('/app', { replace: true })
           } else {
-            navigate('/user-details', { replace: true })
+                navigate('/user-details', { replace: true })
           }
-        }
+      }
+          }, 1500)
+        } else {
+      setErrors({ 
+            submit: 'Authentication failed. Please try again.' 
+      })
+    }
       }, 500)
       
-      // Clear the query parameter
+      // Clear the query parameters
       window.history.replaceState(null, '', window.location.pathname)
-    }
+  }
   }, [navigate, setAuth, setAnonymousId])
 
   return (
