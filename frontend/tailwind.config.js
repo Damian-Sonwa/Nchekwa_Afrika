@@ -8,25 +8,32 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Modern Dark Mode Theme
         primary: {
-          DEFAULT: "#2D9C8A",
-          light: "#A8E8DB",
-          dark: "#0B2F2A",
+          DEFAULT: "#0a3d2f", // Very dark green
+          light: "#b0ff9e", // Light green accent
+          dark: "#0a0a0a", // Near black
         },
-        accent: "#56CFCB",
+        accent: {
+          DEFAULT: "#a3ff7f", // Bright green
+          gold: "#ffd700", // Gold for hover states
+          blue: "#cce5ff", // Light blue for secondary accents
+        },
         background: {
-          light: "#F4FBF9",
-          dark: "#0B2F2A",
+          DEFAULT: "#0a3d2f", // Very dark green
+          dark: "#0a0a0a", // Near black
+          light: "#0a3d2f", // Same as default for consistency
         },
         text: {
-          main: "#07332F",
-          secondary: "#3E6D68",
+          main: "#f0f0f0", // Light color for primary text
+          secondary: "#b0ff9e", // Light green for secondary text
+          placeholder: "#888888", // Subtle gray for placeholders
         },
         // Keep utility colors for alerts/notifications
-        success: "#10B981",
+        success: "#a3ff7f",
         error: "#EF4444",
         warning: "#F59E0B",
-        info: "#3B82F6",
+        info: "#cce5ff",
       },
       fontFamily: {
         heading: ["Inter", "sans-serif"],

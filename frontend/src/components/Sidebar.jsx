@@ -132,7 +132,7 @@ export default function Sidebar() {
         {isActive && !isCollapsed && (
           <motion.div
             layoutId="activeIndicator"
-            className="absolute left-0 top-0 bottom-0 w-1 bg-white rounded-r z-0 pointer-events-none"
+            className="absolute left-0 top-0 bottom-0 w-1 bg-accent rounded-r z-0 pointer-events-none"
             initial={false}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
           />
@@ -154,8 +154,8 @@ export default function Sidebar() {
             "m-0",
             // Active state styling
             isActive
-              ? "bg-background-light text-primary font-bold shadow-md dark:bg-background-light dark:text-primary"
-              : "text-white dark:text-white/80 hover:bg-primary-light hover:text-text-main dark:hover:bg-primary dark:hover:text-white active:bg-primary-dark",
+              ? "bg-accent/20 text-text-main font-bold shadow-md"
+              : "text-text-main hover:bg-accent/10 hover:text-text-main active:bg-accent/20",
             // Ensure button is always clickable and on top
             "pointer-events-auto"
           )}
@@ -164,18 +164,18 @@ export default function Sidebar() {
         >
           <Icon className={cn(
             "w-5 h-5 flex-shrink-0 pointer-events-none",
-            isActive ? "text-primary dark:text-primary" : "text-white/80 dark:text-white/80 group-hover:text-text-main dark:group-hover:text-white"
+            isActive ? "text-text-main" : "text-text-secondary group-hover:text-text-main"
           )} />
           {!isCollapsed && (
             <>
               <span className="font-body font-medium flex-1 text-left pointer-events-none">{item.name}</span>
               {item.badge && (
-                <span className="px-2 py-0.5 text-xs bg-white/20 rounded-full font-inter pointer-events-none">
+                <span className="px-2 py-0.5 text-xs bg-accent/20 rounded-full font-inter pointer-events-none text-text-main">
                   {item.badge}
                 </span>
               )}
               {item.comingSoon && (
-                <span className="px-2 py-0.5 text-xs bg-background text-light rounded-full font-inter pointer-events-none">
+                <span className="px-2 py-0.5 text-xs bg-accent/20 text-text-main rounded-full font-inter pointer-events-none">
                   Soon
                 </span>
               )}
@@ -209,8 +209,8 @@ export default function Sidebar() {
                 // Base styles: Full width, proper padding, cursor pointer
                 "relative w-full flex items-center justify-between px-4 py-2.5",
                 "text-xs font-body font-semibold uppercase tracking-wider",
-                "text-white/70 dark:text-white/70",
-                "hover:text-white dark:hover:text-white",
+                "text-text-secondary",
+                "hover:text-text-main",
                 "transition-colors duration-300",
                 "cursor-pointer m-0 pointer-events-auto",
                 "rounded-lg hover:bg-primary/10",
@@ -263,7 +263,7 @@ export default function Sidebar() {
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Logo/Header */}
-      <div className="p-4 border-b border-primary/20">
+      <div className="p-4 border-b border-accent/20">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <motion.div
@@ -271,20 +271,20 @@ export default function Sidebar() {
               animate={{ opacity: 1 }}
               className="flex items-center space-x-3"
             >
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-md">
-                <Shield className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center shadow-md">
+                <Shield className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <h1 className="text-lg font-heading font-semibold text-white">
+                <h1 className="text-lg font-heading font-semibold text-text-main">
                   Nchekwa_Afrika
                 </h1>
-                <p className="text-xs font-body text-white/70">You are safe here</p>
+                <p className="text-xs font-body text-text-secondary">You are safe here</p>
               </div>
             </motion.div>
           )}
           {isCollapsed && (
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-md mx-auto" title="Nchekwa_Afrika">
-              <Shield className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center shadow-md mx-auto" title="Nchekwa_Afrika">
+              <Shield className="w-6 h-6 text-primary" />
             </div>
           )}
           <button
@@ -299,9 +299,9 @@ export default function Sidebar() {
             aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {isCollapsed ? (
-              <ChevronRight className="w-5 h-5 text-white/80 pointer-events-none" />
+              <ChevronRight className="w-5 h-5 text-text-secondary pointer-events-none" />
             ) : (
-              <ChevronLeft className="w-5 h-5 text-white/80 pointer-events-none" />
+              <ChevronLeft className="w-5 h-5 text-text-secondary pointer-events-none" />
             )}
           </button>
         </div>
@@ -344,7 +344,7 @@ export default function Sidebar() {
       </div>
 
       {/* Footer Actions - Proper spacing and z-index, isolated from navigation */}
-      <div className="p-4 border-t border-primary/20 relative z-10 isolate">
+      <div className="p-4 border-t border-accent/20 relative z-10 isolate">
         {/* Settings item - mb-2 for spacing */}
         <div className="mb-2">
           <NavItem
@@ -363,7 +363,7 @@ export default function Sidebar() {
           className={cn(
             // Base styles: Full width, proper padding, cursor pointer
             "relative z-50 w-full flex items-center space-x-3 px-4 py-3 rounded-xl",
-            "text-white/80 hover:bg-error/20 hover:text-white",
+            "text-text-secondary hover:bg-error/20 hover:text-error",
             "active:bg-error/30",
             "transition-colors duration-300",
             "group font-body cursor-pointer",
@@ -374,7 +374,7 @@ export default function Sidebar() {
           title={isCollapsed ? 'Quick Exit' : undefined}
           aria-label="Quick Exit"
         >
-          <AlertCircle className="w-5 h-5 text-white/80 group-hover:text-white pointer-events-none" />
+          <AlertCircle className="w-5 h-5 text-text-secondary group-hover:text-error pointer-events-none" />
           {!isCollapsed && <span className="font-medium pointer-events-none">Quick Exit</span>}
         </button>
         
@@ -390,10 +390,9 @@ export default function Sidebar() {
             className={cn(
               // Base styles: Full width, proper padding, cursor pointer
               "relative z-50 w-full flex items-center space-x-3 px-4 py-3 rounded-xl",
-              "text-white/80",
-              "hover:bg-primary-light hover:text-text-main",
-              "dark:hover:bg-primary dark:hover:text-white",
-              "active:bg-primary-dark",
+              "text-text-secondary",
+              "hover:bg-accent/10 hover:text-text-main",
+              "active:bg-accent/20",
               "transition-colors duration-300",
               "group font-body cursor-pointer",
               "m-0 pointer-events-auto",
@@ -403,7 +402,7 @@ export default function Sidebar() {
             title={isCollapsed ? 'Sign Out' : undefined}
             aria-label="Sign Out"
           >
-            <LogOut className="w-5 h-5 text-white/80 group-hover:text-text-main dark:group-hover:text-white pointer-events-none" />
+            <LogOut className="w-5 h-5 text-text-secondary group-hover:text-text-main pointer-events-none" />
             {!isCollapsed && <span className="font-medium pointer-events-none">Sign Out</span>}
           </button>
         )}
@@ -422,7 +421,7 @@ export default function Sidebar() {
           width: isCollapsed ? 80 : 280,
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 bg-primary-dark dark:bg-primary-dark border-r border-primary/20 shadow-lg overflow-hidden"
+        className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 bg-background border-r border-accent/20 shadow-lg overflow-hidden"
         style={{ width: isCollapsed ? 80 : 280, maxWidth: isCollapsed ? 80 : 280 }}
       >
         <SidebarContent />
@@ -436,10 +435,10 @@ export default function Sidebar() {
           e.stopPropagation()
           setIsMobileOpen(true)
         }}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-primary-dark dark:bg-primary-dark rounded-lg shadow-md border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors"
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-background rounded-lg shadow-md border border-accent/20 cursor-pointer hover:bg-accent/10 transition-colors"
         aria-label="Open menu"
       >
-        <Menu className="w-6 h-6 text-white pointer-events-none" />
+        <Menu className="w-6 h-6 text-text-main pointer-events-none" />
       </button>
 
       {/* Mobile Sidebar Overlay */}
@@ -466,18 +465,18 @@ export default function Sidebar() {
               exit={{ x: -280 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               onClick={(e) => e.stopPropagation()}
-              className="fixed left-0 top-0 bottom-0 w-72 bg-primary-dark dark:bg-primary-dark shadow-2xl z-50 md:hidden overflow-hidden"
+              className="fixed left-0 top-0 bottom-0 w-72 bg-background shadow-2xl z-50 md:hidden overflow-hidden border-r border-accent/20"
             >
               <div className="p-4 border-b border-primary/20 flex items-center justify-between relative z-10">
                 <div className="flex items-center space-x-3 pointer-events-none">
-                  <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-lg">
-                    <Shield className="w-6 h-6 text-white" />
+                  <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center shadow-lg">
+                    <Shield className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h1 className="text-lg font-heading font-bold text-white">
+                    <h1 className="text-lg font-heading font-bold text-text-main">
                       Nchekwa_Afrika
                     </h1>
-                    <p className="text-xs font-body text-white/70">You are safe here</p>
+                    <p className="text-xs font-body text-text-secondary">You are safe here</p>
                   </div>
                 </div>
                 <button
@@ -487,10 +486,10 @@ export default function Sidebar() {
                     e.stopPropagation()
                     setIsMobileOpen(false)
                   }}
-                  className="relative z-10 p-2 hover:bg-primary/20 rounded-lg transition-colors cursor-pointer"
+                  className="relative z-10 p-2 hover:bg-accent/10 rounded-lg transition-colors cursor-pointer"
                   aria-label="Close menu"
                 >
-                  <X className="w-5 h-5 text-white/80 pointer-events-none" />
+                  <X className="w-5 h-5 text-text-secondary pointer-events-none" />
                 </button>
               </div>
               <div className="h-[calc(100vh-73px)] overflow-y-auto">

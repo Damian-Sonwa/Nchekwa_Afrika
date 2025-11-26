@@ -58,7 +58,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-accent/20 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -71,15 +71,15 @@ export default function Navbar() {
               <motion.div
                 whileHover={{ rotate: 360, scale: 1.1 }}
                 transition={{ duration: 0.5 }}
-                className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow"
+                className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow"
               >
-                <Shield className="w-6 h-6 text-white" />
+                <Shield className="w-6 h-6 text-primary" />
               </motion.div>
               <div>
-                <h1 className="text-xl font-poppins font-semibold text-primary">
+                <h1 className="text-xl font-poppins font-semibold text-text-main">
                   Nchekwa_Afrika
                 </h1>
-                <p className="text-xs font-inter text-text-light">You are safe here</p>
+                <p className="text-xs font-inter text-text-secondary">You are safe here</p>
               </div>
             </Link>
           </motion.div>
@@ -97,8 +97,8 @@ export default function Navbar() {
                   className={cn(
                     "relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center space-x-2",
                     isActive
-                      ? "text-blue-600 bg-blue-50"
-                      : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                      ? "text-primary bg-accent/20"
+                      : "text-text-main hover:text-text-main hover:bg-accent/10"
                   )}
                 >
                   <item.icon className="w-4 h-4" />
@@ -106,7 +106,7 @@ export default function Navbar() {
                   {isActive && (
                     <motion.div
                       layoutId="activeIndicator"
-                      className="absolute inset-0 bg-blue-50 rounded-lg -z-10"
+                      className="absolute inset-0 bg-accent/20 rounded-lg -z-10"
                       initial={false}
                       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                     />
@@ -123,7 +123,7 @@ export default function Navbar() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleQuickExit}
-              className="p-2 text-gray-500 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50"
+              className="p-2 text-text-secondary hover:text-error transition-colors rounded-lg hover:bg-error/20"
               title="Quick Exit"
             >
               <AlertCircle className="w-5 h-5" />
@@ -136,13 +136,13 @@ export default function Navbar() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-accent/10 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 bg-gradient-to-br from-accent to-accent-gold rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-primary" />
                   </div>
                   <ChevronDown className={cn(
-                    "w-4 h-4 text-gray-500 transition-transform",
+                    "w-4 h-4 text-text-secondary transition-transform",
                     userMenuOpen && "rotate-180"
                   )} />
                 </motion.button>
@@ -153,19 +153,19 @@ export default function Navbar() {
                       initial={{ opacity: 0, y: -10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 overflow-hidden"
+                      className="absolute right-0 mt-2 w-48 bg-background rounded-xl shadow-2xl border border-accent/20 py-2 overflow-hidden"
                     >
                       <Link
                         to="/settings"
                         onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="flex items-center space-x-3 px-4 py-2 text-text-main hover:bg-accent/10 transition-colors"
                       >
                         <Settings className="w-4 h-4" />
                         <span>Settings</span>
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 transition-colors"
+                        className="w-full flex items-center space-x-3 px-4 py-2 text-error hover:bg-error/20 transition-colors"
                       >
                         <LogOut className="w-4 h-4" />
                         <span>Sign Out</span>
@@ -178,7 +178,7 @@ export default function Navbar() {
               <div className="hidden md:flex items-center space-x-3">
                 <button
                   onClick={() => navigate('/auth')}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                  className="px-4 py-2 text-text-main hover:text-text-main font-medium transition-colors"
                 >
                   Sign In
                 </button>
@@ -186,7 +186,7 @@ export default function Navbar() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate('/auth?mode=register')}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="px-6 py-2 bg-accent text-primary rounded-lg font-semibold shadow-lg hover:bg-accent-gold hover:shadow-xl transition-all duration-200"
                 >
                   Get Help
                 </motion.button>
@@ -196,7 +196,7 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+              className="md:hidden p-2 text-text-secondary hover:text-text-main rounded-lg hover:bg-accent/10 transition-colors"
             >
               {mobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -217,14 +217,14 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
             />
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-16 right-0 bottom-0 w-64 bg-white shadow-2xl z-50 md:hidden overflow-y-auto"
+              className="fixed top-16 right-0 bottom-0 w-64 bg-background shadow-2xl z-50 md:hidden overflow-y-auto border-l border-accent/20"
             >
               <div className="p-4 space-y-2">
                 {navigation.map((item) => {
@@ -242,8 +242,8 @@ export default function Navbar() {
                       className={cn(
                         "w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200",
                         isActive
-                          ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
-                          : "text-gray-700 hover:bg-gray-100"
+                          ? "bg-accent text-primary shadow-lg"
+                          : "text-text-main hover:bg-accent/10"
                       )}
                     >
                       <item.icon className="w-5 h-5" />
@@ -253,13 +253,13 @@ export default function Navbar() {
                 })}
 
                 {!isAuthenticated && (
-                  <div className="pt-4 border-t border-gray-200 space-y-2">
+                  <div className="pt-4 border-t border-accent/20 space-y-2">
                     <button
                       onClick={() => {
                         navigate('/auth')
                         setMobileMenuOpen(false)
                       }}
-                      className="w-full px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-left font-medium"
+                      className="w-full px-4 py-3 text-text-main hover:bg-accent/10 rounded-lg transition-colors text-left font-medium"
                     >
                       Sign In
                     </button>
@@ -270,7 +270,7 @@ export default function Navbar() {
                         navigate('/auth?mode=register')
                         setMobileMenuOpen(false)
                       }}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold shadow-lg"
+                      className="w-full px-4 py-3 bg-accent text-primary rounded-lg font-semibold shadow-lg"
                     >
                       Get Help
                     </motion.button>
@@ -278,20 +278,20 @@ export default function Navbar() {
                 )}
 
                 {isAuthenticated && (
-                  <div className="pt-4 border-t border-gray-200 space-y-2">
+                  <div className="pt-4 border-t border-accent/20 space-y-2">
                     <button
                       onClick={() => {
                         navigate('/settings')
                         setMobileMenuOpen(false)
                       }}
-                      className="w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-text-main hover:bg-accent/10 rounded-lg transition-colors"
                     >
                       <Settings className="w-5 h-5" />
                       <span className="font-medium">Settings</span>
                     </button>
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-error hover:bg-error/20 rounded-lg transition-colors"
                     >
                       <LogOut className="w-5 h-5" />
                       <span className="font-medium">Sign Out</span>
@@ -306,4 +306,3 @@ export default function Navbar() {
     </nav>
   )
 }
-

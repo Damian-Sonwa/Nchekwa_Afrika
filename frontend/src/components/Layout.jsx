@@ -40,7 +40,7 @@ export default function Layout() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark overflow-x-hidden w-full max-w-full relative">
+    <div className="min-h-screen bg-background overflow-x-hidden w-full max-w-full relative">
       {/* Collapsible Sidebar - z-50 to be above main content */}
       <Sidebar />
 
