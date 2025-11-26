@@ -129,10 +129,18 @@ export const forgotPassword = async (email) => {
 // Reset Password
 export const resetPassword = async (token, newPassword) => {
   try {
+    console.log('📤 Sending reset password request');
+    console.log('🔑 Token (first 16 chars):', token ? token.substring(0, 16) + '...' : 'MISSING');
+    console.log('🔑 Token length:', token ? token.length : 0);
+    console.log('🔒 Password length:', newPassword ? newPassword.length : 0);
+    
     const response = await api.post('/auth/reset-password', { token, newPassword })
+    console.log('✅ Reset password response:', response.data)
     return response.data
   } catch (error) {
-    console.error('Reset password error:', error)
+    console.error('❌ Reset password error:', error)
+    console.error('❌ Error response data:', error.response?.data)
+    console.error('❌ Error status:', error.response?.status)
     throw error
   }
 }

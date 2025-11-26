@@ -23,6 +23,7 @@ export default function ResetPassword() {
     if (token) {
       console.log('🔑 Reset token received from URL:', token.substring(0, 16) + '...');
       console.log('🔑 Token length:', token.length);
+      console.log('🔑 Full token (for debugging):', token);
     } else {
       console.warn('⚠️ No reset token found in URL');
     }
@@ -89,8 +90,14 @@ export default function ResetPassword() {
       }
     } catch (error) {
       console.error('Reset password error:', error)
+      console.error('Error response:', error.response?.data)
+      console.error('Error status:', error.response?.status)
+      
+      // Get the actual error message from the backend
+      const errorMessage = error.response?.data?.error || error.message || 'Failed to reset password. The token may have expired. Please request a new reset link.'
+      
       setErrors({ 
-        submit: error.response?.data?.error || 'Failed to reset password. The token may have expired. Please request a new reset link.' 
+        submit: errorMessage
       })
       setLoading(false)
     }

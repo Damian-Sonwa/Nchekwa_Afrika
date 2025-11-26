@@ -403,12 +403,25 @@ router.post('/reset-password', async (req, res) => {
   try {
     const { token, newPassword } = req.body;
 
+    console.log('📥 Reset password request received');
+    console.log('🔑 Token provided:', token ? token.substring(0, 16) + '...' : 'MISSING');
+    console.log('🔑 Token length:', token ? token.length : 0);
+    console.log('🔒 Password provided:', newPassword ? 'YES (length: ' + newPassword.length + ')' : 'MISSING');
+
     if (!token || !newPassword) {
-      return res.status(400).json({ error: 'Token and new password are required' });
+      console.error('❌ Missing required fields:', { hasToken: !!token, hasPassword: !!newPassword });
+      return res.status(400).json({ 
+        error: 'Token and new password are required',
+        details: { hasToken: !!token, hasPassword: !!newPassword }
+      });
     }
 
     if (newPassword.length < 8) {
-      return res.status(400).json({ error: 'Password must be at least 8 characters' });
+      console.error('❌ Password too short:', newPassword.length);
+      return res.status(400).json({ 
+        error: 'Password must be at least 8 characters',
+        details: { passwordLength: newPassword.length }
+      });
     }
 
     console.log('🔍 Validating reset token (POST):', token.substring(0, 16) + '...');
@@ -420,7 +433,21 @@ router.post('/reset-password', async (req, res) => {
 
     if (users.length === 0) {
       console.error('❌ No user found with token:', token.substring(0, 16) + '...');
-      return res.status(400).json({ error: 'Invalid or expired reset token' });
+      // Try to find users with reset tokens for debugging
+      const allUsers = await User.find({ 'settings.resetToken': { $exists: true } });
+      console.log(`📊 Total users with reset tokens: ${allUsers.length}`);
+      if (allUsers.length > 0) {
+        console.log('📋 Sample tokens:', allUsers.slice(0, 3).map(u => ({
+          token: u.settings?.resetToken?.substring(0, 16) + '...',
+          tokenLength: u.settings?.resetToken?.length,
+          expiry: u.settings?.resetTokenExpiry,
+          expired: u.settings?.resetTokenExpiry ? new Date(u.settings.resetTokenExpiry) < new Date() : 'no expiry'
+        })));
+      }
+      return res.status(400).json({ 
+        error: 'Invalid or expired reset token',
+        details: 'No user found with this token. The token may have been used already or may be incorrect.'
+      });
     }
 
     const user = users.find(u => {
