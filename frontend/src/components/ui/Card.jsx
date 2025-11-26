@@ -18,7 +18,7 @@ export default function Card({
     <motion.div
       whileHover={hover ? { scale: 1.02 } : {}}
       className={cn(
-        'bg-white rounded-xl shadow-md border border-gray-200',
+        'bg-background rounded-xl shadow-md border border-accent/20',
         hover && 'hover:shadow-xl transition-shadow duration-300',
         className
       )}

@@ -29,7 +29,7 @@ export default function Input({
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <Icon className={cn(
               "w-5 h-5",
-              error ? "text-red-400" : "text-gray-400"
+              error ? "text-error" : "text-text-secondary"
             )} />
           </div>
         )}
@@ -40,8 +40,8 @@ export default function Input({
             !Icon && "px-4",
             "py-3",
             error
-              ? "border-red-300 focus:border-red-500 focus:ring-red-200"
-              : "border-gray-200 focus:border-blue-500 focus:ring-blue-200",
+              ? "border-error focus:border-error focus:ring-error/20 bg-background text-text-main"
+              : "border-accent/20 focus:border-accent focus:ring-accent/20 bg-background text-text-main",
             className
           )}
           {...props}
@@ -51,7 +51,7 @@ export default function Input({
         <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-2 text-sm text-red-600 flex items-center space-x-1"
+          className="mt-2 text-sm text-error flex items-center space-x-1"
         >
           <span>{error}</span>
         </motion.p>
