@@ -278,17 +278,42 @@ router.post('/forgot-password', async (req, res) => {
     user.settings = user.settings || {};
     user.settings.resetToken = resetToken;
     user.settings.resetTokenExpiry = resetTokenExpiry;
-    await user.save();
-    console.log('✅ Reset token saved to database for user');
     
-    // Verify the token was saved correctly
+    console.log('💾 Saving token to database:', {
+      userId: user._id.toString(),
+      tokenFirst16: resetToken.substring(0, 16) + '...',
+      tokenLength: resetToken.length,
+      tokenType: typeof resetToken,
+      expiry: resetTokenExpiry
+    });
+    
+    await user.save();
+    console.log('✅ User saved to database');
+    
+    // Verify the token was saved correctly by re-fetching
     const savedUser = await User.findById(user._id);
     if (savedUser && savedUser.settings?.resetToken) {
-      console.log('✅ Verified token in database:', savedUser.settings.resetToken.substring(0, 16) + '...');
-      console.log('✅ Token length in DB:', savedUser.settings.resetToken.length);
-      console.log('✅ Tokens match:', savedUser.settings.resetToken === resetToken);
+      const savedToken = savedUser.settings.resetToken;
+      console.log('✅ Verified token in database after save:');
+      console.log('  Saved token (first 16):', savedToken.substring(0, 16) + '...');
+      console.log('  Saved token (last 16):', '...' + savedToken.substring(savedToken.length - 16));
+      console.log('  Saved token length:', savedToken.length);
+      console.log('  Original token (first 16):', resetToken.substring(0, 16) + '...');
+      console.log('  Original token length:', resetToken.length);
+      console.log('  Tokens match exactly:', savedToken === resetToken);
+      console.log('  Tokens match (string comparison):', String(savedToken) === String(resetToken));
+      console.log('  First 16 chars match:', savedToken.substring(0, 16) === resetToken.substring(0, 16));
+      console.log('  Last 16 chars match:', savedToken.substring(savedToken.length - 16) === resetToken.substring(resetToken.length - 16));
+      
+      if (savedToken !== resetToken) {
+        console.error('❌ WARNING: Saved token does not match original token!');
+        console.error('  Original:', resetToken);
+        console.error('  Saved:', savedToken);
+      }
     } else {
       console.error('❌ Token NOT found in database after save!');
+      console.error('  User ID:', user._id.toString());
+      console.error('  Settings object:', savedUser?.settings);
     }
 
     // Generate reset link using consistent FRONTEND_URL
@@ -474,7 +499,32 @@ router.post('/reset-password', async (req, res) => {
     });
     console.log(`📊 Total users with reset tokens in DB: ${allUsersWithTokens.length}`);
 
-    // Find user by matching token (try both decoded and original)
+    // Log all stored tokens for debugging
+    if (allUsersWithTokens.length > 0) {
+      console.log('📋 All stored tokens in database:');
+      allUsersWithTokens.forEach((u, index) => {
+        const storedToken = u.settings?.resetToken;
+        if (storedToken) {
+          console.log(`  User ${index + 1} (${u.emailHash ? 'has email' : 'no email'}):`, {
+            tokenFirst16: storedToken.substring(0, 16) + '...',
+            tokenLast16: '...' + storedToken.substring(storedToken.length - 16),
+            tokenLength: storedToken.length,
+            tokenType: typeof storedToken,
+            expiry: u.settings?.resetTokenExpiry,
+            expired: u.settings?.resetTokenExpiry ? new Date(u.settings.resetTokenExpiry) < new Date() : 'no expiry'
+          });
+        }
+      });
+    }
+
+    console.log('🔍 Searching for token:', {
+      searchTokenFirst16: decodedToken.substring(0, 16) + '...',
+      searchTokenLast16: '...' + decodedToken.substring(decodedToken.length - 16),
+      searchTokenLength: decodedToken.length,
+      searchTokenType: typeof decodedToken
+    });
+
+    // Find user by matching token (try both decoded and original, case-insensitive)
     let user = null;
     let tokenMatchType = null;
 
@@ -486,7 +536,7 @@ router.post('/reset-password', async (req, res) => {
       if (storedToken === decodedToken) {
         user = u;
         tokenMatchType = 'decoded-exact';
-        console.log('✅ Found user with decoded token match');
+        console.log('✅ Found user with decoded token exact match');
         break;
       }
 
@@ -494,26 +544,50 @@ router.post('/reset-password', async (req, res) => {
       if (storedToken === token && token !== decodedToken) {
         user = u;
         tokenMatchType = 'original-exact';
-        console.log('✅ Found user with original token match');
+        console.log('✅ Found user with original token exact match');
+        break;
+      }
+
+      // Try case-insensitive match (shouldn't be needed for hex, but just in case)
+      if (storedToken.toLowerCase() === decodedToken.toLowerCase() && storedToken !== decodedToken) {
+        user = u;
+        tokenMatchType = 'case-insensitive';
+        console.log('✅ Found user with case-insensitive match');
+        break;
+      }
+
+      // Try trimming both (in case of whitespace issues)
+      if (storedToken.trim() === decodedToken.trim() && storedToken !== decodedToken) {
+        user = u;
+        tokenMatchType = 'trimmed-match';
+        console.log('✅ Found user with trimmed token match');
         break;
       }
     }
 
-    // If still not found, log comparison for debugging
+    // If still not found, log detailed comparison for debugging
     if (!user && allUsersWithTokens.length > 0) {
-      console.log('🔍 Token comparison details:');
-      allUsersWithTokens.slice(0, 3).forEach((u, index) => {
+      console.log('🔍 Detailed token comparison (no match found):');
+      allUsersWithTokens.forEach((u, index) => {
         const storedToken = u.settings?.resetToken;
         if (storedToken) {
           const storedFirst16 = storedToken.substring(0, 16);
           const searchFirst16 = decodedToken.substring(0, 16);
+          const storedLast16 = storedToken.substring(storedToken.length - 16);
+          const searchLast16 = decodedToken.substring(decodedToken.length - 16);
+          
           console.log(`  User ${index + 1}:`, {
             storedFirst16: storedFirst16 + '...',
             searchFirst16: searchFirst16 + '...',
+            storedLast16: '...' + storedLast16,
+            searchLast16: '...' + searchLast16,
             storedLength: storedToken.length,
             searchLength: decodedToken.length,
             firstCharsMatch: storedFirst16 === searchFirst16,
-            fullMatch: storedToken === decodedToken
+            lastCharsMatch: storedLast16 === searchLast16,
+            fullMatch: storedToken === decodedToken,
+            storedTokenFull: storedToken, // Log full token for debugging
+            searchTokenFull: decodedToken // Log full token for debugging
           });
         }
       });
