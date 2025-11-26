@@ -643,29 +643,30 @@ export default function Auth() {
 
   // Handle email verification callback
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const verified = urlParams.get('verified')
-    const reset = urlParams.get('reset')
-    const oauth = urlParams.get('oauth')
+    const handleEmailVerification = async () => {
+      const urlParams = new URLSearchParams(window.location.search)
+      const verified = urlParams.get('verified')
+      const reset = urlParams.get('reset')
+      const oauth = urlParams.get('oauth')
 
-    if (verified === 'true') {
-      // Clear pending email confirmation state
-      setPendingEmailConfirmation(false)
-      setPendingEmail('')
-      
-      console.log('✅ Email verification callback detected (verified=true)')
-      
-      // Check for session tokens in URL hash first (Supabase puts them there)
-      const hashParams = new URLSearchParams(window.location.hash.substring(1))
-      const accessToken = hashParams.get('access_token')
-      const type = hashParams.get('type')
-      
-      if (accessToken && type === 'signup') {
-        console.log('📧 Setting session from email confirmation tokens')
-        const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: hashParams.get('refresh_token') || ''
-        })
+      if (verified === 'true') {
+        // Clear pending email confirmation state
+        setPendingEmailConfirmation(false)
+        setPendingEmail('')
+        
+        console.log('✅ Email verification callback detected (verified=true)')
+        
+        // Check for session tokens in URL hash first (Supabase puts them there)
+        const hashParams = new URLSearchParams(window.location.hash.substring(1))
+        const accessToken = hashParams.get('access_token')
+        const type = hashParams.get('type')
+        
+        if (accessToken && type === 'signup') {
+          console.log('📧 Setting session from email confirmation tokens')
+          const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: hashParams.get('refresh_token') || ''
+          })
         
         if (sessionError) {
           console.error('❌ Error setting session:', sessionError)
@@ -703,49 +704,49 @@ export default function Auth() {
         }
       }
       
-      // Fallback: Check for existing session
-      setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
-      setSuccess(true)
-      
-      // Clear the query parameter
-      window.history.replaceState(null, '', window.location.pathname)
-      
-      // Check session after verification
-      setTimeout(async () => {
-        const { data: { session } } = await supabase.auth.getSession()
-        if (session) {
-        const userData = {
-            email: session.user.email,
-            id: session.user.id,
-            emailConfirmed: true
-          }
-          
-          setAuth(userData, session.access_token, session.user.id)
-          setAnonymousId(session.user.id)
-          
-          localStorage.setItem('supabase_session', JSON.stringify(session))
-          localStorage.setItem('anonymousId', session.user.id)
-        localStorage.setItem('isOnboarded', 'true')
+        // Fallback: Check for existing session
+        setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
+        setSuccess(true)
         
-          setTimeout(() => {
-            navigate('/user-details')
-          }, 2000)
-        } else {
-          console.warn('⚠️ No session found after email verification')
-          setMessage('Email verified! You can now sign in with your email and password.')
-          setSuccess(false)
-        }
-      }, 1000)
-    }
+        // Clear the query parameter
+        window.history.replaceState(null, '', window.location.pathname)
+        
+        // Check session after verification
+        setTimeout(async () => {
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session) {
+          const userData = {
+              email: session.user.email,
+              id: session.user.id,
+              emailConfirmed: true
+            }
+            
+            setAuth(userData, session.access_token, session.user.id)
+            setAnonymousId(session.user.id)
+            
+            localStorage.setItem('supabase_session', JSON.stringify(session))
+            localStorage.setItem('anonymousId', session.user.id)
+          localStorage.setItem('isOnboarded', 'true')
+          
+            setTimeout(() => {
+              navigate('/user-details')
+            }, 2000)
+          } else {
+            console.warn('⚠️ No session found after email verification')
+            setMessage('Email verified! You can now sign in with your email and password.')
+            setSuccess(false)
+          }
+        }, 1000)
+      }
 
-    if (reset === 'true') {
-      setMessage('Your password has been updated successfully! You can now sign in with your new password.')
-      setIsLogin(true)
-      setShowForgotPassword(false)
-      
-      // Clear the query parameter
-      window.history.replaceState(null, '', window.location.pathname)
-    }
+      if (reset === 'true') {
+        setMessage('Your password has been updated successfully! You can now sign in with your new password.')
+        setIsLogin(true)
+        setShowForgotPassword(false)
+        
+        // Clear the query parameter
+        window.history.replaceState(null, '', window.location.pathname)
+      }
 
     if (oauth === 'true') {
       // OAuth callback - session should be set automatically
@@ -810,7 +811,10 @@ export default function Auth() {
       
       // Clear the query parameters
       window.history.replaceState(null, '', window.location.pathname)
-  }
+    }
+    }
+    
+    handleEmailVerification()
   }, [navigate, setAuth, setAnonymousId])
 
   return (
