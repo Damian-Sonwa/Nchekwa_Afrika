@@ -547,7 +547,6 @@ router.post('/reset-password', async (req, res) => {
     }
 
     console.log('✅ Token is valid and not expired');
-    }
 
     // Check if user had a password before (for logging)
     const hadPassword = !!user.passwordHash;
