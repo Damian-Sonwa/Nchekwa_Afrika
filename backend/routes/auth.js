@@ -267,7 +267,14 @@ router.post('/forgot-password', async (req, res) => {
 
     // Generate reset link using consistent FRONTEND_URL
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    if (!process.env.FRONTEND_URL) {
+      console.warn('⚠️  FRONTEND_URL not set! Using fallback:', frontendUrl);
+      console.warn('💡 Set FRONTEND_URL in Render environment variables to your Vercel frontend URL');
+    } else {
+      console.log('✅ Using FRONTEND_URL:', frontendUrl);
+    }
     const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`;
+    console.log('🔗 Generated reset link:', resetLink);
     
     // Send password reset email
     try {
@@ -537,7 +544,14 @@ router.post('/resend-confirmation', async (req, res) => {
 
     // Generate confirmation link
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    if (!process.env.FRONTEND_URL) {
+      console.warn('⚠️  FRONTEND_URL not set! Using fallback:', frontendUrl);
+      console.warn('💡 Set FRONTEND_URL in Render environment variables to your Vercel frontend URL');
+    } else {
+      console.log('✅ Using FRONTEND_URL:', frontendUrl);
+    }
     const confirmationLink = `${frontendUrl}/confirm-email?token=${confirmationToken}`;
+    console.log('🔗 Generated confirmation link:', confirmationLink);
     
     // Send confirmation email
     try {
@@ -665,7 +679,14 @@ router.post('/register', async (req, res) => {
 
     // Generate confirmation link
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    if (!process.env.FRONTEND_URL) {
+      console.warn('⚠️  FRONTEND_URL not set! Using fallback:', frontendUrl);
+      console.warn('💡 Set FRONTEND_URL in Render environment variables to your Vercel frontend URL');
+    } else {
+      console.log('✅ Using FRONTEND_URL:', frontendUrl);
+    }
     const confirmationLink = `${frontendUrl}/confirm-email?token=${confirmationToken}`;
+    console.log('🔗 Generated confirmation link:', confirmationLink);
     
     // Send confirmation email
     try {
@@ -744,15 +765,16 @@ router.get('/test-email', async (req, res) => {
       success: true,
       message: 'Email configuration check',
       config,
-      instructions: {
+        instructions: {
         setup: 'To enable email sending, set the following environment variables in Render:',
         resend: [
           'EMAIL_PROVIDER=resend',
           'RESEND_API_KEY=re_xxxxxxxxxxxxx',
-          'EMAIL_FROM=noreply@yourdomain.com (or onboarding@resend.dev for testing)',
-          'FRONTEND_URL=https://your-frontend-url.vercel.app'
+          'EMAIL_FROM=onboarding@resend.dev (for testing) or noreply@yourdomain.com (for production)',
+          'FRONTEND_URL=https://your-frontend-url.vercel.app (REQUIRED - must match your actual Vercel URL)'
         ],
-        test: 'Add ?testEmail=your@email.com to this URL to test email sending'
+        test: 'Add ?testEmail=your@email.com to this URL to test email sending',
+        frontendUrlNote: '⚠️ IMPORTANT: FRONTEND_URL must be set to your actual Vercel frontend URL. If not set, confirmation links will point to localhost and will not work!'
       }
     });
   } catch (error) {
