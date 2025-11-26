@@ -247,7 +247,7 @@ export default function UserDetails() {
   const iconPositions = generateIconPositions()
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background-light dark:bg-background-dark flex items-center justify-center p-4 relative">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background flex items-center justify-center p-4 relative">
       {/* WhatsApp-style background pattern */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Grid pattern overlay */}
@@ -265,7 +265,7 @@ export default function UserDetails() {
         {iconPositions.map(({ Icon, size, left, top, rotation, key }) => (
           <Icon
             key={key}
-            className="absolute text-primary/20 dark:text-primary/25"
+            className="absolute text-accent/20 dark:text-accent/25"
             style={{
               left: `${left}%`,
               top: `${top}%`,
@@ -308,20 +308,20 @@ export default function UserDetails() {
                     <button
                       type="button"
                       onClick={handleRemoveProfilePicture}
-                      className="absolute top-1 right-1 p-1 bg-error rounded-full text-white hover:bg-error/80 transition-colors"
+                      className="absolute top-1 right-1 p-1 bg-error rounded-full text-text-main hover:bg-error/80 transition-colors"
                       title="Remove picture"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
                 ) : (
-                  <div className="w-32 h-32 rounded-full bg-primary flex items-center justify-center border-4 border-primary shadow-xl">
-                    <User className="w-16 h-16 text-white" />
+                  <div className="w-32 h-32 rounded-full bg-accent flex items-center justify-center border-4 border-primary shadow-xl">
+                    <User className="w-16 h-16 text-text-main" />
                   </div>
                 )}
                 <label
                   htmlFor="profile-picture"
-                  className="absolute bottom-0 right-0 p-2 bg-primary rounded-full text-white cursor-pointer hover:bg-primaryLight transition-colors shadow-lg"
+                  className="absolute bottom-0 right-0 p-2 bg-accent rounded-full text-text-main cursor-pointer hover:bg-accentLight transition-colors shadow-lg"
                   title="Upload profile picture"
                 >
                   {uploadingPicture ? (
@@ -346,10 +346,10 @@ export default function UserDetails() {
                 </p>
               )}
             </motion.div>
-            <h1 className="text-3xl md:text-4xl font-poppins font-bold text-dark dark:text-white mb-2">
+            <h1 className="text-3xl md:text-4xl font-poppins font-bold text-dark dark:text-text-main mb-2">
               Tell Us About Yourself
             </h1>
-            <p className="font-inter text-light dark:text-white">
+            <p className="font-inter text-light dark:text-text-main">
               This information helps us provide better support. All details are kept private and secure.
             </p>
           </motion.div>
@@ -362,18 +362,18 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <label htmlFor="name" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
-                Name <span className="text-text-secondary dark:text-white/70 text-xs">(Optional - you can use an alias)</span>
+              <label htmlFor="name" className="block text-sm font-body font-medium text-text-main mb-2">
+                Name <span className="text-text-secondary dark:text-text-main/70 text-xs">(Optional - you can use an alias)</span>
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text-secondary dark:text-white/60" />
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text-secondary dark:text-text-main/60" />
                 <input
                   id="name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Your name or alias"
-                  className="w-full pl-12 pr-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-accent/20 rounded-xl bg-background text-text-main font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
                 />
               </div>
             </motion.div>
@@ -384,11 +384,11 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <label htmlFor="age" className="block text-sm font-inter font-medium text-dark dark:text-white mb-2">
+              <label htmlFor="age" className="block text-sm font-inter font-medium text-dark dark:text-text-main mb-2">
                 Age <span className="text-error">*</span>
               </label>
               <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light dark:text-white/60" />
+                <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light dark:text-text-main/60" />
                 <input
                   id="age"
                   type="number"
@@ -400,7 +400,7 @@ export default function UserDetails() {
                     setErrors({ ...errors, age: '' })
                   }}
                   placeholder="Your age"
-                  className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl bg-white dark:bg-dark text-dark dark:text-white font-inter focus:outline-none focus:ring-2 transition-all ${
+                  className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl bg-white dark:bg-dark text-dark dark:text-text-main font-inter focus:outline-none focus:ring-2 transition-all ${
                     errors.age
                       ? 'border-error focus:ring-error focus:border-error'
                       : 'border-light dark:border-light/30 focus:ring-primaryLight focus:border-primaryLight'
@@ -419,7 +419,7 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <label className="block text-sm font-inter font-medium text-dark dark:text-white mb-2">
+              <label className="block text-sm font-inter font-medium text-dark dark:text-text-main mb-2">
                 Sex <span className="text-error">*</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 w-full">
@@ -433,8 +433,8 @@ export default function UserDetails() {
                     }}
                     className={`p-3 rounded-xl border-2 transition-all font-inter ${
                       formData.sex === option.value
-                        ? 'border-primary bg-primaryLight/20 text-primary dark:text-primaryLight'
-                        : 'border-light dark:border-light/30 hover:border-primaryLight dark:hover:border-primaryLight text-dark dark:text-white'
+                        ? 'border-primary bg-accentLight/20 text-accent dark:text-accentLight'
+                        : 'border-light dark:border-light/30 hover:border-primaryLight dark:hover:border-primaryLight text-dark dark:text-text-main'
                     }`}
                   >
                     {option.label}
@@ -452,7 +452,7 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <label className="block text-sm font-inter font-medium text-dark dark:text-white mb-2">
+              <label className="block text-sm font-inter font-medium text-dark dark:text-text-main mb-2">
                 Marital Status <span className="text-error">*</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full">
@@ -466,8 +466,8 @@ export default function UserDetails() {
                     }}
                     className={`p-3 rounded-xl border-2 transition-all font-inter ${
                       formData.maritalStatus === option.value
-                        ? 'border-primary bg-primaryLight/20 text-primary dark:text-primaryLight'
-                        : 'border-light dark:border-light/30 hover:border-primaryLight dark:hover:border-primaryLight text-dark dark:text-white'
+                        ? 'border-primary bg-accentLight/20 text-accent dark:text-accentLight'
+                        : 'border-light dark:border-light/30 hover:border-primaryLight dark:hover:border-primaryLight text-dark dark:text-text-main'
                     }`}
                   >
                     {option.label}
@@ -485,11 +485,11 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <label htmlFor="country" className="block text-sm font-inter font-medium text-dark dark:text-white mb-2">
+              <label htmlFor="country" className="block text-sm font-inter font-medium text-dark dark:text-text-main mb-2">
                 Country <span className="text-error">*</span>
               </label>
               <div className="relative">
-                <Globe className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light dark:text-white/60" />
+                <Globe className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light dark:text-text-main/60" />
                 <select
                   id="country"
                   value={formData.country}
@@ -497,16 +497,16 @@ export default function UserDetails() {
                     setFormData({ ...formData, country: e.target.value })
                     setErrors({ ...errors, country: '' })
                   }}
-                  className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl bg-white dark:bg-dark text-dark dark:text-white font-inter focus:outline-none focus:ring-2 transition-all ${
+                  className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl bg-white dark:bg-dark text-dark dark:text-text-main font-inter focus:outline-none focus:ring-2 transition-all ${
                     errors.country
                       ? 'border-error focus:ring-error focus:border-error'
                       : 'border-light dark:border-light/30 focus:ring-primaryLight focus:border-primaryLight'
                   }`}
                   required
                 >
-                  <option value="" className="bg-white dark:bg-dark text-dark dark:text-white">Select your country</option>
+                  <option value="" className="bg-white dark:bg-dark text-dark dark:text-text-main">Select your country</option>
                   {countries.map((country) => (
-                    <option key={country} value={country} className="bg-white dark:bg-dark text-dark dark:text-white">
+                    <option key={country} value={country} className="bg-white dark:bg-dark text-dark dark:text-text-main">
                       {country}
                     </option>
                   ))}
@@ -540,7 +540,7 @@ export default function UserDetails() {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="flex-1 px-6 py-4 bg-primary hover:bg-primaryLight text-white rounded-xl font-inter font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-4 bg-accent hover:bg-accentLight text-text-main rounded-xl font-inter font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -559,7 +559,7 @@ export default function UserDetails() {
                 type="button"
                 onClick={handleSkip}
                 disabled={loading}
-                className="px-6 py-4 border-2 border-light dark:border-light/30 text-dark dark:text-white rounded-xl font-inter font-medium hover:bg-background dark:hover:bg-dark/50 transition-colors disabled:opacity-50"
+                className="px-6 py-4 border-2 border-light dark:border-light/30 text-dark dark:text-text-main rounded-xl font-inter font-medium hover:bg-background dark:hover:bg-dark/50 transition-colors disabled:opacity-50"
               >
                 Skip for now
               </button>
@@ -570,7 +570,7 @@ export default function UserDetails() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
-              className="text-xs font-inter text-center text-light dark:text-white mt-4"
+              className="text-xs font-inter text-center text-light dark:text-text-main mt-4"
             >
               🔒 Your information is encrypted and stored securely. You can update or delete it anytime in Settings.
             </motion.p>
