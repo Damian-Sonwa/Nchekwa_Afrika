@@ -349,7 +349,7 @@ export default function UserDetails() {
             <h1 className="text-3xl md:text-4xl font-poppins font-bold text-dark dark:text-white mb-2">
               Tell Us About Yourself
             </h1>
-            <p className="font-inter text-light dark:text-light">
+            <p className="font-inter text-light dark:text-white">
               This information helps us provide better support. All details are kept private and secure.
             </p>
           </motion.div>
@@ -384,7 +384,7 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <label htmlFor="age" className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
+              <label htmlFor="age" className="block text-sm font-inter font-medium text-dark dark:text-white mb-2">
                 Age <span className="text-error">*</span>
               </label>
               <div className="relative">
@@ -419,7 +419,7 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <label className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
+              <label className="block text-sm font-inter font-medium text-dark dark:text-white mb-2">
                 Sex <span className="text-error">*</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 w-full">
@@ -452,7 +452,7 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <label className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
+              <label className="block text-sm font-inter font-medium text-dark dark:text-white mb-2">
                 Marital Status <span className="text-error">*</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full">
@@ -485,7 +485,7 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <label htmlFor="country" className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
+              <label htmlFor="country" className="block text-sm font-inter font-medium text-dark dark:text-white mb-2">
                 Country <span className="text-error">*</span>
               </label>
               <div className="relative">
@@ -570,7 +570,7 @@ export default function UserDetails() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
-              className="text-xs font-inter text-center text-light dark:text-light mt-4"
+              className="text-xs font-inter text-center text-light dark:text-white mt-4"
             >
               🔒 Your information is encrypted and stored securely. You can update or delete it anytime in Settings.
             </motion.p>
