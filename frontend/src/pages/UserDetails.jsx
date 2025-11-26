@@ -299,7 +299,7 @@ export default function UserDetails() {
             >
               <div className="relative">
                 {profilePicturePreview ? (
-                  <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-xl">
+                  <div className="relative w-32 h-32 rounded-full overflow-hidden border shadow-lg" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
                     <img
                       src={profilePicturePreview}
                       alt="Profile"
@@ -315,13 +315,13 @@ export default function UserDetails() {
                     </button>
                   </div>
                 ) : (
-                  <div className="w-32 h-32 rounded-full bg-accent flex items-center justify-center border-4 border-primary shadow-xl">
-                    <User className="w-16 h-16 text-text-main" />
+                  <div className="w-32 h-32 rounded-full bg-accent flex items-center justify-center border shadow-lg" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+                    <User className="w-16 h-16 text-primary" />
                   </div>
                 )}
                 <label
                   htmlFor="profile-picture"
-                  className="absolute bottom-0 right-0 p-2 bg-accent rounded-full text-text-main cursor-pointer hover:bg-accentLight transition-colors shadow-lg"
+                  className="absolute bottom-0 right-0 p-2 bg-accent rounded-full text-primary cursor-pointer hover:bg-accent-gold transition-colors shadow-lg"
                   title="Upload profile picture"
                 >
                   {uploadingPicture ? (
