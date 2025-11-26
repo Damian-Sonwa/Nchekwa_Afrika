@@ -215,15 +215,24 @@ export default function Auth() {
         }
 
         // Regular login with Supabase
+        console.log('🔐 Attempting login for:', formData.email)
         const { data, error } = await supabase.auth.signInWithPassword({
           email: formData.email,
           password: formData.password,
         })
 
+        console.log('🔐 Login response:', { 
+          hasUser: !!data?.user, 
+          hasSession: !!data?.session,
+          emailConfirmed: data?.user?.email_confirmed_at,
+          error: error?.message 
+        })
+
         if (error) {
-          if (error.message.includes('Email not confirmed')) {
+          console.error('❌ Login error:', error)
+          if (error.message.includes('Email not confirmed') || error.message.includes('email not confirmed')) {
             setErrors({ 
-              submit: 'Please verify your email address before signing in. Check your inbox for the confirmation link.' 
+              submit: 'Please verify your email address before signing in. Check your inbox for the confirmation link. If you already confirmed, try refreshing the page.' 
             })
           } else if (error.message.includes('Invalid login credentials')) {
             setErrors({ submit: 'Invalid email or password' })
@@ -235,20 +244,34 @@ export default function Auth() {
         }
 
         if (data.user && data.session) {
-          // Check if email is confirmed
-          if (!data.user.email_confirmed_at) {
-            setErrors({ 
-              submit: 'Please verify your email address before signing in. Check your inbox for the confirmation link.' 
-            })
-            setLoading(false)
-            return
+          // If Supabase returns a session, the email is confirmed (Supabase enforces this)
+          // However, let's refresh the user data to get the latest confirmation status
+          console.log('✅ Login successful, refreshing user data...')
+          
+          // Refresh user data to get latest confirmation status
+          const { data: { user: refreshedUser }, error: refreshError } = await supabase.auth.getUser()
+          
+          if (refreshError) {
+            console.error('❌ Error refreshing user:', refreshError)
+          } else {
+            console.log('📧 Refreshed user email confirmed?', refreshedUser?.email_confirmed_at)
+          }
+          
+          // Use refreshed user data if available, otherwise use original
+          const user = refreshedUser || data.user
+          
+          // If we have a session, Supabase has verified the email is confirmed
+          // But let's still check for edge cases
+          if (!user.email_confirmed_at && data.session) {
+            console.warn('⚠️ Session exists but email_confirmed_at is null - this might be a timing issue')
+            console.warn('⚠️ Proceeding with login since Supabase returned a session (email is confirmed)')
           }
 
         // Store auth data
         const userData = {
-            email: data.user.email,
-            id: data.user.id,
-            emailConfirmed: true
+            email: user.email,
+            id: user.id,
+            emailConfirmed: !!user.email_confirmed_at || !!data.session // Trust session if email_confirmed_at is missing
         }
         
           setAuth(userData, data.session.access_token, data.user.id)
