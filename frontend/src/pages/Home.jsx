@@ -195,17 +195,28 @@ export default function Home() {
           disabled={sosPressed}
           className="relative w-full group overflow-hidden"
         >
-          {/* Main button - much smaller */}
-          <div className="relative bg-error dark:bg-error rounded-2xl shadow-xl p-4 sm:p-5 md:p-6 flex flex-row items-center justify-between text-white transform transition-all duration-300 hover:shadow-error/50 disabled:opacity-75 border-2 border-error/30 min-h-[100px] sm:min-h-[120px] md:min-h-[140px] w-full max-w-full box-border">
-            {/* Background image with overlay */}
+          {/* Main button - with glass morphism */}
+          <div 
+            className="relative rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-row items-center justify-between text-white transform transition-all duration-300 hover:shadow-error/50 disabled:opacity-75 border-2 border-white/20 dark:border-white/10 min-h-[100px] sm:min-h-[120px] md:min-h-[140px] w-full max-w-full box-border"
+            style={{
+              background: 'rgba(239, 68, 68, 0.95)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+              boxShadow: '0 8px 32px 0 rgba(239, 68, 68, 0.37)'
+            }}
+          >
+            {/* Background image with better visibility */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden">
               <img 
                 src="/StockCake-someone_pressing_an_emergency_button_Images_and_Photos_1763940162.jpg"
                 alt="Emergency button"
-                className="w-full h-full object-cover opacity-15 dark:opacity-8"
+                className="w-full h-full object-cover opacity-30 dark:opacity-25"
+                onError={(e) => {
+                  e.target.style.display = 'none'
+                }}
               />
-              {/* Dark overlay for better text readability */}
-              <div className="absolute inset-0 bg-error/95 dark:bg-error/97" />
+              {/* Lighter overlay for better text readability while keeping image visible */}
+              <div className="absolute inset-0 bg-error/85 dark:bg-error/90" />
             </div>
             
             {/* Shine effect on hover */}
@@ -256,17 +267,18 @@ export default function Home() {
                       duration: 0.5,
                       repeat: sosPressed ? Infinity : 0,
                     }}
-                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-heading font-extrabold mb-1 drop-shadow-md tracking-tight break-words"
+                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-heading font-extrabold mb-1 drop-shadow-lg tracking-tight break-words text-white"
+                    style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
                   >
                     EMERGENCY SOS
                   </motion.h2>
                   
-                  <p className="text-xs sm:text-sm md:text-base font-body font-medium text-white/90 break-words">
+                  <p className="text-xs sm:text-sm md:text-base font-body font-medium text-white break-words drop-shadow-md">
                     {sosPressed ? 'Sending alert...' : 'Tap for immediate help'}
                   </p>
                   
                   {/* Urgency indicator - compact */}
-                  <div className="mt-1 sm:mt-2 flex items-center space-x-1.5 text-[10px] sm:text-xs font-body font-semibold">
+                  <div className="mt-1 sm:mt-2 flex items-center space-x-1.5 text-[10px] sm:text-xs font-body font-semibold text-white drop-shadow-sm">
                     <motion.div
                       animate={{
                         opacity: [1, 0.5, 1],
@@ -275,25 +287,28 @@ export default function Home() {
                         duration: 1,
                         repeat: Infinity,
                       }}
-                      className="w-1.5 h-1.5 bg-white rounded-full"
+                      className="w-1.5 h-1.5 bg-white rounded-full shadow-sm"
                     />
                     <span>24/7 Available</span>
                   </div>
                 </div>
               </div>
               
-              {/* Right side - Image - smaller */}
-              <div className="relative flex-shrink-0 hidden sm:block">
+              {/* Right side - Image - visible on all devices */}
+              <div className="relative flex-shrink-0">
                 <motion.div
                   whileHover={{ scale: 1.03 }}
-                  className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28"
+                  className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
                 >
                   <img 
                     src="/StockCake-someone_pressing_an_emergency_button_Images_and_Photos_1763940162.jpg"
                     alt="Emergency assistance"
-                    className="w-full h-full rounded-xl shadow-lg border-2 border-white/30 object-cover"
+                    className="w-full h-full rounded-xl shadow-lg border-2 border-white/40 dark:border-white/30 object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none'
+                    }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-red-600/20 to-transparent rounded-xl" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-error/30 to-transparent rounded-xl" />
                 </motion.div>
               </div>
             </div>
