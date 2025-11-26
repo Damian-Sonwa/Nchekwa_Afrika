@@ -38,33 +38,33 @@ export default function AdvancedSafety() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-2"
         >
-          <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white">
+          <h1 className="text-3xl font-heading font-bold text-text-main">
             Advanced Safety Features
           </h1>
-          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Enhanced protection and emergency tools</p>
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">Enhanced protection and emergency tools</p>
         </motion.div>
 
         {/* Silent Escape Mode */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6"
+          className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
-              <div className="p-3 bg-primary/10 rounded-lg">
-                <Eye className="w-6 h-6 text-primary" />
+              <div className="p-3 bg-accent/10 rounded-lg">
+                <Eye className="w-6 h-6 text-accent" />
               </div>
               <div>
-                <h2 className="text-3xl font-heading font-bold text-text-main dark:text-white">Silent Escape Mode</h2>
-                <p className="text-sm font-body text-text-secondary dark:text-white/80">Instantly switch to a decoy screen</p>
+                <h2 className="text-3xl font-heading font-bold text-text-main">Silent Escape Mode</h2>
+                <p className="text-sm font-body text-text-secondary">Instantly switch to a decoy screen</p>
               </div>
             </div>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => activateEscape(decoyType)}
-              className="px-4 py-2 rounded-lg bg-primary text-white font-heading font-medium hover:bg-primary-dark transition-all duration-300"
+              className="px-4 py-2 rounded-lg bg-accent text-text-main font-heading font-medium hover:bg-accent-dark transition-all duration-300"
             >
               Activate
             </motion.button>
@@ -78,15 +78,15 @@ export default function AdvancedSafety() {
                 onClick={() => setDecoyType(type)}
                 className={`px-3 py-1 rounded-lg text-sm font-body transition-all duration-300 ${
                   decoyType === type
-                    ? 'bg-primary text-white'
-                    : 'bg-background-light dark:bg-background-dark text-text-main dark:text-white border border-primary-light dark:border-primary/20 hover:border-primary'
+                    ? 'bg-accent text-text-main'
+                    : 'bg-background text-text-main border border-accent/20 dark:border-primary/20 hover:border-primary'
                 }`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </motion.button>
             ))}
           </div>
-          <p className="mt-3 text-xs font-body text-text-secondary dark:text-white/70">
+          <p className="mt-3 text-xs font-body text-text-secondary dark:text-text-main/70">
             Triple tap anywhere or press Ctrl+Shift+E to activate
           </p>
         </motion.div>
@@ -96,7 +96,7 @@ export default function AdvancedSafety() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+          className="bg-background rounded-xl p-6 shadow-lg border border-accent/20"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -104,7 +104,7 @@ export default function AdvancedSafety() {
                 <MapPin className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Location Trail</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-text-main">Location Trail</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Share location with trusted contacts</p>
               </div>
             </div>
@@ -112,8 +112,8 @@ export default function AdvancedSafety() {
               onClick={trailActive ? stopTrail : () => startTrail()}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 trailActive
-                  ? 'bg-red-600 text-white hover:bg-red-700'
-                  : 'bg-green-600 text-white hover:bg-green-700'
+                  ? 'bg-red-600 text-text-main hover:bg-red-700'
+                  : 'bg-green-600 text-text-main hover:bg-green-700'
               }`}
             >
               {trailActive ? 'Stop' : 'Start'}
@@ -133,7 +133,7 @@ export default function AdvancedSafety() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+          className="bg-background rounded-xl p-6 shadow-lg border border-accent/20"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -141,7 +141,7 @@ export default function AdvancedSafety() {
                 <Mic className="w-6 h-6 text-purple-600" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Voice Command SOS</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-text-main">Voice Command SOS</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Hands-free emergency activation</p>
               </div>
             </div>
@@ -149,8 +149,8 @@ export default function AdvancedSafety() {
               onClick={isListening ? stopListening : startListening}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 isListening
-                  ? 'bg-red-600 text-white hover:bg-red-700'
-                  : 'bg-purple-600 text-white hover:bg-purple-700'
+                  ? 'bg-red-600 text-text-main hover:bg-red-700'
+                  : 'bg-purple-600 text-text-main hover:bg-purple-700'
               }`}
             >
               {isListening ? 'Stop' : 'Start'}
@@ -158,10 +158,10 @@ export default function AdvancedSafety() {
           </div>
           {isListening && (
             <div className="mt-4 space-y-2">
-              <p className="text-sm text-gray-600 dark:text-white/80">Listening for: help, emergency, sos, danger, assist</p>
+              <p className="text-sm text-gray-600 dark:text-text-main/80">Listening for: help, emergency, sos, danger, assist</p>
               {transcript && (
                 <div className="p-3 bg-gray-50 dark:bg-background-dark/50 rounded-lg">
-                  <p className="text-sm text-gray-700 dark:text-white">{transcript}</p>
+                  <p className="text-sm text-gray-700 dark:text-text-main">{transcript}</p>
                 </div>
               )}
             </div>
@@ -173,7 +173,7 @@ export default function AdvancedSafety() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+          className="bg-background rounded-xl p-6 shadow-lg border border-accent/20"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -181,7 +181,7 @@ export default function AdvancedSafety() {
                 <Battery className="w-6 h-6 text-orange-600" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Battery-Saver SOS Mode</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-text-main">Battery-Saver SOS Mode</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Reduce power usage while sending SOS</p>
               </div>
             </div>
