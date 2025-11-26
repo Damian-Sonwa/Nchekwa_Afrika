@@ -10,6 +10,24 @@ const hashEmail = (email) => {
 };
 
 // Generate anonymous ID
+// GET handler for documentation
+router.get('/anonymous', (req, res) => {
+  res.status(405).json({
+    error: 'Method not allowed',
+    message: 'This endpoint requires a POST request',
+    usage: {
+      method: 'POST',
+      url: '/api/auth/anonymous',
+      body: {
+        deviceId: 'optional-device-id'
+      },
+      example: {
+        curl: 'curl -X POST https://your-api.com/api/auth/anonymous -H "Content-Type: application/json" -d \'{"deviceId":"optional"}\''
+      }
+    }
+  });
+});
+
 router.post('/anonymous', async (req, res) => {
   try {
     const { deviceId } = req.body;
