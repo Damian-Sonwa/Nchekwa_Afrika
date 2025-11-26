@@ -14,7 +14,19 @@ import NchekwaLogo from '../components/NchekwaLogo'
 export default function ResetPassword() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const token = searchParams.get('token')
+  // Get and decode token from URL (URLSearchParams.get automatically decodes, but be explicit)
+  const rawToken = searchParams.get('token')
+  const token = rawToken ? decodeURIComponent(rawToken) : null
+  
+  // Log token for debugging (first 16 chars only)
+  useEffect(() => {
+    if (token) {
+      console.log('🔑 Reset token received from URL:', token.substring(0, 16) + '...');
+      console.log('🔑 Token length:', token.length);
+    } else {
+      console.warn('⚠️ No reset token found in URL');
+    }
+  }, [token]);
   
   const [formData, setFormData] = useState({
     password: '',
