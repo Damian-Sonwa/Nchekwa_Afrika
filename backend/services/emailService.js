@@ -7,37 +7,35 @@
  * - Other notifications
  * 
  * Supports multiple email providers:
- * - Resend (recommended)
+ * - SendGrid (recommended)
  * - Nodemailer (SMTP)
  * - Console fallback for development
  */
 
-const crypto = require('crypto');
-
 /**
- * Validate and format email address for Resend
+ * Validate email address format
  */
 function validateEmailFormat(email) {
   if (!email || typeof email !== 'string') {
     return false;
   }
-  // Basic email format validation: email@domain.com or Name <email@domain.com>
+  // Basic email format validation: email@domain.com
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const nameEmailRegex = /^[^<]+<[^\s@]+@[^\s@]+\.[^\s@]+>$/;
-  return emailRegex.test(email.trim()) || nameEmailRegex.test(email.trim());
+  return emailRegex.test(email.trim());
 }
 
 /**
- * Get valid from email address for Resend
+ * Get valid from email address
  */
 function getValidFromEmail() {
   const emailFrom = process.env.EMAIL_FROM;
   
-  // If EMAIL_FROM is not set or invalid, use Resend's test domain
+  // If EMAIL_FROM is not set or invalid, use default
   if (!emailFrom || !validateEmailFormat(emailFrom)) {
-    console.warn('⚠️  EMAIL_FROM is not set or invalid, using Resend test domain');
-    console.warn('💡 Set EMAIL_FROM to a verified domain email, or use onboarding@resend.dev for testing');
-    return 'onboarding@resend.dev';
+    console.warn('⚠️  EMAIL_FROM is not set or invalid');
+    console.warn('💡 Set EMAIL_FROM to a verified email address (e.g., noreply@nchekwaafrika.com)');
+    // Return a default - user should set this in production
+    return 'noreply@nchekwaafrika.com';
   }
   
   return emailFrom.trim();
@@ -67,16 +65,16 @@ async function sendConfirmationEmail(email, confirmationLink, confirmationToken)
   
   try {
     switch (emailProvider.toLowerCase()) {
-      case 'resend':
-        const resendResult = await sendViaResend(email, confirmationLink, confirmationToken);
-        if (!resendResult) {
-          console.error('❌ Resend returned false - email was not sent');
-          throw new Error('Resend email sending failed');
+      case 'sendgrid':
+        const sendgridResult = await sendViaSendGrid(email, confirmationLink, confirmationToken, 'confirm');
+        if (!sendgridResult) {
+          console.error('❌ SendGrid returned false - email was not sent');
+          throw new Error('SendGrid email sending failed');
         }
-        return resendResult;
+        return sendgridResult;
       case 'nodemailer':
       case 'smtp':
-        const nodemailerResult = await sendViaNodemailer(email, confirmationLink, confirmationToken);
+        const nodemailerResult = await sendViaNodemailer(email, confirmationLink, confirmationToken, 'confirm');
         if (!nodemailerResult) {
           console.error('❌ Nodemailer returned false - email was not sent');
           throw new Error('Nodemailer email sending failed');
@@ -84,7 +82,7 @@ async function sendConfirmationEmail(email, confirmationLink, confirmationToken)
         return nodemailerResult;
       case 'console':
       default:
-        console.log('💡 Using console mode - emails will be logged only. Set EMAIL_PROVIDER to "resend" or "nodemailer" to send actual emails.');
+        console.log('💡 Using console mode - emails will be logged only. Set EMAIL_PROVIDER to "sendgrid" or "nodemailer" to send actual emails.');
         return await sendViaConsole(email, confirmationLink, confirmationToken);
     }
   } catch (error) {
@@ -97,49 +95,20 @@ async function sendConfirmationEmail(email, confirmationLink, confirmationToken)
 }
 
 /**
- * Validate and format email address for Resend
+ * Send email via SendGrid API
  */
-function validateEmailFormat(email) {
-  if (!email || typeof email !== 'string') {
-    return false;
-  }
-  // Basic email format validation: email@domain.com or Name <email@domain.com>
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const nameEmailRegex = /^[^<]+<[^\s@]+@[^\s@]+\.[^\s@]+>$/;
-  return emailRegex.test(email.trim()) || nameEmailRegex.test(email.trim());
-}
-
-/**
- * Get valid from email address for Resend
- */
-function getValidFromEmail() {
-  const emailFrom = process.env.EMAIL_FROM;
+async function sendViaSendGrid(email, link, token, type = 'confirm') {
+  const sendgridApiKey = process.env.SENDGRID_API_KEY;
   
-  // If EMAIL_FROM is not set or invalid, use Resend's test domain
-  if (!emailFrom || !validateEmailFormat(emailFrom)) {
-    console.warn('⚠️  EMAIL_FROM is not set or invalid, using Resend test domain');
-    console.warn('💡 Set EMAIL_FROM to a verified domain email, or use onboarding@resend.dev for testing');
-    return 'onboarding@resend.dev';
-  }
-  
-  return emailFrom.trim();
-}
-
-/**
- * Send email via Resend API
- */
-async function sendViaResend(email, confirmationLink, confirmationToken) {
-  const resendApiKey = process.env.RESEND_API_KEY;
-  
-  if (!resendApiKey) {
-    console.warn('⚠️  RESEND_API_KEY not set, falling back to console');
-    console.warn('💡 To send emails via Resend, set RESEND_API_KEY in your .env file');
-    return await sendViaConsole(email, confirmationLink, confirmationToken);
+  if (!sendgridApiKey) {
+    console.warn('⚠️  SENDGRID_API_KEY not set, falling back to console');
+    console.warn('💡 To send emails via SendGrid, set SENDGRID_API_KEY in your environment variables');
+    return await sendViaConsole(email, link, token);
   }
 
   try {
-    const { Resend } = require('resend');
-    const resend = new Resend(resendApiKey);
+    const sgMail = require('@sendgrid/mail');
+    sgMail.setApiKey(sendgridApiKey);
     
     const fromEmail = getValidFromEmail();
     console.log(`📧 From: ${fromEmail}`);
@@ -150,42 +119,29 @@ async function sendViaResend(email, confirmationLink, confirmationToken) {
       throw new Error(`Invalid recipient email format: ${email}`);
     }
     
-    const htmlContent = getEmailTemplate(confirmationLink, 'confirm');
+    const htmlContent = getEmailTemplate(link, type);
+    const subject = type === 'confirm' 
+      ? 'Confirm Your Email - Nchekwa_Afrika'
+      : 'Reset Your Password - Nchekwa_Afrika';
     
-    const { data, error } = await resend.emails.send({
+    const msg = {
+      to: email,
       from: fromEmail,
-      to: [email],
-      subject: 'Confirm Your Email - Nchekwa_Afrika',
+      subject: subject,
       html: htmlContent,
-    });
-
-    if (error) {
-      console.error('❌ Resend API error:', error);
-      console.error('❌ Error details:', JSON.stringify(error, null, 2));
-      
-      // Handle Resend free tier limitation
-      if (error.statusCode === 403 && error.message && error.message.includes('testing emails')) {
-        const errorMsg = '⚠️  RESEND FREE TIER LIMITATION: You can only send emails to your verified email address.\n' +
-          '💡 Solutions:\n' +
-          '   1. For testing: Only send emails to your verified email (madudamian25@gmail.com)\n' +
-          '   2. For production: Verify a domain at https://resend.com/domains and use an email from that domain\n' +
-          '   3. Alternative: Use SMTP/Nodemailer instead (set EMAIL_PROVIDER=nodemailer)\n' +
-          '   4. Development: Use EMAIL_PROVIDER=console to log emails to console';
-        console.error(errorMsg);
-        // Don't throw - allow the confirmation link to be returned in the response
-        // The user can still use the link from the API response
-        return false;
-      }
-      
-      throw error;
-    }
-
-    console.log('✅ Confirmation email sent via Resend');
-    console.log('✅ Email ID:', data?.id);
+    };
+    
+    await sgMail.send(msg);
+    
+    const emailType = type === 'confirm' ? 'Confirmation' : 'Password reset';
+    console.log(`✅ ${emailType} email sent via SendGrid`);
     return true;
   } catch (error) {
-    console.error('❌ Failed to send email via Resend:', error);
-    console.error('❌ Error stack:', error.stack);
+    console.error('❌ SendGrid API error:', error);
+    if (error.response) {
+      console.error('❌ Error details:', JSON.stringify(error.response.body, null, 2));
+    }
+    console.error('❌ Error message:', error.message);
     throw error;
   }
 }
@@ -193,7 +149,7 @@ async function sendViaResend(email, confirmationLink, confirmationToken) {
 /**
  * Send email via Nodemailer (SMTP)
  */
-async function sendViaNodemailer(email, confirmationLink, confirmationToken) {
+async function sendViaNodemailer(email, link, token, type = 'confirm') {
   const nodemailer = require('nodemailer');
   
   const smtpConfig = {
@@ -209,7 +165,7 @@ async function sendViaNodemailer(email, confirmationLink, confirmationToken) {
   if (!smtpConfig.host || !smtpConfig.auth.user || !smtpConfig.auth.pass) {
     console.warn('⚠️  SMTP configuration incomplete, falling back to console');
     console.warn('💡 Required SMTP env vars: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD');
-    return await sendViaConsole(email, confirmationLink, confirmationToken);
+    return await sendViaConsole(email, link, token);
   }
 
   try {
@@ -222,16 +178,20 @@ async function sendViaNodemailer(email, confirmationLink, confirmationToken) {
     console.log(`📧 From: ${fromEmail}`);
     console.log(`📧 To: ${email}`);
     
-    const htmlContent = getEmailTemplate(confirmationLink, 'confirm');
+    const htmlContent = getEmailTemplate(link, type);
+    const subject = type === 'confirm' 
+      ? 'Confirm Your Email - Nchekwa_Afrika'
+      : 'Reset Your Password - Nchekwa_Afrika';
     
     const info = await transporter.sendMail({
       from: fromEmail,
       to: email,
-      subject: 'Confirm Your Email - Nchekwa_Afrika',
+      subject: subject,
       html: htmlContent,
     });
 
-    console.log('✅ Confirmation email sent via Nodemailer');
+    const emailType = type === 'confirm' ? 'Confirmation' : 'Password reset';
+    console.log(`✅ ${emailType} email sent via Nodemailer`);
     console.log('✅ Message ID:', info.messageId);
     return true;
   } catch (error) {
@@ -245,71 +205,22 @@ async function sendViaNodemailer(email, confirmationLink, confirmationToken) {
 /**
  * Console fallback (for development)
  */
-async function sendViaConsole(email, confirmationLink, confirmationToken) {
+async function sendViaConsole(email, link, token) {
+  const emailType = link.includes('reset') ? 'PASSWORD RESET' : 'EMAIL CONFIRMATION';
   console.log('\n📧 ============================================');
-  console.log('📧 EMAIL CONFIRMATION (Development Mode)');
+  console.log(`📧 ${emailType} (Development Mode)`);
   console.log('📧 ============================================');
   console.log('📧 To:', email);
-  console.log('📧 Subject: Confirm Your Email - Nchekwa_Afrika');
-  console.log('📧 Confirmation Link:', confirmationLink);
-  if (confirmationToken) {
-    console.log('📧 Token:', confirmationToken);
+  console.log('📧 Subject:', link.includes('reset') ? 'Reset Your Password - Nchekwa_Afrika' : 'Confirm Your Email - Nchekwa_Afrika');
+  console.log('📧 Link:', link);
+  if (token) {
+    console.log('📧 Token:', token);
   }
   console.log('📧 ============================================\n');
   
   // In development, we still return true since the link is shown in console/logs
   // and returned in the API response
   return true;
-}
-
-/**
- * Get email HTML template
- */
-function getEmailTemplate(confirmationLink, type = 'confirm') {
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
-  const appName = 'Nchekwa_Afrika';
-  
-  if (type === 'confirm') {
-    return `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirm Your Email</title>
-</head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
-  <div style="background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-    <div style="text-align: center; margin-bottom: 30px;">
-      <h1 style="color: #0a3d2f; margin: 0; font-size: 24px;">${appName}</h1>
-      <p style="color: #666; margin: 5px 0 0 0;">You are safe here</p>
-    </div>
-    
-    <h2 style="color: #0a3d2f; margin-top: 0;">Confirm Your Email Address</h2>
-    <p>Thank you for signing up! Please confirm your email address by clicking the button below:</p>
-    
-    <div style="text-align: center; margin: 30px 0;">
-      <a href="${confirmationLink}" style="display: inline-block; background-color: #a3ff7f; color: #0a3d2f; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px;">Confirm Email</a>
-    </div>
-    
-    <p style="color: #666; font-size: 14px;">Or copy and paste this link into your browser:</p>
-    <p style="color: #888; font-size: 12px; word-break: break-all; background-color: #f9f9f9; padding: 10px; border-radius: 4px;">${confirmationLink}</p>
-    
-    <p style="color: #666; font-size: 14px; margin-top: 30px;">This link will expire in 7 days.</p>
-    
-    <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-    
-    <p style="color: #999; font-size: 12px; text-align: center; margin: 0;">
-      If you didn't create an account with ${appName}, you can safely ignore this email.
-    </p>
-  </div>
-</body>
-</html>
-    `;
-  }
-  
-  // Default template
-  return `<p>Click here to confirm: <a href="${confirmationLink}">${confirmationLink}</a></p>`;
 }
 
 /**
@@ -323,7 +234,7 @@ async function sendPasswordResetEmail(email, resetLink, resetToken) {
   // If no email provided, skip sending (development mode)
   if (!email) {
     console.log('⚠️  No email address provided, skipping email send');
-    return await sendPasswordResetViaConsole(email, resetLink, resetToken);
+    return await sendViaConsole(email, resetLink, resetToken);
   }
   
   // Check which email service is configured
@@ -335,16 +246,16 @@ async function sendPasswordResetEmail(email, resetLink, resetToken) {
   
   try {
     switch (emailProvider.toLowerCase()) {
-      case 'resend':
-        const resendResult = await sendPasswordResetViaResend(email, resetLink, resetToken);
-        if (!resendResult) {
-          console.error('❌ Resend returned false - email was not sent');
-          throw new Error('Resend email sending failed');
+      case 'sendgrid':
+        const sendgridResult = await sendViaSendGrid(email, resetLink, resetToken, 'reset');
+        if (!sendgridResult) {
+          console.error('❌ SendGrid returned false - email was not sent');
+          throw new Error('SendGrid email sending failed');
         }
-        return resendResult;
+        return sendgridResult;
       case 'nodemailer':
       case 'smtp':
-        const nodemailerResult = await sendPasswordResetViaNodemailer(email, resetLink, resetToken);
+        const nodemailerResult = await sendViaNodemailer(email, resetLink, resetToken, 'reset');
         if (!nodemailerResult) {
           console.error('❌ Nodemailer returned false - email was not sent');
           throw new Error('Nodemailer email sending failed');
@@ -352,7 +263,7 @@ async function sendPasswordResetEmail(email, resetLink, resetToken) {
         return nodemailerResult;
       case 'console':
       default:
-        return await sendPasswordResetViaConsole(email, resetLink, resetToken);
+        return await sendViaConsole(email, resetLink, resetToken);
     }
   } catch (error) {
     console.error('❌ Email service error:', error);
@@ -361,140 +272,6 @@ async function sendPasswordResetEmail(email, resetLink, resetToken) {
     // Re-throw the error so the calling code knows it failed
     throw error;
   }
-}
-
-/**
- * Send password reset email via Resend API
- */
-async function sendPasswordResetViaResend(email, resetLink, resetToken) {
-  const resendApiKey = process.env.RESEND_API_KEY;
-  
-  if (!resendApiKey) {
-    console.warn('⚠️  RESEND_API_KEY not set, falling back to console');
-    console.warn('💡 To send emails via Resend, set RESEND_API_KEY in your .env file');
-    return await sendPasswordResetViaConsole(email, resetLink, resetToken);
-  }
-
-  try {
-    const { Resend } = require('resend');
-    const resend = new Resend(resendApiKey);
-    
-    const fromEmail = getValidFromEmail();
-    console.log(`📧 From: ${fromEmail}`);
-    console.log(`📧 To: ${email}`);
-    
-    // Validate recipient email
-    if (!validateEmailFormat(email)) {
-      throw new Error(`Invalid recipient email format: ${email}`);
-    }
-    
-    const htmlContent = getEmailTemplate(resetLink, 'reset');
-    
-    const { data, error } = await resend.emails.send({
-      from: fromEmail,
-      to: [email],
-      subject: 'Reset Your Password - Nchekwa_Afrika',
-      html: htmlContent,
-    });
-
-    if (error) {
-      console.error('❌ Resend API error:', error);
-      console.error('❌ Error details:', JSON.stringify(error, null, 2));
-      
-      // Handle Resend free tier limitation
-      if (error.statusCode === 403 && error.message && error.message.includes('testing emails')) {
-        const errorMsg = '⚠️  RESEND FREE TIER LIMITATION: You can only send emails to your verified email address.\n' +
-          '💡 Solutions:\n' +
-          '   1. For testing: Only send emails to your verified email (madudamian25@gmail.com)\n' +
-          '   2. For production: Verify a domain at https://resend.com/domains and use an email from that domain\n' +
-          '   3. Alternative: Use SMTP/Nodemailer instead (set EMAIL_PROVIDER=nodemailer)\n' +
-          '   4. Development: Use EMAIL_PROVIDER=console to log emails to console';
-        console.error(errorMsg);
-        // Don't throw - allow the reset link to be returned in the response
-        return false;
-      }
-      
-      throw error;
-    }
-
-    console.log('✅ Password reset email sent via Resend');
-    console.log('✅ Email ID:', data?.id);
-    return true;
-  } catch (error) {
-    console.error('❌ Failed to send email via Resend:', error);
-    console.error('❌ Error stack:', error.stack);
-    throw error;
-  }
-}
-
-/**
- * Send password reset email via Nodemailer (SMTP)
- */
-async function sendPasswordResetViaNodemailer(email, resetLink, resetToken) {
-  const nodemailer = require('nodemailer');
-  
-  const smtpConfig = {
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  };
-
-  if (!smtpConfig.host || !smtpConfig.auth.user || !smtpConfig.auth.pass) {
-    console.warn('⚠️  SMTP configuration incomplete, falling back to console');
-    console.warn('💡 Required SMTP env vars: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD');
-    return await sendPasswordResetViaConsole(email, resetLink, resetToken);
-  }
-
-  try {
-    console.log(`📧 SMTP Host: ${smtpConfig.host}:${smtpConfig.port}`);
-    console.log(`📧 SMTP User: ${smtpConfig.auth.user}`);
-    
-    const transporter = nodemailer.createTransport(smtpConfig);
-    
-    const fromEmail = process.env.EMAIL_FROM || smtpConfig.auth.user;
-    console.log(`📧 From: ${fromEmail}`);
-    console.log(`📧 To: ${email}`);
-    
-    const htmlContent = getEmailTemplate(resetLink, 'reset');
-    
-    const info = await transporter.sendMail({
-      from: fromEmail,
-      to: email,
-      subject: 'Reset Your Password - Nchekwa_Afrika',
-      html: htmlContent,
-    });
-
-    console.log('✅ Password reset email sent via Nodemailer');
-    console.log('✅ Message ID:', info.messageId);
-    return true;
-  } catch (error) {
-    console.error('❌ Failed to send email via Nodemailer:', error);
-    console.error('❌ Error details:', error.message);
-    console.error('❌ Error code:', error.code);
-    throw error;
-  }
-}
-
-/**
- * Console fallback for password reset (for development)
- */
-async function sendPasswordResetViaConsole(email, resetLink, resetToken) {
-  console.log('\n📧 ============================================');
-  console.log('📧 PASSWORD RESET (Development Mode)');
-  console.log('📧 ============================================');
-  console.log('📧 To:', email);
-  console.log('📧 Subject: Reset Your Password - Nchekwa_Afrika');
-  console.log('📧 Reset Link:', resetLink);
-  if (resetToken) {
-    console.log('📧 Token:', resetToken);
-  }
-  console.log('📧 ============================================\n');
-  
-  return true;
 }
 
 /**
@@ -592,4 +369,3 @@ module.exports = {
   sendConfirmationEmail,
   sendPasswordResetEmail,
 };
-

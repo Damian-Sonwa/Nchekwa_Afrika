@@ -39,19 +39,18 @@ This will:
 
 **✅ Good Signs:**
 ```
-📧 Email Provider: resend
+📧 Email Provider: sendgrid
 📧 Sending confirmation email to: user@example.com
-📧 From: noreply@yourdomain.com
-✅ Confirmation email sent via Resend
-✅ Email ID: abc123...
+📧 From: noreply@nchekwaafrika.com
+✅ Confirmation email sent via SendGrid
 ```
 
 **❌ Bad Signs:**
 ```
-⚠️  RESEND_API_KEY not set, falling back to console
+⚠️  SENDGRID_API_KEY not set, falling back to console
 💡 Using console mode - emails will be logged only
-❌ Resend API error: ...
-❌ Failed to send email via Resend: ...
+❌ SendGrid API error: ...
+❌ Failed to send email via SendGrid: ...
 ```
 
 ## Step 4: Verify Environment Variables in Render
@@ -62,9 +61,9 @@ Make sure all these variables are set correctly in Render:
 2. Verify these variables exist and have correct values:
 
 ```
-EMAIL_PROVIDER=resend
-RESEND_API_KEY=re_xxxxxxxxxxxxx
-EMAIL_FROM=noreply@yourdomain.com (or onboarding@resend.dev for testing)
+EMAIL_PROVIDER=sendgrid
+SENDGRID_API_KEY=SG.xxxxxxxxxxxxx
+EMAIL_FROM=noreply@nchekwaafrika.com
 FRONTEND_URL=https://your-frontend-url.vercel.app
 ```
 
@@ -72,50 +71,51 @@ FRONTEND_URL=https://your-frontend-url.vercel.app
 
 **Issue 1: EMAIL_PROVIDER not set or set to "console"**
 - **Symptom:** Logs show "Using console mode"
-- **Fix:** Set `EMAIL_PROVIDER=resend` in Render
+- **Fix:** Set `EMAIL_PROVIDER=sendgrid` in Render
 
-**Issue 2: RESEND_API_KEY missing or incorrect**
-- **Symptom:** Logs show "RESEND_API_KEY not set, falling back to console"
+**Issue 2: SENDGRID_API_KEY missing or incorrect**
+- **Symptom:** Logs show "SENDGRID_API_KEY not set, falling back to console"
 - **Fix:** 
-  1. Get your API key from [Resend Dashboard](https://resend.com/api-keys)
-  2. Set `RESEND_API_KEY=re_xxxxxxxxxxxxx` in Render
+  1. Get your API key from [SendGrid Dashboard](https://app.sendgrid.com/settings/api_keys)
+  2. Set `SENDGRID_API_KEY=SG.xxxxxxxxxxxxx` in Render
 
 **Issue 3: EMAIL_FROM not verified**
-- **Symptom:** Resend API returns error about unverified domain
+- **Symptom:** SendGrid API returns error about unverified sender
 - **Fix:** 
-  - For testing: Use `onboarding@resend.dev` (no verification needed)
-  - For production: Verify your domain in Resend and use `noreply@yourdomain.com`
+  - Verify your sender email in SendGrid dashboard (Settings → Sender Authentication)
+  - For testing: Use a verified single sender email
+  - For production: Verify your domain and use `noreply@yourdomain.com`
 
 **Issue 4: FRONTEND_URL incorrect**
 - **Symptom:** Links in emails point to wrong URL
 - **Fix:** Set `FRONTEND_URL` to your actual Vercel frontend URL
 
-## Step 5: Check Resend Dashboard
+## Step 5: Check SendGrid Dashboard
 
-1. Go to [Resend Dashboard](https://resend.com/emails)
-2. Check the **"Emails"** section
+1. Go to [SendGrid Dashboard](https://app.sendgrid.com)
+2. Navigate to **Activity** → **Email Activity**
 3. Look for:
    - Failed emails (red status)
    - Error messages
    - Delivery status
+   - Bounce/spam reports
 
 ## Step 6: Common Error Messages and Solutions
 
-### Error: "Invalid API key"
-- **Cause:** RESEND_API_KEY is incorrect or expired
-- **Fix:** Generate a new API key in Resend and update it in Render
+### Error: "Invalid API key" or "Unauthorized"
+- **Cause:** SENDGRID_API_KEY is incorrect or expired
+- **Fix:** Generate a new API key in SendGrid and update it in Render
 
-### Error: "Invalid `from` field" or "Domain not verified"
-- **Cause:** EMAIL_FROM is not set, invalid format, or uses a domain that isn't verified in Resend
+### Error: "Sender email not verified" or "The from address does not match a verified Sender Identity"
+- **Cause:** EMAIL_FROM is not verified in SendGrid
 - **Fix:** 
-  - **For testing:** Use `onboarding@resend.dev` (no verification needed)
-  - **For production:** Verify your domain in Resend dashboard and use `noreply@yourdomain.com`
-  - **Format:** Must be valid email format: `email@domain.com` or `Name <email@domain.com>`
-  - **Note:** The system will automatically use `onboarding@resend.dev` if EMAIL_FROM is not set or invalid
+  - Go to SendGrid → Settings → Sender Authentication
+  - Verify a Single Sender (for testing) or Authenticate Your Domain (for production)
+  - Use the verified email address as EMAIL_FROM
 
 ### Error: "Rate limit exceeded"
-- **Cause:** Too many emails sent in a short time
-- **Fix:** Wait a few minutes or upgrade your Resend plan
+- **Cause:** Too many emails sent (free tier: 100/day)
+- **Fix:** Wait until the next day or upgrade your SendGrid plan
 
 ### Error: "Email address is invalid"
 - **Cause:** The recipient email address is malformed
@@ -127,18 +127,18 @@ Check the logs when a user registers:
 
 1. User registers → Check logs for:
    ```
-   📧 Email Provider: resend
+   📧 Email Provider: sendgrid
    📧 Sending confirmation email to: user@example.com
    ```
 
 2. If you see "Using console mode" instead:
-   - EMAIL_PROVIDER is not set to "resend"
+   - EMAIL_PROVIDER is not set to "sendgrid"
    - Check Render environment variables
 
 3. If you see errors:
    - Check the error message
    - Verify API key and configuration
-   - Check Resend dashboard for delivery status
+   - Check SendGrid dashboard for delivery status
 
 ## Step 8: Test the Full Flow
 
@@ -153,7 +153,7 @@ Check the logs when a user registers:
 
 2. **Check logs** for email sending attempt
 
-3. **Check Resend dashboard** for email delivery status
+3. **Check SendGrid dashboard** for email delivery status
 
 4. **Check email inbox** (and spam folder)
 
@@ -170,30 +170,30 @@ The code now includes comprehensive logging. When emails fail, you'll see:
 If emails still aren't being sent after following these steps:
 
 1. **Check Render Logs** for any error messages
-2. **Verify Resend API Key** is active in Resend dashboard
-3. **Test with Resend's test domain:** Use `onboarding@resend.dev` as EMAIL_FROM
-4. **Check Resend Dashboard** for delivery status and errors
+2. **Verify SendGrid API Key** is active in SendGrid dashboard
+3. **Verify sender email** in SendGrid dashboard (Settings → Sender Authentication)
+4. **Check SendGrid Dashboard** for delivery status and errors
 5. **Verify FRONTEND_URL** matches your actual frontend URL
 6. **Try the test endpoint:** `/api/auth/test-email?testEmail=your@email.com`
 
 ## Quick Checklist
 
-- [ ] EMAIL_PROVIDER is set to "resend" in Render
-- [ ] RESEND_API_KEY is set and correct in Render
-- [ ] EMAIL_FROM is set (use onboarding@resend.dev for testing)
+- [ ] EMAIL_PROVIDER is set to "sendgrid" in Render
+- [ ] SENDGRID_API_KEY is set and correct in Render
+- [ ] EMAIL_FROM is set to a verified sender email
 - [ ] FRONTEND_URL is set to your actual frontend URL
-- [ ] Resend API key is active in Resend dashboard
-- [ ] Domain is verified in Resend (if using custom domain)
-- [ ] Logs show "Email Provider: resend" (not "console")
-- [ ] Logs show "✅ Confirmation email sent via Resend"
-- [ ] Check Resend dashboard for email delivery status
+- [ ] SendGrid API key is active in SendGrid dashboard
+- [ ] Sender email is verified in SendGrid (Settings → Sender Authentication)
+- [ ] Logs show "Email Provider: sendgrid" (not "console")
+- [ ] Logs show "✅ Confirmation email sent via SendGrid"
+- [ ] Check SendGrid dashboard for email delivery status
 - [ ] Check spam folder in email inbox
 
 ## Support
 
 If you continue to have issues:
 1. Check Render logs for specific error messages
-2. Check Resend dashboard for delivery status
+2. Check SendGrid dashboard for delivery status
 3. Verify all environment variables are set correctly
 4. Test with the `/api/auth/test-email` endpoint
-
+5. Verify sender authentication in SendGrid dashboard

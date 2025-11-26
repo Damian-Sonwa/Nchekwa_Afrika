@@ -1096,14 +1096,14 @@ router.post('/register', async (req, res) => {
 router.get('/test-email', async (req, res) => {
   try {
     const emailProvider = process.env.EMAIL_PROVIDER || 'console';
-    const resendApiKey = process.env.RESEND_API_KEY;
+    const sendgridApiKey = process.env.SENDGRID_API_KEY;
     const emailFrom = process.env.EMAIL_FROM;
     const frontendUrl = process.env.FRONTEND_URL;
     
     const config = {
       emailProvider,
-      hasResendApiKey: !!resendApiKey,
-      resendApiKeyLength: resendApiKey ? resendApiKey.length : 0,
+      hasSendgridApiKey: !!sendgridApiKey,
+      sendgridApiKeyLength: sendgridApiKey ? sendgridApiKey.length : 0,
       emailFrom,
       frontendUrl,
       smtpHost: process.env.SMTP_HOST,
@@ -1135,11 +1135,20 @@ router.get('/test-email', async (req, res) => {
       config,
         instructions: {
         setup: 'To enable email sending, set the following environment variables in Render:',
-        resend: [
-          'EMAIL_PROVIDER=resend',
-          'RESEND_API_KEY=re_xxxxxxxxxxxxx',
-          'EMAIL_FROM=onboarding@resend.dev (for testing) or noreply@yourdomain.com (for production)',
+        sendgrid: [
+          'EMAIL_PROVIDER=sendgrid',
+          'SENDGRID_API_KEY=SG.xxxxxxxxxxxxx',
+          'EMAIL_FROM=noreply@nchekwaafrika.com (or your verified sender email)',
           'FRONTEND_URL=https://your-frontend-url.vercel.app (REQUIRED - must match your actual Vercel URL)'
+        ],
+        smtp: [
+          'EMAIL_PROVIDER=nodemailer',
+          'SMTP_HOST=smtp.gmail.com',
+          'SMTP_PORT=587',
+          'SMTP_USER=your-email@gmail.com',
+          'SMTP_PASSWORD=your-app-password',
+          'EMAIL_FROM=your-email@gmail.com',
+          'FRONTEND_URL=https://your-frontend-url.vercel.app'
         ],
         test: 'Add ?testEmail=your@email.com to this URL to test email sending',
         frontendUrlNote: '⚠️ IMPORTANT: FRONTEND_URL must be set to your actual Vercel frontend URL. If not set, confirmation links will point to localhost and will not work!'
