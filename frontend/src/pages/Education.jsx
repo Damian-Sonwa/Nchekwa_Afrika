@@ -100,21 +100,21 @@ export default function Education() {
   return (
     <div className="w-full max-w-full overflow-x-hidden box-border space-y-6 pb-20 md:pb-8">
       <div>
-        <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">Knowledge Hub</h1>
-        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Learn about your rights, safety, and available support</p>
+        <h1 className="text-3xl font-heading font-bold text-text-main mb-2">Knowledge Hub</h1>
+        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">Learn about your rights, safety, and available support</p>
       </div>
 
       {/* Intro Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-primary-light dark:bg-primary/20 border border-primary-light rounded-2xl p-6"
+        className="bg-accent-light dark:bg-accent/20 border border-primary-light rounded-2xl p-6"
       >
         <div className="flex items-start space-x-4">
-          <BookOpen className="w-8 h-8 text-primary flex-shrink-0" />
+          <BookOpen className="w-8 h-8 text-accent flex-shrink-0" />
           <div>
-            <h3 className="font-heading font-semibold text-text-main dark:text-white mb-2">Knowledge is Power</h3>
-            <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+            <h3 className="font-heading font-semibold text-text-main mb-2">Knowledge is Power</h3>
+            <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
               Understanding GBV, your rights, and available resources can help you make
               informed decisions about your safety and well-being.
             </p>
@@ -138,18 +138,18 @@ export default function Education() {
               <motion.button
                 whileHover={{ scale: 1.01 }}
                 onClick={() => setOpenTopic(isOpen ? null : topic.id)}
-                className="w-full p-6 flex items-center justify-between hover:bg-background-light dark:hover:bg-primary/10 transition-colors"
+                className="w-full p-6 flex items-center justify-between hover:bg-background-light dark:hover:bg-accent/10 transition-colors"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-primary rounded-lg">
-                    <Icon className="w-6 h-6 text-white" />
+                  <div className="p-3 bg-accent rounded-lg">
+                    <Icon className="w-6 h-6 text-text-main" />
                   </div>
-                  <h3 className="text-3xl font-heading font-bold text-text-main dark:text-white">{topic.title}</h3>
+                  <h3 className="text-3xl font-heading font-bold text-text-main">{topic.title}</h3>
                 </div>
                 {isOpen ? (
-                  <ChevronUp className="w-5 h-5 text-text-secondary dark:text-white/80" />
+                  <ChevronUp className="w-5 h-5 text-text-secondary" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-text-secondary dark:text-white/80" />
+                  <ChevronDown className="w-5 h-5 text-text-secondary" />
                 )}
               </motion.button>
               {isOpen && (
@@ -160,7 +160,7 @@ export default function Education() {
                   className="px-6 pb-6"
                 >
                   <div className="pt-4 border-t border-primary-light dark:border-primary/20">
-                    <p className="text-lg font-body text-text-secondary dark:text-white/80 whitespace-pre-line leading-relaxed">
+                    <p className="text-lg font-body text-text-secondary whitespace-pre-line leading-relaxed">
                       {topic.content}
                     </p>
                   </div>
