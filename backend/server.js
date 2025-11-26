@@ -268,23 +268,42 @@ const io = require('socket.io')(server, {
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
   },
-  allowEIO3: true // Allow Engine.IO v3 clients for better compatibility
+  allowEIO3: true, // Allow Engine.IO v3 clients for better compatibility
+  pingTimeout: 60000, // 60 seconds - time to wait for pong before considering connection dead
+  pingInterval: 25000, // 25 seconds - interval between pings
+  transports: ['websocket', 'polling'], // Allow both transports
+  upgrade: true, // Allow transport upgrades
+  rememberUpgrade: false // Don't remember upgrade preference
 });
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+  console.log('✅ User connected:', socket.id);
+  console.log('🔌 Transport:', socket.conn.transport.name);
 
   socket.on('join-chat', (sessionId) => {
+    console.log('📝 User joining chat session:', sessionId);
     socket.join(sessionId);
+    // Send confirmation that user joined
+    socket.emit('joined-chat', { sessionId, success: true });
   });
 
   socket.on('chat-message', (data) => {
+    console.log('💬 Chat message received for session:', data.sessionId);
     io.to(data.sessionId).emit('chat-message', data);
   });
 
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+  socket.on('disconnect', (reason) => {
+    console.log('❌ User disconnected:', socket.id, 'Reason:', reason);
+  });
+
+  socket.on('error', (error) => {
+    console.error('❌ Socket error:', error);
+  });
+
+  // Handle ping/pong for connection health
+  socket.on('ping', () => {
+    socket.emit('pong');
   });
 });
 

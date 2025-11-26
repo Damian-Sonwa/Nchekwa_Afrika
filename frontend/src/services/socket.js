@@ -50,36 +50,79 @@ export const initializeSocket = (sessionId, onMessage, onConnectionChange) => {
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
     reconnectionAttempts: 10,
-    timeout: 20000,
+    timeout: 10000, // Reduced from 20000 to 10000 (10 seconds)
     forceNew: true,
+    upgrade: true, // Allow transport upgrades
+    rememberUpgrade: false, // Don't remember upgrade preference
+    autoConnect: true,
   })
 
   currentSessionId = sessionId
 
+  // Add connection timeout detection
+  let connectionTimeout = null
+
   socket.on('connect', () => {
-    console.log('✅ Socket connected')
+    console.log('✅ Socket connected, ID:', socket.id)
+    if (connectionTimeout) {
+      clearTimeout(connectionTimeout)
+      connectionTimeout = null
+    }
     socket.emit('join-chat', sessionId)
     connectionCallbacks.forEach(cb => cb(true))
   })
 
+  // Set connection timeout
+  connectionTimeout = setTimeout(() => {
+    if (!socket.connected) {
+      console.error('❌ Socket connection timeout after 10 seconds')
+      connectionCallbacks.forEach(cb => cb(false))
+      // Try to reconnect
+      socket.connect()
+    }
+  }, 10000)
+
   socket.on('disconnect', (reason) => {
     console.log('❌ Socket disconnected:', reason)
+    if (connectionTimeout) {
+      clearTimeout(connectionTimeout)
+      connectionTimeout = null
+    }
     connectionCallbacks.forEach(cb => cb(false))
     
     // Auto-reconnect on unexpected disconnects
     if (reason === 'io server disconnect') {
       // Server disconnected, reconnect manually
+      console.log('🔄 Attempting to reconnect...')
+      socket.connect()
+    } else if (reason === 'transport close' || reason === 'transport error') {
+      // Transport error, try reconnecting
+      console.log('🔄 Transport error, attempting to reconnect...')
       socket.connect()
     }
   })
 
   socket.on('connect_error', (error) => {
     console.error('❌ Socket connection error:', error.message)
+    console.error('❌ Error details:', {
+      type: error.type,
+      description: error.description,
+      context: error.context,
+      transport: error.transport
+    })
+    if (connectionTimeout) {
+      clearTimeout(connectionTimeout)
+      connectionTimeout = null
+    }
     connectionCallbacks.forEach(cb => cb(false))
   })
 
   socket.on('reconnect', (attemptNumber) => {
     console.log('🔄 Socket reconnected after', attemptNumber, 'attempts')
+    if (connectionTimeout) {
+      clearTimeout(connectionTimeout)
+      connectionTimeout = null
+    }
     socket.emit('join-chat', sessionId)
     connectionCallbacks.forEach(cb => cb(true))
   })
@@ -93,8 +136,19 @@ export const initializeSocket = (sessionId, onMessage, onConnectionChange) => {
   })
 
   socket.on('reconnect_failed', () => {
-    console.error('❌ Socket reconnection failed')
+    console.error('❌ Socket reconnection failed after all attempts')
+    if (connectionTimeout) {
+      clearTimeout(connectionTimeout)
+      connectionTimeout = null
+    }
     connectionCallbacks.forEach(cb => cb(false))
+    // Try one more time after a delay
+    setTimeout(() => {
+      if (!socket.connected) {
+        console.log('🔄 Final reconnection attempt...')
+        socket.connect()
+      }
+    }, 5000)
   })
 
   socket.on('chat-message', (data) => {
