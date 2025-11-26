@@ -42,9 +42,60 @@ export default function Auth() {
   const navigate = useNavigate()
   const { login: setAuth, setAnonymousId, isAuthenticated, logout } = useAuthStore()
   
-  // Check for email confirmation callback
+  // Check for email confirmation callback from Supabase
   useEffect(() => {
     const handleAuthCallback = async () => {
+      // Check for Supabase auth callback in URL hash (from email confirmation)
+      const hashParams = new URLSearchParams(window.location.hash.substring(1))
+      const accessToken = hashParams.get('access_token')
+      const type = hashParams.get('type')
+      
+      if (accessToken && type === 'signup') {
+        console.log('📧 Email confirmation callback detected in URL hash')
+        // Set session from the tokens in the URL
+        const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: hashParams.get('refresh_token') || ''
+        })
+        
+        if (sessionError) {
+          console.error('❌ Error setting session from email confirmation:', sessionError)
+          return
+        }
+        
+        if (sessionData?.session) {
+          console.log('✅ Session created from email confirmation')
+          const user = sessionData.session.user
+          
+          // Store auth data
+          const userData = {
+            email: user.email,
+            id: user.id,
+            emailConfirmed: true
+          }
+          
+          setAuth(userData, sessionData.session.access_token, user.id)
+          setAnonymousId(user.id)
+          
+          localStorage.setItem('supabase_session', JSON.stringify(sessionData.session))
+          localStorage.setItem('anonymousId', user.id)
+          localStorage.setItem('isOnboarded', 'true')
+          
+          // Clear the hash from URL
+          window.history.replaceState(null, '', window.location.pathname + window.location.search)
+          
+          // Navigate based on user details completion
+          const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+          if (userDetailsCompleted) {
+            navigate('/app', { replace: true })
+          } else {
+            navigate('/user-details', { replace: true })
+          }
+          return
+        }
+      }
+      
+      // Also check for existing session
       const { data, error } = await supabase.auth.getSession()
       
       if (data?.session) {
