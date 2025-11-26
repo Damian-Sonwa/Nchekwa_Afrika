@@ -102,7 +102,7 @@ export default function ConfirmEmail() {
 
   if (success && token) {
     return (
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background-light dark:bg-background-dark flex items-center justify-center p-4">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -116,13 +116,13 @@ export default function ConfirmEmail() {
           >
             <CheckCircle className="w-16 h-16 text-success" />
           </motion.div>
-          <h2 className="text-2xl font-heading font-bold text-text-main dark:text-white">
+          <h2 className="text-2xl font-heading font-bold text-text-main">
             Email Confirmed!
           </h2>
-          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
             Your email has been successfully confirmed. You can now sign in to your Nchekwa_Afrika account.
           </p>
-          <p className="text-sm font-body text-text-secondary dark:text-white/70">
+          <p className="text-sm font-body text-text-secondary dark:text-text-main/70">
             Redirecting to login...
           </p>
         </motion.div>
@@ -131,7 +131,7 @@ export default function ConfirmEmail() {
   }
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -139,18 +139,18 @@ export default function ConfirmEmail() {
       >
         <div className="text-center mb-8">
           <NchekwaLogo size="w-20 h-20" />
-          <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mt-4 mb-2">
+          <h1 className="text-3xl font-heading font-bold text-text-main mt-4 mb-2">
             Confirm Your Email
           </h1>
-          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
             {token ? 'Verifying your email...' : confirmationLink ? 'Email service not configured. Use the link below to confirm your email:' : 'Please check your email for a confirmation link'}
           </p>
         </div>
 
         {loading ? (
           <div className="text-center py-8">
-            <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-            <p className="text-lg font-body text-text-secondary dark:text-white/80">Verifying your email address...</p>
+            <Loader2 className="w-12 h-12 animate-spin text-accent mx-auto mb-4" />
+            <p className="text-lg font-body text-text-secondary">Verifying your email address...</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -174,17 +174,17 @@ export default function ConfirmEmail() {
 
             {/* Show confirmation link (when email service not configured) */}
             {devConfirmationLink && (
-              <div className="p-4 bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/50 rounded-xl">
-                <p className="text-sm font-inter font-semibold text-primary dark:text-primary-light mb-2">
+              <div className="p-4 bg-accent/10 dark:bg-accent/20 border border-primary/30 dark:border-primary/50 rounded-xl">
+                <p className="text-sm font-inter font-semibold text-accent dark:text-accent-light mb-2">
                   📧 Confirmation Link
                 </p>
-                <p className="text-xs font-inter text-text-secondary dark:text-white/70 mb-3">
+                <p className="text-xs font-inter text-text-secondary dark:text-text-main/70 mb-3">
                   Email service is not configured yet. Use this link to confirm your email:
                 </p>
                 <div className="space-y-2">
                   <a
                     href={devConfirmationLink}
-                    className="block p-3 bg-white dark:bg-slate-800 rounded-lg border border-primary/30 dark:border-primary/50 text-xs text-primary dark:text-primary-light break-all hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors"
+                    className="block p-3 bg-white dark:bg-slate-800 rounded-lg border border-primary/30 dark:border-primary/50 text-xs text-accent dark:text-accent-light break-all hover:bg-accent/5 dark:hover:bg-accent/10 transition-colors"
                   >
                     {devConfirmationLink}
                   </a>
@@ -194,7 +194,7 @@ export default function ConfirmEmail() {
                       setSuccess(true)
                       setTimeout(() => setSuccess(false), 2000)
                     }}
-                    className="w-full px-3 py-2 bg-primary hover:bg-primary-light text-white text-sm font-inter rounded-lg transition-colors"
+                    className="w-full px-3 py-2 bg-accent hover:bg-accent-light text-text-main text-sm font-inter rounded-lg transition-colors"
                   >
                     Copy Link
                   </button>
@@ -217,7 +217,7 @@ export default function ConfirmEmail() {
                     setSuccess(true)
                     setTimeout(() => setSuccess(false), 2000)
                   }}
-                  className="w-full px-3 py-2 bg-accent hover:bg-accent/90 text-white text-sm font-inter rounded-lg transition-colors"
+                  className="w-full px-3 py-2 bg-accent hover:bg-accent/90 text-text-main text-sm font-inter rounded-lg transition-colors"
                 >
                   Copy Confirmation Link
                 </button>
@@ -230,14 +230,14 @@ export default function ConfirmEmail() {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="w-5 h-5 text-text-secondary dark:text-white/60" />
+                  <Mail className="w-5 h-5 text-text-secondary dark:text-text-main/60" />
                 </div>
                 <input
                   id="email"
                   type="email"
                   value={emailAddress}
                   onChange={(e) => setEmailAddress(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 border-2 border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:border-primary-light focus:ring-primary-light/20 bg-white dark:bg-slate-700 text-text-dark dark:text-white font-inter"
+                  className="w-full pl-12 pr-4 py-3.5 border-2 border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:border-primary-light focus:ring-primary-light/20 bg-white dark:bg-slate-700 text-text-dark dark:text-text-main font-inter"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -248,7 +248,7 @@ export default function ConfirmEmail() {
               disabled={resending}
               whileHover={{ scale: resending ? 1 : 1.05 }}
               whileTap={{ scale: resending ? 1 : 0.98 }}
-              className="w-full py-4 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              className="w-full py-4 rounded-xl bg-accent text-text-main font-heading font-semibold shadow-md hover:bg-accent-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {resending ? (
                 <>
@@ -268,7 +268,7 @@ export default function ConfirmEmail() {
         <div className="mt-6 text-center">
           <button
             onClick={() => navigate('/auth')}
-            className="text-sm font-inter text-primary hover:text-primary-light dark:text-primary-light dark:hover:text-primary font-medium transition-colors"
+            className="text-sm font-inter text-accent hover:text-accent-light dark:text-accent-light dark:hover:text-accent font-medium transition-colors"
           >
             Back to Login
           </button>
