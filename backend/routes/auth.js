@@ -280,6 +280,16 @@ router.post('/forgot-password', async (req, res) => {
     user.settings.resetTokenExpiry = resetTokenExpiry;
     await user.save();
     console.log('✅ Reset token saved to database for user');
+    
+    // Verify the token was saved correctly
+    const savedUser = await User.findById(user._id);
+    if (savedUser && savedUser.settings?.resetToken) {
+      console.log('✅ Verified token in database:', savedUser.settings.resetToken.substring(0, 16) + '...');
+      console.log('✅ Token length in DB:', savedUser.settings.resetToken.length);
+      console.log('✅ Tokens match:', savedUser.settings.resetToken === resetToken);
+    } else {
+      console.error('❌ Token NOT found in database after save!');
+    }
 
     // Generate reset link using consistent FRONTEND_URL
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
@@ -426,10 +436,36 @@ router.post('/reset-password', async (req, res) => {
 
     console.log('🔍 Validating reset token (POST):', token.substring(0, 16) + '...');
     console.log('🔍 Full token length:', token.length);
+    console.log('🔍 Full token (for debugging):', token);
 
     // Find user with matching reset token
     const users = await User.find({ 'settings.resetToken': token });
     console.log(`📊 Found ${users.length} user(s) with matching token`);
+    
+    // Also try to find by email hash to see if user exists
+    if (users.length === 0) {
+      // Try a different search approach - find all users with reset tokens and compare manually
+      const allUsersWithTokens = await User.find({ 'settings.resetToken': { $exists: true, $ne: null } });
+      console.log(`📊 Total users with reset tokens in DB: ${allUsersWithTokens.length}`);
+      
+      if (allUsersWithTokens.length > 0) {
+        console.log('🔍 Comparing tokens...');
+        allUsersWithTokens.forEach((u, index) => {
+          const storedToken = u.settings?.resetToken;
+          if (storedToken) {
+            const matches = storedToken === token;
+            console.log(`  User ${index + 1}:`, {
+              storedToken: storedToken.substring(0, 16) + '...',
+              searchToken: token.substring(0, 16) + '...',
+              storedLength: storedToken.length,
+              searchLength: token.length,
+              matches: matches,
+              firstCharsMatch: storedToken.substring(0, 16) === token.substring(0, 16)
+            });
+          }
+        });
+      }
+    }
 
     if (users.length === 0) {
       console.error('❌ No user found with token:', token.substring(0, 16) + '...');
