@@ -241,12 +241,20 @@ export default function Auth() {
           })
           
           // Handle different error types
-          // Note: Supabase returns "Email not confirmed" error if email confirmation is required
-          // But if we get a session, email IS confirmed (Supabase enforces this server-side)
-          if (error.message?.includes('Email not confirmed') || 
-              error.message?.includes('email not confirmed') ||
-              error.message?.includes('Email not verified') ||
-              (error.status === 400 && error.message?.toLowerCase().includes('confirm'))) {
+          // IMPORTANT: Supabase returns specific errors for email confirmation vs invalid credentials
+          // "Email not confirmed" = email confirmation required
+          // "Invalid login credentials" = wrong email/password OR email not confirmed (in some cases)
+          // We should only show email confirmation message for explicit confirmation errors
+          
+          const errorMsg = error.message?.toLowerCase() || ''
+          const isEmailConfirmationError = 
+            errorMsg.includes('email not confirmed') ||
+            errorMsg.includes('email not verified') ||
+            errorMsg.includes('verify your email') ||
+            (error.status === 400 && errorMsg.includes('confirm') && !errorMsg.includes('invalid'))
+          
+          if (isEmailConfirmationError) {
+            console.log('📧 Email confirmation error detected')
             setErrors({ 
               submit: 'Please verify your email address before signing in. Check your inbox for the confirmation link. If you already confirmed, wait a moment and try again, or click "Resend Confirmation Email" below.' 
             })
@@ -254,27 +262,20 @@ export default function Auth() {
             setPendingEmailConfirmation(true)
             setPendingEmail(formData.email)
           } else if (error.message?.includes('Invalid login credentials') || 
-                     error.message?.includes('Invalid credentials') ||
-                     error.status === 400) {
-            // "Invalid login credentials" can also mean email not confirmed in some Supabase configurations
-            // Let's check if the user exists and if email is confirmed
-            console.log('🔍 Checking user status for:', formData.email)
-            
-            // Try to get user info to see if it's a confirmation issue
-            try {
-              // Note: We can't directly check user status without auth, but we can provide helpful guidance
-              setErrors({ 
-                submit: 'Invalid email or password. If you confirmed your email on another device, make sure you\'re using the correct password. You can also try resetting your password or resending the confirmation email.' 
-              })
-              
-              // Offer to show resend confirmation option
-              // User can manually click if they think email isn't confirmed
-              console.log('💡 Tip: If you think your email isn\'t confirmed, try the "Resend Confirmation Email" option')
-            } catch (checkError) {
-              console.error('❌ Error checking user status:', checkError)
-              setErrors({ submit: 'Invalid email or password. Please check your credentials and try again.' })
-            }
-          } else {
+                     error.message?.includes('Invalid credentials')) {
+            // This is a credentials error - wrong email or password
+            // Don't assume it's email confirmation issue
+            console.log('🔐 Invalid credentials error - not email confirmation issue')
+            setErrors({ 
+              submit: 'Invalid email or password. Please check your credentials and try again. If you forgot your password, click "Forgot password?" below.' 
+            })
+          } else if (error.status === 400) {
+            // Generic 400 error - could be various issues
+            console.log('⚠️ Generic 400 error:', error.message)
+            setErrors({ 
+              submit: error.message || 'Login failed. Please check your email and password, or try resetting your password.' 
+            })
+      } else {
             setErrors({ submit: error.message || `Failed to sign in (Error ${error.status || 'unknown'}). Please try again.` })
           }
           setLoading(false)
@@ -331,7 +332,7 @@ export default function Auth() {
             }
           }, 1500)
         }
-      } else {
+          } else {
         // Signup with Supabase
         // Always use Vercel URL for email confirmation links (even in development)
         const emailConfirmationUrl = getEmailConfirmationUrl()
@@ -357,7 +358,7 @@ export default function Auth() {
           console.error('❌ Signup error:', error)
           if (error.message.includes('already registered')) {
             setErrors({ submit: 'An account with this email already exists. Please sign in instead.' })
-          } else {
+            } else {
             setErrors({ submit: error.message || 'Failed to create account. Please try again.' })
           }
           setLoading(false)
@@ -393,7 +394,7 @@ export default function Auth() {
             
             setTimeout(() => {
               navigate('/user-details')
-            }, 2000)
+        }, 2000)
           } else {
             // Email confirmation is mandatory - show persistent message
             console.log('📧 Email confirmation required - showing confirmation screen')
