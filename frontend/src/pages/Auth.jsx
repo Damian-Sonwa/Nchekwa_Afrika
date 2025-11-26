@@ -182,22 +182,23 @@ export default function Auth() {
                 confirmParams.set('token', response.confirmationToken)
               }
               navigate('/confirm-email?' + confirmParams.toString())
-          } else {
-            // For login: always go to app (profile form is only for first-time signups)
-            // For signup: show profile form only if userDetailsCompleted is not set
-            if (isLogin) {
-              navigate('/app')
             } else {
-              // Signup: check if user details are completed
-              const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
-              if (!userDetailsCompleted) {
-                navigate('/user-details') // First-time signup: show profile form
+              // For login: always go to app (profile form is only for first-time signups)
+              // For signup: show profile form only if userDetailsCompleted is not set
+              if (isLogin) {
+                navigate('/app')
               } else {
-                navigate('/app') // Returning signup: go to app
+                // Signup: check if user details are completed
+                const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+                if (!userDetailsCompleted) {
+                  navigate('/user-details') // First-time signup: show profile form
+                } else {
+                  navigate('/app') // Returning signup: go to app
+                }
               }
             }
-          }
-        }, 2000)
+          }, 2000)
+        }
       }
     } catch (error) {
       console.error('Auth error:', error)
