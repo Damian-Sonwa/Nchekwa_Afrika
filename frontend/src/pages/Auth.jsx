@@ -104,6 +104,7 @@ export default function Auth() {
   const [errors, setErrors] = useState({})
   const [success, setSuccess] = useState(false)
   const [message, setMessage] = useState('')
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
 
   const validateForm = () => {
     const newErrors = {}
