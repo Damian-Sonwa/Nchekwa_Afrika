@@ -72,6 +72,31 @@ mongoose.connect(mongoUri, {
 // Static file serving for uploads
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Root API endpoint
+app.get('/api', (req, res) => {
+  res.json({
+    message: 'GBV App API',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      health: '/health',
+      auth: '/api/auth',
+      sos: '/api/sos',
+      chat: '/api/chat',
+      resources: '/api/resources',
+      shelters: '/api/shelters',
+      safetyPlans: '/api/safety-plans',
+      evidence: '/api/evidence',
+      user: '/api/user',
+      settings: '/api/settings',
+      mood: '/api/mood',
+      legal: '/api/legal',
+      emotionalCheckin: '/api/emotional-checkin',
+      community: '/api/community'
+    }
+  });
+});
+
 // Routes
 app.use('/api/sos', require('./routes/sos'));
 app.use('/api/chat', require('./routes/chat'));
