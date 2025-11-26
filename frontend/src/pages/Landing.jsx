@@ -197,7 +197,7 @@ const ImageCarousel = () => {
 
       {/* Fallback gradient if images don't load */}
       <div className="hidden absolute inset-0 items-center justify-center bg-accent rounded-2xl">
-        <Shield className="w-32 h-32 text-text-main opacity-50" />
+        <Shield className="w-32 h-32 text-accent opacity-50" />
       </div>
     </div>
   )
@@ -219,7 +219,7 @@ export default function Landing() {
               className="flex items-center space-x-3"
             >
               <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center shadow-md">
-                <Shield className="w-6 h-6 text-text-main" />
+                <Shield className="w-6 h-6 text-primary" />
               </div>
               <div>
                 <h1 className="text-xl font-heading font-semibold text-accent">
@@ -323,7 +323,7 @@ export default function Landing() {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => navigate('/auth')}
-                  className="px-6 py-3 border-2 border-accent text-text-main rounded-xl font-heading font-semibold hover:bg-accent hover:text-text-main  shadow-md hover:shadow-lg transition-all duration-300"
+                  className="px-6 py-3 border-2 border-accent text-accent rounded-xl font-heading font-semibold hover:bg-accent hover:text-primary shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   Explore Resources
                 </motion.button>
@@ -398,7 +398,7 @@ export default function Landing() {
                   style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                 >
                   <div className={`inline-flex p-4 rounded-xl bg-accent mb-6`}>
-                    <Icon className="w-8 h-8 text-text-main" />
+                    <Icon className="w-8 h-8 text-primary" />
                   </div>
                   <h3 className="text-3xl font-heading font-bold text-text-main mb-3">
                     {feature.title}
@@ -437,7 +437,8 @@ export default function Landing() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+                className="bg-card border rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
               >
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -468,17 +469,17 @@ export default function Landing() {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <h2 className="text-3xl font-heading font-bold text-text-main mb-4">
+            <h2 className="text-3xl font-heading font-bold text-primary mb-4">
               Ready to Take the First Step?
             </h2>
-            <p className="text-lg font-body text-text-main/90 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-lg font-body text-primary/90 leading-relaxed max-w-2xl mx-auto">
               Join thousands who have found support, resources, and hope. Your path to safety starts with a single click.
             </p>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate('/auth?mode=register')}
-              className="px-6 py-3 rounded-xl bg-accent text-primary font-heading font-bold shadow-xl hover:shadow-2xl transition-all duration-300 focus:ring-2 focus:ring-accent inline-flex items-center space-x-2"
+              className="px-6 py-3 rounded-xl bg-primary text-accent font-heading font-bold shadow-xl hover:shadow-2xl transition-all duration-300 focus:ring-2 focus:ring-accent inline-flex items-center space-x-2"
             >
               <span>Start Your Journey</span>
               <ArrowRight className="w-5 h-5" />
