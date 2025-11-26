@@ -23,10 +23,10 @@ export default function Button({
   const baseStyles = 'font-heading font-semibold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2'
   
   const variants = {
-    primary: 'bg-primary text-white shadow-md hover:bg-primary-dark hover:shadow-lg focus:ring-accent dark:bg-primary dark:hover:bg-primary-dark',
-    secondary: 'bg-background-light text-text-main hover:bg-primary-light border border-primary-light dark:bg-background-dark dark:text-white dark:border-primary dark:hover:bg-primary',
-    outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white dark:border-primary-light dark:text-primary-light dark:hover:bg-primary dark:hover:text-white',
-    danger: 'bg-error text-white hover:bg-error/90 shadow-md hover:shadow-lg focus:ring-error',
+    primary: 'bg-accent text-primary shadow-md hover:bg-accent-gold hover:shadow-lg focus:ring-accent',
+    secondary: 'bg-background text-text-main hover:bg-accent/10 border border-accent/20',
+    outline: 'border-2 border-accent text-accent hover:bg-accent hover:text-primary',
+    danger: 'bg-error text-text-main hover:bg-error/90 shadow-md hover:shadow-lg focus:ring-error',
   }
   
   const sizes = {
