@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { supabase } from '../lib/supabase'
+import { getUserDetails } from '../services/api'
 
 /**
  * Nchekwa_Afrika Authentication Page with Supabase Integration
@@ -84,12 +85,34 @@ export default function Auth() {
           // Clear the hash from URL
           window.history.replaceState(null, '', window.location.pathname + window.location.search)
           
-          // Navigate based on user details completion
-          const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
-          if (userDetailsCompleted) {
-            navigate('/app', { replace: true })
-          } else {
-            navigate('/user-details', { replace: true })
+          // Check if user has already completed their details (for returning users)
+          try {
+            // First check localStorage for quick navigation
+            const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+            if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+              navigate('/app', { replace: true })
+              return
+            }
+            
+            // For returning users, check database to see if details exist
+            const detailsResponse = await getUserDetails(user.id)
+            if (detailsResponse?.success && detailsResponse?.userDetails) {
+              // User has already completed their details - skip user-details page
+              localStorage.setItem('userDetailsCompleted', 'true')
+              navigate('/app', { replace: true })
+            } else {
+              // First-time user - show user-details page
+              navigate('/user-details', { replace: true })
+            }
+          } catch (error) {
+            console.error('Error checking user details:', error)
+            // On error, check localStorage as fallback
+            const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+            if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+              navigate('/app', { replace: true })
+            } else {
+              navigate('/user-details', { replace: true })
+            }
           }
           return
         }
@@ -119,12 +142,34 @@ export default function Auth() {
           localStorage.setItem('anonymousId', user.id)
           localStorage.setItem('isOnboarded', 'true')
           
-          // Navigate based on user details completion
-          const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
-          if (userDetailsCompleted) {
-            navigate('/app', { replace: true })
-          } else {
-            navigate('/user-details', { replace: true })
+          // Check if user has already completed their details (for returning users)
+          try {
+            // First check localStorage for quick navigation
+            const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+            if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+              navigate('/app', { replace: true })
+              return
+            }
+            
+            // For returning users, check database to see if details exist
+            const detailsResponse = await getUserDetails(user.id)
+            if (detailsResponse?.success && detailsResponse?.userDetails) {
+              // User has already completed their details - skip user-details page
+              localStorage.setItem('userDetailsCompleted', 'true')
+              navigate('/app', { replace: true })
+            } else {
+              // First-time user - show user-details page
+              navigate('/user-details', { replace: true })
+            }
+          } catch (error) {
+            console.error('Error checking user details:', error)
+            // On error, check localStorage as fallback
+            const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+            if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+              navigate('/app', { replace: true })
+            } else {
+              navigate('/user-details', { replace: true })
+            }
           }
         }
       }
@@ -142,11 +187,45 @@ export default function Auth() {
         const isAuth = isAuthenticated || token || session
         
         if (isAuth && window.location.pathname === '/auth') {
-          const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
-          if (userDetailsCompleted) {
-            navigate('/app', { replace: true })
-          } else {
-            navigate('/user-details', { replace: true })
+          // Check if user has already completed their details (for returning users)
+          try {
+            // First check localStorage for quick navigation
+            const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+            if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+              navigate('/app', { replace: true })
+              return
+            }
+            
+            // For returning users, check database to see if details exist
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session?.user) {
+              const detailsResponse = await getUserDetails(session.user.id)
+              if (detailsResponse?.success && detailsResponse?.userDetails) {
+                // User has already completed their details - skip user-details page
+                localStorage.setItem('userDetailsCompleted', 'true')
+                navigate('/app', { replace: true })
+              } else {
+                // First-time user - show user-details page
+                navigate('/user-details', { replace: true })
+              }
+            } else {
+              // No session, check localStorage as fallback
+              const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+              if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+                navigate('/app', { replace: true })
+              } else {
+                navigate('/user-details', { replace: true })
+              }
+            }
+          } catch (error) {
+            console.error('Error checking user details:', error)
+            // On error, check localStorage as fallback
+            const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+            if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+              navigate('/app', { replace: true })
+            } else {
+              navigate('/user-details', { replace: true })
+            }
           }
         }
       } catch (error) {
@@ -374,14 +453,37 @@ export default function Auth() {
         setSuccess(true)
           setMessage('Welcome back!')
         
-        setTimeout(() => {
+        // Check if user has already completed their details (for returning users)
+        setTimeout(async () => {
+          try {
+            // First check localStorage for quick navigation
             const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
-            if (userDetailsCompleted) {
+            if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+              navigate('/app')
+              return
+            }
+            
+            // For returning users, check database to see if details exist
+            const detailsResponse = await getUserDetails(data.user.id)
+            if (detailsResponse?.success && detailsResponse?.userDetails) {
+              // User has already completed their details - skip user-details page
+              localStorage.setItem('userDetailsCompleted', 'true')
+              navigate('/app')
+            } else {
+              // First-time user - show user-details page
+              navigate('/user-details')
+            }
+          } catch (error) {
+            console.error('Error checking user details:', error)
+            // On error, check localStorage as fallback
+            const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+            if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
               navigate('/app')
             } else {
               navigate('/user-details')
             }
-          }, 1500)
+          }
+        }, 1500)
         }
           } else {
         // Signup with Supabase
@@ -697,8 +799,36 @@ export default function Auth() {
           // Clear URL parameters and hash
           window.history.replaceState(null, '', window.location.pathname)
           
-          setTimeout(() => {
-            navigate('/user-details')
+          // Check if user has already completed their details (for returning users)
+          setTimeout(async () => {
+            try {
+              // First check localStorage for quick navigation
+              const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+              if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+                navigate('/app')
+                return
+              }
+              
+              // For returning users, check database to see if details exist
+              const detailsResponse = await getUserDetails(user.id)
+              if (detailsResponse?.success && detailsResponse?.userDetails) {
+                // User has already completed their details - skip user-details page
+                localStorage.setItem('userDetailsCompleted', 'true')
+                navigate('/app')
+              } else {
+                // First-time user - show user-details page
+                navigate('/user-details')
+              }
+            } catch (error) {
+              console.error('Error checking user details:', error)
+              // On error, check localStorage as fallback
+              const userDetailsCompleted = localStorage.getItem('userDetailsCompleted')
+              if (userDetailsCompleted === 'true' || userDetailsCompleted === 'skipped') {
+                navigate('/app')
+              } else {
+                navigate('/user-details')
+              }
+            }
           }, 2000)
           return
         }
