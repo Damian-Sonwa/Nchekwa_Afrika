@@ -30,6 +30,11 @@ const getBaseUrl = () => {
   return 'https://nchekwa-afrika.vercel.app'
 }
 
+// Get email confirmation URL - always use Vercel URL for email links
+const getEmailConfirmationUrl = () => {
+  return 'https://nchekwa-afrika.vercel.app'
+}
+
 export default function Auth() {
   const navigate = useNavigate()
   const { login: setAuth, setAnonymousId, isAuthenticated, logout } = useAuthStore()
@@ -115,6 +120,8 @@ export default function Auth() {
   const [success, setSuccess] = useState(false)
   const [message, setMessage] = useState('')
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
+  const [pendingEmailConfirmation, setPendingEmailConfirmation] = useState(false)
+  const [pendingEmail, setPendingEmail] = useState('')
 
   const validateForm = () => {
     const newErrors = {}
@@ -149,6 +156,8 @@ export default function Auth() {
       setFormData({ email: '', password: '', confirmPassword: '' })
       setErrors({})
       setMessage('')
+      setPendingEmailConfirmation(false)
+      setPendingEmail('')
       setIsFlipping(false)
     }, 300)
   }
@@ -260,12 +269,13 @@ export default function Auth() {
         }
       } else {
         // Signup with Supabase
-        const baseUrl = getBaseUrl()
+        // Always use Vercel URL for email confirmation links (even in development)
+        const emailConfirmationUrl = getEmailConfirmationUrl()
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
-            emailRedirectTo: `${baseUrl}/auth?verified=true`,
+            emailRedirectTo: `${emailConfirmationUrl}/auth?verified=true`,
           }
         })
 
@@ -280,9 +290,6 @@ export default function Auth() {
         }
 
         if (data.user) {
-          setSuccess(true)
-          setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
-          
           // Check if email confirmation is required
           if (data.user.email_confirmed_at) {
             // Email already confirmed (shouldn't happen normally, but handle it)
@@ -301,19 +308,22 @@ export default function Auth() {
             localStorage.setItem('anonymousId', data.user.id)
             localStorage.setItem('isOnboarded', 'true')
             
+            setSuccess(true)
+            setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
+            
             setTimeout(() => {
               navigate('/user-details')
             }, 2000)
           } else {
-            // Email confirmation required
-            setMessage('Account created! Please check your email to confirm your account. We sent a confirmation link to ' + formData.email)
+            // Email confirmation is mandatory - show persistent message
+            setPendingEmailConfirmation(true)
+            setPendingEmail(formData.email)
+            setSuccess(false)
+            setMessage('')
+            setLoading(false)
             
-            // Show success message for 5 seconds before allowing user to continue
-            setTimeout(() => {
-              setSuccess(false)
-              setMessage('')
-              setIsLogin(true) // Switch to login form
-            }, 5000)
+            // Clear form but keep email for resend functionality
+            setFormData({ ...formData, password: '', confirmPassword: '' })
           }
         }
       }
@@ -325,6 +335,46 @@ export default function Auth() {
       if (!success) {
       setLoading(false)
       }
+    }
+  }
+
+  const handleResendConfirmation = async () => {
+    if (!pendingEmail) {
+      setErrors({ submit: 'No email address found. Please sign up again.' })
+      return
+    }
+
+    setLoading(true)
+    setErrors({})
+    setMessage('')
+    
+    try {
+      // Always use Vercel URL for email confirmation links
+      const emailConfirmationUrl = getEmailConfirmationUrl()
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: pendingEmail,
+        options: {
+          emailRedirectTo: `${emailConfirmationUrl}/auth?verified=true`,
+        }
+      })
+
+      if (error) {
+        setErrors({ 
+          submit: error.message || 'Failed to resend confirmation email. Please try again.' 
+        })
+        setLoading(false)
+        return
+      }
+
+      setMessage('Confirmation email sent! Please check your inbox (and spam folder) for the confirmation link.')
+      setLoading(false)
+    } catch (error) {
+      console.error('Resend confirmation error:', error)
+      setErrors({ 
+        submit: error.message || 'Failed to resend confirmation email. Please try again.' 
+      })
+      setLoading(false)
     }
   }
 
@@ -455,6 +505,10 @@ export default function Auth() {
     const oauth = urlParams.get('oauth')
 
     if (verified === 'true') {
+      // Clear pending email confirmation state
+      setPendingEmailConfirmation(false)
+      setPendingEmail('')
+      
       setMessage('Your email is verified! Welcome to Nchekwa Afrika!')
       setSuccess(true)
       
@@ -686,6 +740,150 @@ export default function Auth() {
                           <p className="text-lg font-body leading-relaxed" style={{ color: '#b0ff9e' }}>
                             Redirecting you...
                           </p>
+                        </motion.div>
+                      ) : pendingEmailConfirmation ? (
+                        <motion.div
+                          key="email-confirmation"
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          className="text-center space-y-6 py-8"
+                        >
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring", stiffness: 200 }}
+                            className="inline-flex p-4 rounded-full"
+                            style={{
+                              background: 'rgba(163, 255, 127, 0.2)'
+                            }}
+                          >
+                            <Mail className="w-16 h-16" style={{ color: '#a3ff7f' }} />
+                          </motion.div>
+                          <div className="space-y-4">
+                            <h2 className="text-2xl font-heading font-bold" style={{ color: '#f0f0f0' }}>
+                              Check Your Email
+                            </h2>
+                            <p className="text-lg font-body leading-relaxed" style={{ color: '#f0f0f0' }}>
+                              We've sent a confirmation email to <strong style={{ color: '#a3ff7f' }}>{pendingEmail}</strong>
+                            </p>
+                            <p className="text-sm font-body" style={{ color: '#b0ff9e' }}>
+                              Please click the confirmation link in the email to complete your signup. 
+                              Check your spam folder if you don't see it.
+                            </p>
+                            <p className="text-sm font-body italic" style={{ color: '#888888' }}>
+                              You must confirm your email before you can sign in.
+                            </p>
+                          </div>
+                          
+                          {/* Resend Confirmation Button */}
+                          <div className="space-y-3 pt-4">
+                            <motion.button
+                              type="button"
+                              onClick={handleResendConfirmation}
+                              disabled={loading}
+                              whileHover={{ scale: loading ? 1 : 1.05 }}
+                              whileTap={{ scale: loading ? 1 : 0.98 }}
+                              className="w-full py-3 px-6 rounded-xl font-heading font-semibold shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                              style={{
+                                background: loading ? '#888888' : 'rgba(163, 255, 127, 0.2)',
+                                border: '2px solid rgba(163, 255, 127, 0.5)',
+                                color: loading ? '#0a3d2f' : '#a3ff7f',
+                                boxShadow: loading ? 'none' : '0 4px 14px 0 rgba(163, 255, 127, 0.3)'
+                              }}
+                              onMouseEnter={(e) => {
+                                if (!loading) {
+                                  e.currentTarget.style.background = 'rgba(163, 255, 127, 0.3)'
+                                  e.currentTarget.style.borderColor = '#a3ff7f'
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!loading) {
+                                  e.currentTarget.style.background = 'rgba(163, 255, 127, 0.2)'
+                                  e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.5)'
+                                }
+                              }}
+                            >
+                              {loading ? (
+                                <>
+                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                  <span>Sending...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Mail className="w-5 h-5" />
+                                  <span>Resend Confirmation Email</span>
+                                </>
+                              )}
+                            </motion.button>
+                            
+                            {/* Back to Login Button */}
+                            <motion.button
+                              type="button"
+                              onClick={() => {
+                                setPendingEmailConfirmation(false)
+                                setPendingEmail('')
+                                setIsLogin(true)
+                                setErrors({})
+                                setMessage('')
+                              }}
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                              className="w-full py-2 px-4 rounded-xl font-body font-medium transition-all duration-300"
+                              style={{
+                                border: '2px solid rgba(163, 255, 127, 0.3)',
+                                background: 'rgba(0, 0, 0, 0.2)',
+                                color: '#b0ff9e'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.borderColor = '#a3ff7f'
+                                e.currentTarget.style.background = 'rgba(163, 255, 127, 0.1)'
+                                e.currentTarget.style.color = '#a3ff7f'
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+                                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.2)'
+                                e.currentTarget.style.color = '#b0ff9e'
+                              }}
+                            >
+                              Back to Sign In
+                            </motion.button>
+                          </div>
+
+                          {/* Success/Error Messages */}
+                          {message && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="p-4 rounded-xl"
+                              style={{
+                                background: 'rgba(163, 255, 127, 0.15)',
+                                border: '1px solid rgba(163, 255, 127, 0.3)'
+                              }}
+                            >
+                              <p className="text-sm font-body flex items-center space-x-2" style={{ color: '#a3ff7f' }}>
+                                <CheckCircle className="w-4 h-4" />
+                                <span>{message}</span>
+                              </p>
+                            </motion.div>
+                          )}
+
+                          {errors.submit && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="p-4 rounded-xl"
+                              style={{
+                                background: 'rgba(239, 68, 68, 0.15)',
+                                border: '1px solid rgba(239, 68, 68, 0.3)'
+                              }}
+                            >
+                              <p className="text-sm font-body flex items-center space-x-2" style={{ color: '#ef4444' }}>
+                                <AlertCircle className="w-4 h-4" />
+                                <span>{errors.submit}</span>
+                              </p>
+                            </motion.div>
+                          )}
                         </motion.div>
                       ) : (
                         <motion.form
