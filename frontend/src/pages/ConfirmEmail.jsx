@@ -106,7 +106,8 @@ export default function ConfirmEmail() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-4 sm:p-6 md:p-10 w-full max-w-md mx-4 box-border text-center space-y-4"
+          className="bg-card border rounded-2xl shadow-lg p-4 sm:p-6 md:p-10 w-full max-w-md mx-4 box-border text-center space-y-4"
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
         >
           <motion.div
             initial={{ scale: 0 }}
@@ -135,7 +136,8 @@ export default function ConfirmEmail() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-4 sm:p-6 md:p-10 w-full max-w-md mx-4 box-border"
+        className="bg-card border rounded-2xl shadow-lg p-4 sm:p-6 md:p-10 w-full max-w-md mx-4 box-border"
+        style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
       >
         <div className="text-center mb-8">
           <NchekwaLogo size="w-20 h-20" />
@@ -248,7 +250,7 @@ export default function ConfirmEmail() {
               disabled={resending}
               whileHover={{ scale: resending ? 1 : 1.05 }}
               whileTap={{ scale: resending ? 1 : 0.98 }}
-              className="w-full py-4 rounded-xl bg-accent text-text-main font-heading font-semibold shadow-md hover:bg-accent-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              className="w-full py-4 rounded-xl bg-accent text-primary font-heading font-bold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {resending ? (
                 <>

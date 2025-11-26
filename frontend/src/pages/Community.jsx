@@ -210,7 +210,7 @@ function NewPostModal({ isOpen, onClose, onSubmit, anonymousId }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onClose}
-                className="px-6 py-2 rounded-xl border border-primary-light text-text-main hover:bg-background-light dark:hover:bg-accent/20 transition-colors font-body font-semibold"
+                className="px-6 py-2 rounded-xl border border-accent text-accent bg-transparent hover:bg-accent/10 transition-colors font-body font-semibold"
               >
                 Cancel
               </motion.button>
@@ -377,7 +377,7 @@ function CommentList({ postId, comments, onAddComment, anonymousId }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               disabled={loading || !commentText.trim()}
-              className="px-4 py-2 rounded-lg bg-accent text-text-main hover:bg-accent-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 rounded-lg bg-accent text-primary font-bold hover:bg-accent-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -476,7 +476,8 @@ function CommunityPostCard({ post, onLike, onComment, onReport, anonymousId }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 w-full"
+      className="bg-card border rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 w-full"
+      style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
@@ -589,7 +590,8 @@ function CommunityFeed({ posts, onLike, onComment, onReport, anonymousId, loadin
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="text-center py-12 bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg"
+        className="text-center py-12 bg-card border rounded-2xl shadow-lg"
+        style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
       >
         <Users className="w-16 h-16 text-text-secondary dark:text-text-main/60 mx-auto mb-4" />
         <h3 className="text-xl font-heading font-bold text-text-main mb-2">
@@ -743,7 +745,7 @@ export default function Community() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowNewPostModal(true)}
-          className="px-6 py-3 rounded-xl bg-accent text-text-main font-body font-semibold hover:bg-accent-dark transition-colors flex items-center space-x-2 w-full sm:w-auto justify-center"
+          className="px-6 py-3 rounded-xl bg-accent text-primary font-body font-bold hover:bg-accent-gold transition-colors flex items-center space-x-2 w-full sm:w-auto justify-center"
         >
           <Plus className="w-5 h-5" />
           <span>New Post</span>
@@ -751,7 +753,7 @@ export default function Community() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-4 p-4 bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg">
+      <div className="flex flex-wrap items-center gap-4 p-4 bg-card border rounded-2xl shadow-lg" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
         {/* Category filter */}
         <div className="flex items-center space-x-2">
           <Filter className="w-5 h-5 text-text-secondary dark:text-text-main/60" />

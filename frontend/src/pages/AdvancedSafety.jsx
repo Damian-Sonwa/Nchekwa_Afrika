@@ -48,7 +48,8 @@ export default function AdvancedSafety() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6"
+          className="bg-card border rounded-2xl shadow-lg p-6"
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -64,7 +65,7 @@ export default function AdvancedSafety() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => activateEscape(decoyType)}
-              className="px-4 py-2 rounded-lg bg-accent text-text-main font-heading font-medium hover:bg-accent-dark transition-all duration-300"
+              className="px-4 py-2 rounded-lg bg-accent text-primary font-heading font-bold hover:bg-accent-gold transition-all duration-300"
             >
               Activate
             </motion.button>
@@ -78,7 +79,7 @@ export default function AdvancedSafety() {
                 onClick={() => setDecoyType(type)}
                 className={`px-3 py-1 rounded-lg text-sm font-body transition-all duration-300 ${
                   decoyType === type
-                    ? 'bg-accent text-text-main'
+                    ? 'bg-accent text-primary font-bold'
                     : 'bg-background text-text-main border border-accent/20 dark:border-primary/20 hover:border-primary'
                 }`}
               >
@@ -96,7 +97,8 @@ export default function AdvancedSafety() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-background rounded-xl p-6 shadow-lg border border-accent/20"
+          className="bg-card rounded-xl p-6 shadow-lg border"
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -133,7 +135,8 @@ export default function AdvancedSafety() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-background rounded-xl p-6 shadow-lg border border-accent/20"
+          className="bg-card rounded-xl p-6 shadow-lg border"
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -173,7 +176,8 @@ export default function AdvancedSafety() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-background rounded-xl p-6 shadow-lg border border-accent/20"
+          className="bg-card rounded-xl p-6 shadow-lg border"
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">

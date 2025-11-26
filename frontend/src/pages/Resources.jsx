@@ -369,7 +369,7 @@ export default function Resources() {
                     onClick={() => setSelectedCategory(category.id)}
                     className={`px-3 sm:px-4 py-2 rounded-lg font-body font-medium whitespace-nowrap transition-all duration-300 flex items-center space-x-2 flex-shrink-0 ${
                       selectedCategory === category.id
-                        ? 'bg-accent text-text-main shadow-md'
+                        ? 'bg-accent text-primary font-bold shadow-md'
                         : 'bg-background text-text-main hover:bg-accent-light dark:hover:bg-accent border border-accent/20'
                     }`}
                   >
@@ -394,7 +394,9 @@ export default function Resources() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
                     whileHover={{ scale: 1.02 }}
-                    className="bg-white dark:bg-dark rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200 p-6 border border-light dark:border-light/30"
+                    className="bg-card rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200 p-6 border"
+                    style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                    style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div
@@ -599,7 +601,7 @@ export default function Resources() {
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
                       onClick={getCurrentLocation}
-                      className="px-4 py-2 rounded-lg bg-accent text-text-main font-body text-sm hover:bg-accent-dark transition-all duration-300 flex items-center space-x-2"
+                      className="px-4 py-2 rounded-lg bg-accent text-primary font-body font-bold text-sm hover:bg-accent-gold transition-all duration-300 flex items-center space-x-2"
                     >
                       <Navigation className="w-4 h-4" />
                       <span>Find Nearest</span>
@@ -647,7 +649,8 @@ export default function Resources() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
                           whileHover={{ scale: 1.03 }}
-                          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+                          className="bg-card border rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+                          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                         >
                           {/* Header */}
                           <div className="flex items-start justify-between mb-4">

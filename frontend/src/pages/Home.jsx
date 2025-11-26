@@ -333,9 +333,10 @@ export default function Home() {
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.03, y: -4 }}
                 onClick={() => stat.href && navigate(stat.href)}
-                className={`bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 ${
-                  stat.href ? 'cursor-pointer hover:border-primary' : ''
+                className={`bg-card rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border ${
+                  stat.href ? 'cursor-pointer hover:border-accent' : ''
                 }`}
+                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10">
@@ -383,7 +384,7 @@ export default function Home() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(action.href)}
-              className="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-xl bg-accent text-text-main font-heading font-semibold shadow-md hover:bg-accent-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent"
+              className="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-xl bg-accent text-primary font-heading font-bold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent"
             >
               <action.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 mb-2 mx-auto" />
               <p className="text-xs sm:text-sm font-body font-semibold mb-1 break-words">{action.name}</p>
@@ -400,7 +401,8 @@ export default function Home() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.4 }}
-          className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+          className="bg-card rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border"
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
       >
         <div className="flex items-start space-x-4">
             <div className="flex-shrink-0 p-3 rounded-xl bg-accent/20">
@@ -420,7 +422,8 @@ export default function Home() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5 }}
-          className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+          className="bg-card rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border"
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
         >
           <h3 className="text-3xl font-heading font-bold text-text-main mb-4 sm:mb-6 flex items-center">
             <div className="p-2 rounded-lg bg-accent/10 mr-3">

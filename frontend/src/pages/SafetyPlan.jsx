@@ -79,7 +79,7 @@ export default function SafetyPlan() {
             onClick={() => setActiveTab(tab.id)}
             className={`px-6 py-2 rounded-lg font-heading font-medium whitespace-nowrap transition-all duration-300 ${
               activeTab === tab.id
-                ? 'bg-accent text-text-main shadow-md'
+                ? 'bg-accent text-primary font-bold shadow-md'
                 : 'bg-background text-text-main hover:bg-accent-light dark:hover:bg-accent border border-primary-light dark:border-primary/20'
             }`}
           >
@@ -89,7 +89,7 @@ export default function SafetyPlan() {
       </div>
 
       {/* Tab Content */}
-      <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6">
+      <div className="bg-card border rounded-2xl shadow-lg p-6" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
         {activeTab === 'overview' && (
           <div className="space-y-4">
             <textarea
@@ -103,7 +103,7 @@ export default function SafetyPlan() {
               whileTap={{ scale: 0.97 }}
               onClick={handleSave}
               disabled={saving}
-              className="px-6 py-3 rounded-xl bg-accent text-text-main font-heading font-semibold shadow-md hover:bg-accent-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent flex items-center space-x-2 disabled:opacity-50"
+              className="px-6 py-3 rounded-xl bg-accent text-primary font-heading font-bold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent flex items-center space-x-2 disabled:opacity-50"
             >
               <Save className="w-5 h-5" />
               <span>{saving ? 'Saving...' : 'Save Plan'}</span>
@@ -264,7 +264,7 @@ function AddStepForm({ onAdd }) {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           type="submit"
-          className="px-4 py-2 rounded-lg bg-accent text-text-main font-heading font-semibold hover:bg-accent-dark transition-all duration-300"
+          className="px-4 py-2 rounded-lg bg-accent text-primary font-heading font-bold hover:bg-accent-gold transition-all duration-300"
         >
           Add
         </motion.button>
@@ -343,7 +343,7 @@ function AddContactForm({ onAdd }) {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           type="submit"
-          className="px-4 py-2 rounded-lg bg-accent text-text-main font-heading font-semibold hover:bg-accent-dark transition-all duration-300"
+          className="px-4 py-2 rounded-lg bg-accent text-primary font-heading font-bold hover:bg-accent-gold transition-all duration-300"
         >
           Add
         </motion.button>
@@ -421,7 +421,7 @@ function AddPlaceForm({ onAdd }) {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           type="submit"
-          className="px-4 py-2 rounded-lg bg-accent text-text-main font-heading font-semibold hover:bg-accent-dark transition-all duration-300"
+          className="px-4 py-2 rounded-lg bg-accent text-primary font-heading font-bold hover:bg-accent-gold transition-all duration-300"
         >
           Add
         </motion.button>

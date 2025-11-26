@@ -98,6 +98,10 @@ npm install -g vercel
    VITE_SOCKET_URL=https://your-backend-url.onrender.com
    ```
 
+   ⚠️ **CRITICAL**: Make sure `VITE_API_URL` includes `/api` at the end!
+   - ✅ Correct: `https://nchekwa-afrika.onrender.com/api`
+   - ❌ Wrong: `https://nchekwa-afrika.onrender.com`
+
    Replace `your-backend-url.onrender.com` with your actual Render backend URL.
 
 6. Click **"Deploy"**

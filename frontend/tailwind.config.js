@@ -24,6 +24,10 @@ export default {
           dark: "#0a0a0a", // Near black
           light: "#0a3d2f", // Same as default for consistency
         },
+        card: {
+          DEFAULT: "#0f4d3c", // Card background (slightly lighter than main)
+          border: "rgba(255, 255, 255, 0.1)", // Card border
+        },
         text: {
           main: "#f0f0f0", // Light color for primary text
           secondary: "#b0ff9e", // Light green for secondary text

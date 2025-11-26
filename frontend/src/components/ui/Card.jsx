@@ -18,15 +18,14 @@ export default function Card({
     <motion.div
       whileHover={hover ? { scale: 1.02 } : {}}
       className={cn(
-        'bg-background rounded-xl shadow-md border border-accent/20',
+        'bg-card rounded-xl shadow-md border',
         hover && 'hover:shadow-xl transition-shadow duration-300',
         className
       )}
+      style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
       {...props}
     >
       {children}
     </motion.div>
   )
 }
-
-

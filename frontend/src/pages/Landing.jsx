@@ -259,7 +259,7 @@ export default function Landing() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => navigate('/auth?mode=register')}
-                className="px-6 py-3 rounded-xl bg-accent text-text-main font-heading font-semibold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent"
+                className="px-6 py-3 rounded-xl bg-accent text-primary font-heading font-bold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent"
               >
                 Get Help
               </motion.button>
@@ -313,7 +313,7 @@ export default function Landing() {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => navigate('/auth?mode=register')}
-                  className="group px-6 py-3 rounded-xl bg-accent text-text-main font-heading font-semibold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent flex items-center justify-center space-x-2"
+                  className="group px-6 py-3 rounded-xl bg-accent text-primary font-heading font-bold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent flex items-center justify-center space-x-2"
                 >
                   <span>Begin Your Journey</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -394,7 +394,8 @@ export default function Landing() {
                   key={index}
                   variants={itemVariants}
                   whileHover={{ scale: 1.02 }}
-                  className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+                  className="bg-card border rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+                  style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                 >
                   <div className={`inline-flex p-4 rounded-xl bg-accent mb-6`}>
                     <Icon className="w-8 h-8 text-text-main" />
@@ -477,7 +478,7 @@ export default function Landing() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate('/auth?mode=register')}
-              className="px-6 py-3 rounded-xl bg-accent text-primary font-heading font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 focus:ring-2 focus:ring-accent inline-flex items-center space-x-2"
+              className="px-6 py-3 rounded-xl bg-accent text-primary font-heading font-bold shadow-xl hover:shadow-2xl transition-all duration-300 focus:ring-2 focus:ring-accent inline-flex items-center space-x-2"
             >
               <span>Start Your Journey</span>
               <ArrowRight className="w-5 h-5" />

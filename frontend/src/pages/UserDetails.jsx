@@ -283,7 +283,7 @@ export default function UserDetails() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-2xl mx-4 relative z-10 box-border"
       >
-        <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-2xl p-8 md:p-10">
+        <div className="bg-card rounded-2xl shadow-2xl p-8 md:p-10 border" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -540,7 +540,7 @@ export default function UserDetails() {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="flex-1 px-6 py-4 bg-accent hover:bg-accentLight text-text-main rounded-xl font-inter font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-4 bg-accent hover:bg-accent-gold text-primary rounded-xl font-inter font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>

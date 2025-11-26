@@ -23,8 +23,8 @@ export default function Button({
   const baseStyles = 'font-heading font-semibold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2'
   
   const variants = {
-    primary: 'bg-accent text-primary shadow-md hover:bg-accent-gold hover:shadow-lg focus:ring-accent',
-    secondary: 'bg-background text-text-main hover:bg-accent/10 border border-accent/20',
+    primary: 'bg-accent text-primary shadow-md hover:bg-accent-gold hover:shadow-lg focus:ring-accent font-bold',
+    secondary: 'bg-transparent border border-accent text-accent hover:bg-accent/10 focus:ring-accent',
     outline: 'border-2 border-accent text-accent hover:bg-accent hover:text-primary',
     danger: 'bg-error text-text-main hover:bg-error/90 shadow-md hover:shadow-lg focus:ring-error',
   }

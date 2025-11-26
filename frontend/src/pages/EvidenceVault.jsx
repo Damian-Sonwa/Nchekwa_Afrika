@@ -159,7 +159,7 @@ export default function EvidenceVault() {
           <h1 className="text-3xl font-heading font-bold text-text-main mb-2">Evidence Vault</h1>
           <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">Secure, encrypted storage for your evidence</p>
         </div>
-        <div className="text-center py-12 bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg">
+        <div className="text-center py-12 bg-card border rounded-2xl shadow-lg" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
           <Lock className="w-16 h-16 text-text-secondary dark:text-text-main/60 mx-auto mb-4" />
           <p className="text-lg font-body text-text-secondary">Please complete onboarding first</p>
         </div>
@@ -183,7 +183,7 @@ export default function EvidenceVault() {
 
       {/* Upload & Export Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-full">
-        <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6">
+        <div className="bg-card border rounded-2xl shadow-lg p-6" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
         <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-accent/20 rounded-xl cursor-pointer hover:bg-background-light dark:hover:bg-accent/10 transition-all duration-300">
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <Upload className="w-10 h-10 text-text-secondary dark:text-text-main/60 mb-2" />
@@ -215,7 +215,7 @@ export default function EvidenceVault() {
 
       {/* Evidence List */}
       {evidence.length === 0 ? (
-        <div className="text-center py-12 bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg">
+        <div className="text-center py-12 bg-card border rounded-2xl shadow-lg" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
           <Lock className="w-16 h-16 text-text-secondary dark:text-text-main/60 mx-auto mb-4" />
           <p className="text-lg font-body text-text-secondary">No evidence stored yet</p>
           <p className="text-sm font-body text-text-secondary dark:text-text-main/70 mt-2">
@@ -234,7 +234,7 @@ export default function EvidenceVault() {
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ scale: 1.03 }}
                 className={cn(
-                  "bg-white/90 dark:bg-background-dark rounded-2xl shadow-lg p-4 border-2 transition-all duration-300 cursor-pointer",
+                  "bg-card rounded-2xl shadow-lg p-4 border-2 transition-all duration-300 cursor-pointer",
                   selectedEvidence.find(e => e._id === item._id)
                     ? "border-primary bg-accent-light dark:bg-accent/20"
                     : "border-primary-light dark:border-primary/20 hover:shadow-xl hover:border-primary"
@@ -304,7 +304,8 @@ export default function EvidenceVault() {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6 box-border"
+                className="bg-card border rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6 box-border"
+                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
               >
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-heading font-bold text-text-main">Export Evidence</h2>
@@ -430,7 +431,7 @@ export default function EvidenceVault() {
                     whileTap={{ scale: 0.97 }}
                     onClick={handleExportSubmit}
                     disabled={!exportMethod || (exportMethod === 'email' && !exportEmail) || (exportMethod === 'whatsapp' && !exportPhone)}
-                    className="flex-1 px-4 py-2 rounded-lg bg-accent text-text-main font-heading font-semibold hover:bg-accent-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-4 py-2 rounded-lg bg-accent text-primary font-heading font-bold hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Export
                   </motion.button>

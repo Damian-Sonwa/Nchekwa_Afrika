@@ -341,7 +341,9 @@ export default function Settings() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg overflow-hidden mb-4"
+        className="bg-card rounded-2xl shadow-lg overflow-hidden mb-4 border"
+        style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+        style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
       >
         <button
           onClick={() => setActiveSection(isOpen ? null : id)}

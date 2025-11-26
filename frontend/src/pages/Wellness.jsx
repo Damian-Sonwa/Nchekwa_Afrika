@@ -101,7 +101,7 @@ export default function Wellness() {
           )}
 
           {/* Log Mood */}
-          <div className="bg-background/90 border border-primary-light rounded-2xl shadow-lg p-6">
+          <div className="bg-card border rounded-2xl shadow-lg p-6" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
             <h2 className="text-3xl font-heading font-bold text-text-main mb-4">How are you feeling right now?</h2>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4 w-full max-w-full">
               {moodOptions.map((mood) => (
@@ -133,7 +133,7 @@ export default function Wellness() {
               whileTap={{ scale: 0.97 }}
               onClick={handleLogMood}
               disabled={!selectedMood}
-              className="w-full px-6 py-3 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-6 py-3 rounded-xl bg-accent text-primary font-heading font-bold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Log Mood
             </motion.button>
@@ -141,7 +141,7 @@ export default function Wellness() {
 
           {/* Mood Stats */}
           {Object.keys(moodStats).length > 0 && (
-            <div className="bg-background/90 border border-primary-light rounded-2xl shadow-lg p-6">
+            <div className="bg-card border rounded-2xl shadow-lg p-6" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
               <h2 className="text-3xl font-heading font-bold text-text-main mb-4 flex items-center">
                 <TrendingUp className="w-5 h-5 mr-2 text-primary" />
                 This Week's Mood

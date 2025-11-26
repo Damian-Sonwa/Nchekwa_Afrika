@@ -133,7 +133,8 @@ export default function Education() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg overflow-hidden"
+              className="bg-card border rounded-2xl shadow-lg overflow-hidden"
+              style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
             >
               <motion.button
                 whileHover={{ scale: 1.01 }}

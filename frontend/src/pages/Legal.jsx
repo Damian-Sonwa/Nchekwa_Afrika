@@ -68,7 +68,8 @@ export default function Legal() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+              className="bg-card border rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+              style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
             >
               <div className="p-3 bg-accent/10 rounded-lg w-fit mb-4">
                 <Icon className="w-6 h-6 text-accent" />

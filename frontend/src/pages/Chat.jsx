@@ -181,9 +181,10 @@ export default function Chat() {
                 <div
                   className={`w-full max-w-[85%] sm:max-w-xs md:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl box-border ${
                     isUser
-                      ? 'bg-accent text-primary'
-                      : 'bg-background-light dark:bg-background-dark border border-accent/20 dark:border-primary/20 text-text-main'
+                      ? 'bg-accent text-primary font-bold'
+                      : 'bg-card border text-text-main'
                   }`}
+                  style={!isUser ? { borderColor: 'rgba(255, 255, 255, 0.1)' } : {}}
                 >
                   <p className="text-sm font-body">{message.content}</p>
                   <p
@@ -221,7 +222,7 @@ export default function Chat() {
             whileTap={{ scale: 0.97 }}
             onClick={handleSend}
             disabled={!inputText.trim()}
-            className="flex-shrink-0 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-accent text-primary font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            className="flex-shrink-0 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-accent text-primary font-heading font-bold shadow-md hover:bg-accent-gold hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
           >
             <Send className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="hidden sm:inline md:inline">Send</span>
