@@ -279,6 +279,8 @@ export default function Auth() {
         console.log('📧 Signing up user:', formData.email)
         console.log('🔗 Email confirmation redirect URL:', redirectUrl)
         console.log('🌍 Supabase URL:', import.meta.env.VITE_SUPABASE_URL || 'Not set')
+        console.log('✅ Using production URL for email confirmation:', emailConfirmationUrl)
+        console.log('⚠️ IMPORTANT: Make sure Supabase Site URL is set to:', emailConfirmationUrl)
         
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
