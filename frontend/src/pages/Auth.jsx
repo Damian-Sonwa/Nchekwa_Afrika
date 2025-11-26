@@ -330,6 +330,8 @@ export default function Auth() {
             }, 2000)
           } else {
             // Email confirmation is mandatory - show persistent message
+            console.log('📧 Email confirmation required - showing confirmation screen')
+            console.log('📧 Confirmation sent at:', data.user.confirmation_sent_at)
             setPendingEmailConfirmation(true)
             setPendingEmail(formData.email)
             setSuccess(false)
@@ -791,11 +793,18 @@ export default function Auth() {
                             <p className="text-lg font-body leading-relaxed" style={{ color: '#f0f0f0' }}>
                               We've sent a confirmation email to <strong style={{ color: '#a3ff7f' }}>{pendingEmail}</strong>
                             </p>
-                            <p className="text-sm font-body" style={{ color: '#b0ff9e' }}>
-                              Please click the confirmation link in the email to complete your signup. 
-                              Check your spam folder if you don't see it.
-                            </p>
-                            <p className="text-sm font-body italic" style={{ color: '#888888' }}>
+                            <div className="space-y-2 text-sm font-body" style={{ color: '#b0ff9e' }}>
+                              <p>
+                                Please click the confirmation link in the email to complete your signup.
+                              </p>
+                              <p className="font-semibold" style={{ color: '#ffd700' }}>
+                                ⚠️ Important: Check your spam/junk folder if you don't see the email!
+                              </p>
+                              <p>
+                                The email is sent from <code className="px-2 py-1 rounded" style={{ background: 'rgba(0, 0, 0, 0.3)', color: '#a3ff7f' }}>noreply@mail.app.supabase.io</code>
+                              </p>
+                            </div>
+                            <p className="text-sm font-body italic mt-2" style={{ color: '#888888' }}>
                               You must confirm your email before you can sign in.
                             </p>
                           </div>
