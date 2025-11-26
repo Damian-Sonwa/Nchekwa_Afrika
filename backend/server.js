@@ -104,9 +104,86 @@ app.get('/api', (req, res) => {
     message: 'GBV App API',
     version: '1.0.0',
     status: 'running',
+    baseUrl: process.env.FRONTEND_URL || 'http://localhost:3001',
     endpoints: {
-      health: '/health',
-      auth: '/api/auth',
+      health: {
+        method: 'GET',
+        path: '/health',
+        description: 'Health check endpoint'
+      },
+      apiInfo: {
+        method: 'GET',
+        path: '/api',
+        description: 'API information and available endpoints'
+      },
+      auth: {
+        base: '/api/auth',
+        endpoints: {
+          anonymous: {
+            method: 'POST',
+            path: '/api/auth/anonymous',
+            description: 'Create anonymous session',
+            body: { deviceId: 'string (optional)' }
+          },
+          login: {
+            method: 'POST',
+            path: '/api/auth/login',
+            description: 'Login with email and password',
+            body: { email: 'string', password: 'string' }
+          },
+          register: {
+            method: 'POST',
+            path: '/api/auth/register',
+            description: 'Register new user with email and password',
+            body: { email: 'string', password: 'string' }
+          },
+          social: {
+            method: 'POST',
+            path: '/api/auth/social',
+            description: 'Social login (Google/Apple)',
+            body: { provider: 'google|apple', providerId: 'string', email: 'string (optional)' }
+          },
+          forgotPassword: {
+            method: 'POST',
+            path: '/api/auth/forgot-password',
+            description: 'Request password reset email',
+            body: { email: 'string' }
+          },
+          resetPasswordGet: {
+            method: 'GET',
+            path: '/api/auth/reset-password?token=TOKEN',
+            description: 'Validate reset password token'
+          },
+          resetPasswordPost: {
+            method: 'POST',
+            path: '/api/auth/reset-password',
+            description: 'Reset password with token',
+            body: { token: 'string', newPassword: 'string' }
+          },
+          confirmEmailGet: {
+            method: 'GET',
+            path: '/api/auth/confirm-email?token=TOKEN',
+            description: 'Confirm email with token from URL'
+          },
+          confirmEmailPost: {
+            method: 'POST',
+            path: '/api/auth/confirm-email',
+            description: 'Confirm email with token in body',
+            body: { token: 'string' }
+          },
+          resendConfirmation: {
+            method: 'POST',
+            path: '/api/auth/resend-confirmation',
+            description: 'Resend email confirmation link',
+            body: { email: 'string' }
+          },
+          testEmail: {
+            method: 'GET',
+            path: '/api/auth/test-email?testEmail=EMAIL',
+            description: 'Test email configuration'
+          }
+        }
+      },
       sos: '/api/sos',
       chat: '/api/chat',
       resources: '/api/resources',
@@ -119,7 +196,8 @@ app.get('/api', (req, res) => {
       legal: '/api/legal',
       emotionalCheckin: '/api/emotional-checkin',
       community: '/api/community'
-    }
+    },
+    note: 'Most endpoints require POST method. Use GET only for /api, /health, /api/auth/reset-password?token=..., /api/auth/confirm-email?token=..., and /api/auth/test-email'
   });
 });
 
