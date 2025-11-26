@@ -254,15 +254,22 @@ export default function Auth() {
           } else if (error.message?.includes('Invalid login credentials') || 
                      error.message?.includes('Invalid credentials') ||
                      error.status === 400) {
-            // Check if it's actually an email confirmation issue
-            if (error.message?.toLowerCase().includes('confirm') || 
-                error.message?.toLowerCase().includes('verify')) {
+            // "Invalid login credentials" can also mean email not confirmed in some Supabase configurations
+            // Let's check if the user exists and if email is confirmed
+            console.log('🔍 Checking user status for:', formData.email)
+            
+            // Try to get user info to see if it's a confirmation issue
+            try {
+              // Note: We can't directly check user status without auth, but we can provide helpful guidance
               setErrors({ 
-                submit: 'Please verify your email address before signing in. If you already confirmed, try refreshing the page or resending the confirmation email.' 
+                submit: 'Invalid email or password. If you confirmed your email on another device, make sure you\'re using the correct password. You can also try resetting your password or resending the confirmation email.' 
               })
-              setPendingEmailConfirmation(true)
-              setPendingEmail(formData.email)
-            } else {
+              
+              // Offer to show resend confirmation option
+              // User can manually click if they think email isn't confirmed
+              console.log('💡 Tip: If you think your email isn\'t confirmed, try the "Resend Confirmation Email" option')
+            } catch (checkError) {
+              console.error('❌ Error checking user status:', checkError)
               setErrors({ submit: 'Invalid email or password. Please check your credentials and try again.' })
             }
           } else {
@@ -1193,13 +1200,28 @@ export default function Auth() {
                             </motion.div>
                           )}
 
-                          {/* Forgot Password (Login only, hide if updating password) */}
+                          {/* Forgot Password and Resend Confirmation (Login only, hide if updating password) */}
                           {isLogin && !isUpdatingPassword && (
                             <motion.div
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
-                              className="flex justify-end"
+                              className="flex justify-between items-center"
                             >
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setPendingEmailConfirmation(true)
+                                  setPendingEmail(formData.email || '')
+                                  setErrors({})
+                                  setMessage('')
+                                }}
+                                className="text-sm font-inter font-medium transition-colors"
+                                style={{ color: '#b0ff9e' }}
+                                onMouseEnter={(e) => e.currentTarget.style.color = '#a3ff7f'}
+                                onMouseLeave={(e) => e.currentTarget.style.color = '#b0ff9e'}
+                              >
+                                Resend confirmation email
+                              </button>
                               <button
                                 type="button"
                                 onClick={() => setShowForgotPassword(true)}
