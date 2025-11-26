@@ -225,19 +225,48 @@ export default function Auth() {
           hasUser: !!data?.user, 
           hasSession: !!data?.session,
           emailConfirmed: data?.user?.email_confirmed_at,
-          error: error?.message 
+          error: error ? {
+            message: error.message,
+            status: error.status,
+            name: error.name
+          } : null
         })
 
         if (error) {
-          console.error('❌ Login error:', error)
-          if (error.message.includes('Email not confirmed') || error.message.includes('email not confirmed')) {
+          console.error('❌ Login error details:', {
+            message: error.message,
+            status: error.status,
+            name: error.name,
+            fullError: error
+          })
+          
+          // Handle different error types
+          if (error.message?.includes('Email not confirmed') || 
+              error.message?.includes('email not confirmed') ||
+              error.message?.includes('Email not verified') ||
+              error.status === 400 && error.message?.includes('confirm')) {
             setErrors({ 
-              submit: 'Please verify your email address before signing in. Check your inbox for the confirmation link. If you already confirmed, try refreshing the page.' 
+              submit: 'Please verify your email address before signing in. Check your inbox for the confirmation link. If you already confirmed on another device, wait a moment and try again, or click "Resend Confirmation Email" below.' 
             })
-          } else if (error.message.includes('Invalid login credentials')) {
-            setErrors({ submit: 'Invalid email or password' })
-      } else {
-            setErrors({ submit: error.message || 'Failed to sign in. Please try again.' })
+            // Show resend option
+            setPendingEmailConfirmation(true)
+            setPendingEmail(formData.email)
+          } else if (error.message?.includes('Invalid login credentials') || 
+                     error.message?.includes('Invalid credentials') ||
+                     error.status === 400) {
+            // Check if it's actually an email confirmation issue
+            if (error.message?.toLowerCase().includes('confirm') || 
+                error.message?.toLowerCase().includes('verify')) {
+              setErrors({ 
+                submit: 'Please verify your email address before signing in. If you already confirmed, try refreshing the page or resending the confirmation email.' 
+              })
+              setPendingEmailConfirmation(true)
+              setPendingEmail(formData.email)
+            } else {
+              setErrors({ submit: 'Invalid email or password. Please check your credentials and try again.' })
+            }
+          } else {
+            setErrors({ submit: error.message || `Failed to sign in (Error ${error.status || 'unknown'}). Please try again.` })
           }
           setLoading(false)
           return
