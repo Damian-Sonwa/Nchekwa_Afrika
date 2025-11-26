@@ -30,8 +30,11 @@ const getBaseUrl = () => {
   return 'https://nchekwa-afrika.vercel.app'
 }
 
-// Get email confirmation URL - always use Vercel URL for email links
+// Get email confirmation URL - ALWAYS use Vercel URL for email links (never localhost)
+// This ensures email links work even when testing locally
 const getEmailConfirmationUrl = () => {
+  // Always return production URL for email confirmation links
+  // This is critical because email links are clicked from any device/environment
   return 'https://nchekwa-afrika.vercel.app'
 }
 
