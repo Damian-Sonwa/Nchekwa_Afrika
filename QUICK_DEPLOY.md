@@ -8,9 +8,9 @@
 2. Go to [Render Dashboard](https://dashboard.render.com/)
 3. New → Web Service → Connect GitHub repo
 4. Settings:
-   - **Root Directory**: `backend`
-   - **Build**: `npm install`
-   - **Start**: `npm start`
+   - **Root Directory**: `backend` ⚠️ **CRITICAL: Must set this!**
+   - **Build Command**: `npm install` (or leave empty)
+   - **Start Command**: `npm start` (or leave empty)
 5. Add environment variables:
    ```
    NODE_ENV=production

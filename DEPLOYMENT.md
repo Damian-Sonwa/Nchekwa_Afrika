@@ -41,8 +41,9 @@ This guide will help you deploy the GBV App to Vercel (frontend) and Render (bac
 4. Configure the service:
    - **Name**: `gbv-backend` (or your preferred name)
    - **Environment**: `Node`
-   - **Build Command**: `cd backend && npm install`
-   - **Start Command**: `cd backend && npm start`
+   - **Root Directory**: `backend` ⚠️ **IMPORTANT: Set this!**
+   - **Build Command**: `npm install` (or leave empty, it will auto-detect)
+   - **Start Command**: `npm start` (or leave empty, it will use package.json)
    - **Plan**: Choose **Starter** (free tier)
 
 5. Add Environment Variables:
