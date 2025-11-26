@@ -140,19 +140,19 @@ export default function Chat() {
   return (
     <div className="w-full max-w-full overflow-x-hidden box-border flex flex-col h-[calc(100vh-10rem)] sm:h-[calc(100vh-12rem)] md:h-[calc(100vh-8rem)] min-h-[400px] sm:min-h-[500px]">
       {/* Header */}
-      <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-3 sm:p-4 mb-3 sm:mb-4">
+      <div className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-3 sm:p-4 mb-3 sm:mb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 sm:space-x-3">
             <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
               connectionStatus === 'connected' 
-                ? 'bg-success dark:bg-success' 
+                ? 'bg-success' 
                 : connectionStatus === 'connecting'
-                ? 'bg-warning dark:bg-warning animate-pulse'
-                : 'bg-error dark:bg-error animate-pulse'
+                ? 'bg-warning animate-pulse'
+                : 'bg-error animate-pulse'
             }`}></div>
             <div>
-              <h2 className="text-base sm:text-lg font-heading font-semibold text-text-main dark:text-white">Support Chat</h2>
-              <p className="text-xs sm:text-sm font-body text-text-secondary dark:text-white/80">
+              <h2 className="text-base sm:text-lg font-heading font-semibold text-text-main">Support Chat</h2>
+              <p className="text-xs sm:text-sm font-body text-text-secondary">
                 {connectionStatus === 'connected' 
                   ? 'Connected to counselor' 
                   : connectionStatus === 'connecting'
@@ -161,7 +161,7 @@ export default function Chat() {
               </p>
             </div>
           </div>
-          <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-primary dark:text-primary-light" />
+          <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
         </div>
       </div>
 
@@ -181,8 +181,8 @@ export default function Chat() {
                 <div
                   className={`w-full max-w-[85%] sm:max-w-xs md:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl box-border ${
                     isUser
-                      ? 'bg-primary text-white'
-                      : 'bg-background-light dark:bg-background-dark border border-primary-light dark:border-primary/20 text-text-main dark:text-white'
+                      ? 'bg-accent text-primary'
+                      : 'bg-background-light dark:bg-background-dark border border-accent/20 dark:border-primary/20 text-text-main'
                   }`}
                 >
                   <p className="text-sm font-body">{message.content}</p>
@@ -205,7 +205,7 @@ export default function Chat() {
       </div>
 
       {/* Input */}
-      <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-3 sm:p-4 w-full max-w-full box-border">
+      <div className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-3 sm:p-4 w-full max-w-full box-border">
         <div className="flex space-x-2 sm:space-x-3 w-full max-w-full">
           <input
             ref={inputRef}
@@ -214,14 +214,14 @@ export default function Chat() {
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Type your message..."
-            className="flex-1 min-w-0 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-body border-2 border-primary-light dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
+            className="flex-1 min-w-0 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-body border-2 border-accent/20 dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
           />
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={handleSend}
             disabled={!inputText.trim()}
-            className="flex-shrink-0 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            className="flex-shrink-0 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-accent text-primary font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
           >
             <Send className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="hidden sm:inline md:inline">Send</span>
