@@ -4,9 +4,12 @@ import axios from 'axios'
 // In production, use VITE_API_URL or default to /api
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
+// Log API URL in both dev and production for debugging
+console.log('🔗 API Base URL:', API_BASE_URL)
 if (import.meta.env.DEV) {
-  console.log('🔗 API Base URL:', API_BASE_URL)
   console.log('📡 Backend should be running on: http://localhost:3000')
+} else if (!import.meta.env.VITE_API_URL) {
+  console.warn('⚠️ VITE_API_URL is not set! Using default /api. This may not work in production.')
 }
 
 const api = axios.create({

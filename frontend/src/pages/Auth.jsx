@@ -200,7 +200,12 @@ export default function Auth() {
       let errorMessage = 'Something went wrong. Please try again.'
       
       if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
-        errorMessage = 'Cannot connect to server. Please make sure the backend server is running on http://localhost:3000'
+        const apiUrl = import.meta.env.VITE_API_URL || '/api'
+        if (import.meta.env.DEV) {
+          errorMessage = 'Cannot connect to server. Please make sure the backend server is running on http://localhost:3000'
+        } else {
+          errorMessage = 'Cannot connect to server. Please check your internet connection and try again.'
+        }
       } else if (error.code === 'ETIMEDOUT') {
         errorMessage = 'Request timed out. Please check your connection and try again.'
       } else if (error.response?.data?.error) {
