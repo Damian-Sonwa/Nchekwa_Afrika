@@ -504,9 +504,9 @@ export default function UserDetails() {
                   }`}
                   required
                 >
-                  <option value="">Select your country</option>
+                  <option value="" className="bg-white dark:bg-dark text-dark dark:text-white">Select your country</option>
                   {countries.map((country) => (
-                    <option key={country} value={country}>
+                    <option key={country} value={country} className="bg-white dark:bg-dark text-dark dark:text-white">
                       {country}
                     </option>
                   ))}

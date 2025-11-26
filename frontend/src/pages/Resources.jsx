@@ -501,9 +501,9 @@ export default function Resources() {
                     onChange={(e) => setSelectedCountry(e.target.value)}
                     className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
-                    <option value="">All Countries</option>
+                    <option value="" className="bg-white dark:bg-background-dark text-text-main dark:text-white">All Countries</option>
                     {countries.map((country) => (
-                      <option key={country} value={country}>
+                      <option key={country} value={country} className="bg-white dark:bg-background-dark text-text-main dark:text-white">
                         {country}
                       </option>
                     ))}
@@ -521,9 +521,9 @@ export default function Resources() {
                     disabled={!selectedCountry}
                     className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <option value="">All Cities</option>
+                    <option value="" className="bg-white dark:bg-background-dark text-text-main dark:text-white">All Cities</option>
                     {cities.map((city) => (
-                      <option key={city} value={city}>
+                      <option key={city} value={city} className="bg-white dark:bg-background-dark text-text-main dark:text-white">
                         {city}
                       </option>
                     ))}
@@ -540,12 +540,12 @@ export default function Resources() {
                     onChange={(e) => setSelectedType(e.target.value)}
                     className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
-                    <option value="">All Types</option>
-                    <option value="shelter">Shelter</option>
-                    <option value="safe-house">Safe House</option>
-                    <option value="hotel">Hotel</option>
-                    <option value="refuge">Refuge</option>
-                    <option value="accommodation">Accommodation</option>
+                    <option value="" className="bg-white dark:bg-background-dark text-text-main dark:text-white">All Types</option>
+                    <option value="shelter" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Shelter</option>
+                    <option value="safe-house" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Safe House</option>
+                    <option value="hotel" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Hotel</option>
+                    <option value="refuge" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Refuge</option>
+                    <option value="accommodation" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Accommodation</option>
                   </select>
                 </div>
 
@@ -560,7 +560,7 @@ export default function Resources() {
                     className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
                     {sortOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
+                      <option key={option.value} value={option.value} className="bg-white dark:bg-background-dark text-text-main dark:text-white">
                         {option.label}
                       </option>
                     ))}

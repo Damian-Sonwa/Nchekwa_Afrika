@@ -158,10 +158,10 @@ export default function AdvancedSafety() {
           </div>
           {isListening && (
             <div className="mt-4 space-y-2">
-              <p className="text-sm text-gray-600">Listening for: help, emergency, sos, danger, assist</p>
+              <p className="text-sm text-gray-600 dark:text-white/80">Listening for: help, emergency, sos, danger, assist</p>
               {transcript && (
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-700">{transcript}</p>
+                <div className="p-3 bg-gray-50 dark:bg-background-dark/50 rounded-lg">
+                  <p className="text-sm text-gray-700 dark:text-white">{transcript}</p>
                 </div>
               )}
             </div>

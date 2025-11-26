@@ -329,7 +329,7 @@ export default function Home() {
                   {stat.href && (
                     <motion.div
                       whileHover={{ x: 5 }}
-                      className="text-light dark:text-light text-xl"
+                      className="text-light dark:text-white/60 text-xl"
                     >
                       →
                     </motion.div>

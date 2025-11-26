@@ -499,11 +499,11 @@ export default function Settings() {
                   onChange={(e) => setAccountInfo({ ...accountInfo, sex: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  <option value="">Select...</option>
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
-                  <option value="other">Other</option>
-                  <option value="prefer-not-to-say">Prefer not to say</option>
+                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Select...</option>
+                  <option value="female" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Female</option>
+                  <option value="male" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Male</option>
+                  <option value="other" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Other</option>
+                  <option value="prefer-not-to-say" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Prefer not to say</option>
                 </select>
               </div>
               <div>
@@ -513,13 +513,13 @@ export default function Settings() {
                   onChange={(e) => setAccountInfo({ ...accountInfo, maritalStatus: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  <option value="">Select...</option>
-                  <option value="single">Single</option>
-                  <option value="married">Married</option>
-                  <option value="divorced">Divorced</option>
-                  <option value="widowed">Widowed</option>
-                  <option value="separated">Separated</option>
-                  <option value="prefer-not-to-say">Prefer not to say</option>
+                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Select...</option>
+                  <option value="single" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Single</option>
+                  <option value="married" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Married</option>
+                  <option value="divorced" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Divorced</option>
+                  <option value="widowed" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Widowed</option>
+                  <option value="separated" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Separated</option>
+                  <option value="prefer-not-to-say" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Prefer not to say</option>
                 </select>
               </div>
               <div>
@@ -851,9 +851,9 @@ export default function Settings() {
               }}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
-              <option value="zip">ZIP Archive</option>
-              <option value="pdf">PDF Document</option>
-              <option value="json">JSON File</option>
+              <option value="zip" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">ZIP Archive</option>
+              <option value="pdf" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">PDF Document</option>
+              <option value="json" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">JSON File</option>
             </select>
           </div>
           <ToggleSwitch
@@ -1021,10 +1021,10 @@ export default function Settings() {
                   }}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  <option value="">Select device...</option>
-                  <option value="smartwatch">Smartwatch</option>
-                  <option value="fitness-tracker">Fitness Tracker</option>
-                  <option value="panic-button">Panic Button</option>
+                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Select device...</option>
+                  <option value="smartwatch" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Smartwatch</option>
+                  <option value="fitness-tracker" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Fitness Tracker</option>
+                  <option value="panic-button" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Panic Button</option>
                   <option value="other">Other</option>
                 </select>
               </div>
@@ -1087,14 +1087,14 @@ export default function Settings() {
             onClick={() => alert('Privacy policy content...')}
             className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
           >
-            <Shield className="w-5 h-5 inline mr-2 text-gray-500" />
+            <Shield className="w-5 h-5 inline mr-2 text-gray-500 dark:text-white/60" />
             <span className="font-medium text-gray-900 dark:text-white">Privacy Policy</span>
           </button>
           <button
             onClick={() => alert('Help content...')}
             className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
           >
-            <HelpCircle className="w-5 h-5 inline mr-2 text-gray-500" />
+            <HelpCircle className="w-5 h-5 inline mr-2 text-gray-500 dark:text-white/60" />
             <span className="font-medium text-gray-900 dark:text-white">Help & Support</span>
           </button>
         </div>
