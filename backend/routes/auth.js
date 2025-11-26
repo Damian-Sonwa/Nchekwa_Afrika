@@ -346,57 +346,69 @@ router.post('/forgot-password', async (req, res) => {
 // Reset Password (GET - token in query string for direct link clicks)
 router.get('/reset-password', async (req, res) => {
   try {
-    const { token } = req.query;
+    let { token } = req.query;
 
     if (!token) {
       return res.status(400).json({ error: 'Reset token is required' });
     }
 
-    console.log('🔍 Validating reset token (GET):', token.substring(0, 16) + '...');
-    console.log('🔍 Full token length:', token.length);
-
-    // Find user with matching reset token
-    const users = await User.find({ 'settings.resetToken': token });
-    console.log(`📊 Found ${users.length} user(s) with matching token`);
-
-    if (users.length === 0) {
-      console.error('❌ No user found with token:', token.substring(0, 16) + '...');
-      // Try to find users with reset tokens for debugging
-      const allUsers = await User.find({ 'settings.resetToken': { $exists: true } });
-      console.log(`📊 Total users with reset tokens: ${allUsers.length}`);
-      if (allUsers.length > 0) {
-        console.log('📋 Sample tokens:', allUsers.slice(0, 3).map(u => ({
-          token: u.settings?.resetToken?.substring(0, 16) + '...',
-          tokenLength: u.settings?.resetToken?.length,
-          expiry: u.settings?.resetTokenExpiry,
-          expired: u.settings?.resetTokenExpiry ? new Date(u.settings.resetTokenExpiry) < new Date() : 'no expiry'
-        })));
+    // Normalize and decode token
+    token = token.trim();
+    let decodedToken = token;
+    try {
+      if (token.includes('%')) {
+        decodedToken = decodeURIComponent(token);
       }
-      return res.status(400).json({ error: 'Invalid or expired reset token' });
+    } catch (decodeError) {
+      // Use as-is if decoding fails
     }
+    decodedToken = decodedToken.trim();
 
-    const user = users.find(u => {
-      const expiry = u.settings?.resetTokenExpiry;
-      const isValid = expiry && new Date(expiry) > new Date();
-      if (!isValid) {
-        console.log('⏰ Token expired for user:', {
-          expiry: expiry,
-          now: new Date(),
-          expired: expiry ? new Date(expiry) < new Date() : 'no expiry set'
-        });
-      }
-      return isValid;
+    console.log('🔍 Validating reset token (GET)');
+    console.log('🔑 Token (first 16 chars):', decodedToken.substring(0, 16) + '...');
+    console.log('🔑 Token length:', decodedToken.length);
+
+    // Find all users with reset tokens and match manually
+    const allUsersWithTokens = await User.find({ 
+      'settings.resetToken': { $exists: true, $ne: null, $ne: '' }
     });
+    console.log(`📊 Total users with reset tokens in DB: ${allUsersWithTokens.length}`);
+
+    // Find user by matching token
+    let user = null;
+    for (const u of allUsersWithTokens) {
+      const storedToken = u.settings?.resetToken;
+      if (storedToken && (storedToken === decodedToken || storedToken === token)) {
+        user = u;
+        break;
+      }
+    }
 
     if (!user) {
-      console.error('❌ Token expired or invalid');
-      return res.status(400).json({ error: 'Invalid or expired reset token' });
+      console.error('❌ No user found with token');
+      return res.status(400).json({ 
+        error: 'Invalid or expired reset token',
+        details: 'No user found with this token. The token may have been used already or may be incorrect.'
+      });
     }
 
-    console.log('✅ Token is valid, user can reset password');
+    // Check if token has expired
+    const expiry = user.settings?.resetTokenExpiry;
+    const now = new Date();
+    const isExpired = expiry ? new Date(expiry) <= now : true;
+
+    if (isExpired) {
+      console.error('❌ Token expired');
+      return res.status(400).json({ 
+        error: 'Invalid or expired reset token',
+        details: 'The reset token has expired. Please request a new password reset link.'
+      });
+    }
+
+    console.log('✅ Token is valid and not expired');
 
     // Token is valid - return success (frontend will handle the form)
-    res.json({
+    res.status(200).json({
       success: true,
       message: 'Token is valid. You can now reset your password.',
       valid: true
@@ -434,92 +446,107 @@ router.post('/reset-password', async (req, res) => {
       });
     }
 
-    // Try to decode the token if it's URL encoded (frontend might send it encoded)
+    // Normalize token: trim whitespace and handle encoding
+    token = token.trim();
     let decodedToken = token;
+    
+    // Try to decode if URL encoded (frontend should decode, but handle both cases)
     try {
-      // If token contains % characters, it's likely URL encoded
       if (token.includes('%')) {
         decodedToken = decodeURIComponent(token);
-        console.log('🔓 Token was URL encoded, decoded:', decodedToken.substring(0, 16) + '...');
+        console.log('🔓 Token was URL encoded, decoded');
       }
     } catch (decodeError) {
-      console.log('ℹ️  Token is not URL encoded, using as-is');
-    }
-
-    console.log('🔍 Validating reset token (POST):', decodedToken.substring(0, 16) + '...');
-    console.log('🔍 Full token length:', decodedToken.length);
-    console.log('🔍 Full token (for debugging):', decodedToken);
-
-    // Try to find user with both encoded and decoded token
-    let users = await User.find({ 'settings.resetToken': decodedToken });
-    console.log(`📊 Found ${users.length} user(s) with decoded token`);
-    
-    // If not found with decoded token, try with original token
-    if (users.length === 0 && token !== decodedToken) {
-      users = await User.find({ 'settings.resetToken': token });
-      console.log(`📊 Found ${users.length} user(s) with original token`);
+      console.log('ℹ️  Token decoding not needed or failed, using as-is');
     }
     
-    // Also try to find by email hash to see if user exists
-    if (users.length === 0) {
-      // Try a different search approach - find all users with reset tokens and compare manually
-      const allUsersWithTokens = await User.find({ 'settings.resetToken': { $exists: true, $ne: null } });
-      console.log(`📊 Total users with reset tokens in DB: ${allUsersWithTokens.length}`);
-      
-      if (allUsersWithTokens.length > 0) {
-        console.log('🔍 Comparing tokens...');
-        allUsersWithTokens.forEach((u, index) => {
-          const storedToken = u.settings?.resetToken;
-          if (storedToken) {
-            const matches = storedToken === token;
-            console.log(`  User ${index + 1}:`, {
-              storedToken: storedToken.substring(0, 16) + '...',
-              searchToken: token.substring(0, 16) + '...',
-              storedLength: storedToken.length,
-              searchLength: token.length,
-              matches: matches,
-              firstCharsMatch: storedToken.substring(0, 16) === token.substring(0, 16)
-            });
-          }
-        });
+    // Normalize decoded token
+    decodedToken = decodedToken.trim();
+
+    console.log('🔍 Validating reset token (POST)');
+    console.log('🔑 Token (first 16 chars):', decodedToken.substring(0, 16) + '...');
+    console.log('🔑 Token length:', decodedToken.length);
+    console.log('🔑 Token format:', /^[a-f0-9]+$/i.test(decodedToken) ? 'hex (valid)' : 'non-hex (may be encoded)');
+
+    // Find all users with reset tokens (more reliable than direct query)
+    const allUsersWithTokens = await User.find({ 
+      'settings.resetToken': { $exists: true, $ne: null, $ne: '' }
+    });
+    console.log(`📊 Total users with reset tokens in DB: ${allUsersWithTokens.length}`);
+
+    // Find user by matching token (try both decoded and original)
+    let user = null;
+    let tokenMatchType = null;
+
+    for (const u of allUsersWithTokens) {
+      const storedToken = u.settings?.resetToken;
+      if (!storedToken) continue;
+
+      // Try exact match with decoded token
+      if (storedToken === decodedToken) {
+        user = u;
+        tokenMatchType = 'decoded-exact';
+        console.log('✅ Found user with decoded token match');
+        break;
+      }
+
+      // Try exact match with original token
+      if (storedToken === token && token !== decodedToken) {
+        user = u;
+        tokenMatchType = 'original-exact';
+        console.log('✅ Found user with original token match');
+        break;
       }
     }
 
-    if (users.length === 0) {
-      console.error('❌ No user found with token:', token.substring(0, 16) + '...');
-      // Try to find users with reset tokens for debugging
-      const allUsers = await User.find({ 'settings.resetToken': { $exists: true } });
-      console.log(`📊 Total users with reset tokens: ${allUsers.length}`);
-      if (allUsers.length > 0) {
-        console.log('📋 Sample tokens:', allUsers.slice(0, 3).map(u => ({
-          token: u.settings?.resetToken?.substring(0, 16) + '...',
-          tokenLength: u.settings?.resetToken?.length,
-          expiry: u.settings?.resetTokenExpiry,
-          expired: u.settings?.resetTokenExpiry ? new Date(u.settings.resetTokenExpiry) < new Date() : 'no expiry'
-        })));
-      }
-      return res.status(400).json({ 
-        error: 'Invalid or expired reset token',
-        details: 'No user found with this token. The token may have been used already or may be incorrect.'
+    // If still not found, log comparison for debugging
+    if (!user && allUsersWithTokens.length > 0) {
+      console.log('🔍 Token comparison details:');
+      allUsersWithTokens.slice(0, 3).forEach((u, index) => {
+        const storedToken = u.settings?.resetToken;
+        if (storedToken) {
+          const storedFirst16 = storedToken.substring(0, 16);
+          const searchFirst16 = decodedToken.substring(0, 16);
+          console.log(`  User ${index + 1}:`, {
+            storedFirst16: storedFirst16 + '...',
+            searchFirst16: searchFirst16 + '...',
+            storedLength: storedToken.length,
+            searchLength: decodedToken.length,
+            firstCharsMatch: storedFirst16 === searchFirst16,
+            fullMatch: storedToken === decodedToken
+          });
+        }
       });
     }
 
-    const user = users.find(u => {
-      const expiry = u.settings?.resetTokenExpiry;
-      const isValid = expiry && new Date(expiry) > new Date();
-      if (!isValid) {
-        console.log('⏰ Token expired for user:', {
-          expiry: expiry,
-          now: new Date(),
-          expired: expiry ? new Date(expiry) < new Date() : 'no expiry set'
-        });
-      }
-      return isValid;
-    });
-
     if (!user) {
-      console.error('❌ Token expired or invalid');
-      return res.status(400).json({ error: 'Invalid or expired reset token' });
+      console.error('❌ No user found with matching token');
+      return res.status(400).json({ 
+        error: 'Invalid or expired reset token',
+        details: 'No user found with this token. The token may have been used already, may be incorrect, or may have expired.'
+      });
+    }
+
+    // Check if token has expired
+    const expiry = user.settings?.resetTokenExpiry;
+    const now = new Date();
+    const isExpired = expiry ? new Date(expiry) <= now : true;
+
+    if (isExpired) {
+      console.error('❌ Token expired');
+      console.log('⏰ Token expiry details:', {
+        expiry: expiry,
+        now: now,
+        expired: true,
+        hoursSinceExpiry: expiry ? Math.round((now - new Date(expiry)) / (1000 * 60 * 60) * 10) / 10 : 'no expiry set'
+      });
+      return res.status(400).json({ 
+        error: 'Invalid or expired reset token',
+        details: 'The reset token has expired. Please request a new password reset link.'
+      });
+    }
+
+    console.log('✅ Token is valid and not expired');
     }
 
     // Check if user had a password before (for logging)
