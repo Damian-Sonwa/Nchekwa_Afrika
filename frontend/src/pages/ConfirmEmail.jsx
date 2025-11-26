@@ -143,7 +143,7 @@ export default function ConfirmEmail() {
             Confirm Your Email
           </h1>
           <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
-            {token ? 'Verifying your email...' : confirmationLink ? 'Development mode: Use the link below to confirm' : 'Please check your email for a confirmation link'}
+            {token ? 'Verifying your email...' : confirmationLink ? 'Email service not configured. Use the link below to confirm your email:' : 'Please check your email for a confirmation link'}
           </p>
         </div>
 
@@ -172,14 +172,14 @@ export default function ConfirmEmail() {
               </div>
             )}
 
-            {/* Development Mode: Show confirmation link */}
+            {/* Show confirmation link (when email service not configured) */}
             {devConfirmationLink && (
               <div className="p-4 bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/50 rounded-xl">
                 <p className="text-sm font-inter font-semibold text-primary dark:text-primary-light mb-2">
-                  🔧 Development Mode: Confirmation Link
+                  📧 Confirmation Link
                 </p>
-                <p className="text-xs font-inter text-text-light dark:text-slate-400 mb-3">
-                  In development, emails are not sent. Use this link to confirm your email:
+                <p className="text-xs font-inter text-text-secondary dark:text-white/70 mb-3">
+                  Email service is not configured yet. Use this link to confirm your email:
                 </p>
                 <div className="space-y-2">
                   <a
@@ -230,7 +230,7 @@ export default function ConfirmEmail() {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="w-5 h-5 text-text-light" />
+                  <Mail className="w-5 h-5 text-text-secondary dark:text-white/60" />
                 </div>
                 <input
                   id="email"

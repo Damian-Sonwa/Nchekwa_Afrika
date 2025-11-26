@@ -375,15 +375,21 @@ router.post('/resend-confirmation', async (req, res) => {
     user.settings.emailConfirmationExpiry = confirmationExpiry;
     await user.save();
 
-    // TODO: Send email with confirmation link
-    const confirmationLink = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/confirm-email?token=${confirmationToken}`;
-    console.log('📧 Email confirmation link:', confirmationLink); // Remove in production
+    // Generate confirmation link
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    const confirmationLink = `${frontendUrl}/confirm-email?token=${confirmationToken}`;
+    
+    // TODO: Send confirmation email via email service (SendGrid, AWS SES, etc.)
+    console.log('📧 Email confirmation link:', confirmationLink);
+    console.log('📧 Confirmation token:', confirmationToken);
+    console.log('💡 Note: Email service not configured. Link is returned in response for now.');
 
     res.json({
       success: true,
       message: 'If an account exists with this email, a confirmation link has been sent.',
-      // Development only: include confirmation link
-      ...(process.env.NODE_ENV !== 'production' && { confirmationLink, confirmationToken })
+      // Return confirmation link in response (until email service is configured)
+      confirmationLink: confirmationLink,
+      confirmationToken: confirmationToken
     });
   } catch (error) {
     console.error('Resend confirmation error:', error);
@@ -428,11 +434,15 @@ router.post('/register', async (req, res) => {
       
       await existingUser.save();
 
-      // TODO: Send confirmation email
-      const confirmationLink = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/confirm-email?token=${confirmationToken}`;
-      console.log('📧 Email confirmation link:', confirmationLink); // Remove in production
+      // Generate confirmation link
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+      const confirmationLink = `${frontendUrl}/confirm-email?token=${confirmationToken}`;
       
-      // In development, return the link so user can see it
+      // TODO: Send confirmation email via email service (SendGrid, AWS SES, etc.)
+      console.log('📧 Email confirmation link:', confirmationLink);
+      console.log('📧 Confirmation token:', confirmationToken);
+      console.log('💡 Note: Email service not configured. Link is returned in response for now.');
+      
       const token = existingUser.anonymousId; // In production, use JWT here
       
       return res.status(200).json({
@@ -441,8 +451,9 @@ router.post('/register', async (req, res) => {
         token: token,
         requiresEmailConfirmation: true,
         message: 'Password set successfully. Please check your email to confirm your account.',
-        // Development only: include confirmation link
-        ...(process.env.NODE_ENV !== 'production' && { confirmationLink, confirmationToken })
+        // Return confirmation link in response (until email service is configured)
+        confirmationLink: confirmationLink,
+        confirmationToken: confirmationToken
       });
     }
 
@@ -466,11 +477,15 @@ router.post('/register', async (req, res) => {
     });
     await user.save();
 
-    // TODO: Send confirmation email
-    const confirmationLink = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/confirm-email?token=${confirmationToken}`;
-    console.log('📧 Email confirmation link:', confirmationLink); // Remove in production
+    // Generate confirmation link
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    const confirmationLink = `${frontendUrl}/confirm-email?token=${confirmationToken}`;
     
-    // In development, return the link so user can see it
+    // TODO: Send confirmation email via email service (SendGrid, AWS SES, etc.)
+    console.log('📧 Email confirmation link:', confirmationLink);
+    console.log('📧 Confirmation token:', confirmationToken);
+    console.log('💡 Note: Email service not configured. Link is returned in response for now.');
+    
     const token = anonymousId; // In production, use JWT here
     
     res.status(201).json({
@@ -479,8 +494,9 @@ router.post('/register', async (req, res) => {
       token: token,
       requiresEmailConfirmation: true,
       message: 'Account created successfully. Please check your email to confirm your account.',
-      // Development only: include confirmation link
-      ...(process.env.NODE_ENV !== 'production' && { confirmationLink, confirmationToken })
+      // Return confirmation link in response (until email service is configured)
+      confirmationLink: confirmationLink,
+      confirmationToken: confirmationToken
     });
   } catch (error) {
     console.error('Register error:', error);

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Shield, Mail, Lock, Eye, EyeOff, ArrowRight, 
-  CheckCircle, AlertCircle, Loader2
+  CheckCircle, AlertCircle, Loader2, ArrowLeft
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { register, login, socialLogin, forgotPassword } from '../services/api'
@@ -149,23 +149,39 @@ export default function Auth() {
         }
         
         setSuccess(true)
-        setMessage(isLogin ? 'Welcome back!' : 'Account created! Please check your email to confirm your account.')
         
-        // Navigate after brief success animation
-        setTimeout(() => {
-          if (!isLogin && response.requiresEmailConfirmation) {
-            // Show email confirmation message
-            // In development, include the confirmation link/token
-            const confirmParams = new URLSearchParams({
-              email: formData.email
-            })
-            if (response.confirmationLink) {
-              confirmParams.set('link', response.confirmationLink)
-            }
-            if (response.confirmationToken) {
-              confirmParams.set('token', response.confirmationToken)
-            }
+        // If email confirmation is required, show the link immediately
+        if (!isLogin && response.requiresEmailConfirmation && response.confirmationLink) {
+          setMessage(`Account created! Click the link below to confirm your email:\n\n${response.confirmationLink}`)
+          
+          // Navigate to confirm email page with the link
+          const confirmParams = new URLSearchParams({
+            email: formData.email,
+            link: response.confirmationLink
+          })
+          if (response.confirmationToken) {
+            confirmParams.set('token', response.confirmationToken)
+          }
+          setTimeout(() => {
             navigate('/confirm-email?' + confirmParams.toString())
+          }, 3000) // Give user time to see the message
+        } else {
+          setMessage(isLogin ? 'Welcome back!' : 'Account created! Please check your email to confirm your account.')
+          
+          // Navigate after brief success animation
+          setTimeout(() => {
+            if (!isLogin && response.requiresEmailConfirmation) {
+              // Show email confirmation message
+              const confirmParams = new URLSearchParams({
+                email: formData.email
+              })
+              if (response.confirmationLink) {
+                confirmParams.set('link', response.confirmationLink)
+              }
+              if (response.confirmationToken) {
+                confirmParams.set('token', response.confirmationToken)
+              }
+              navigate('/confirm-email?' + confirmParams.toString())
           } else {
             // For login: always go to app (profile form is only for first-time signups)
             // For signup: show profile form only if userDetailsCompleted is not set
@@ -297,6 +313,20 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background-light dark:bg-background-dark">
+      {/* Back to Landing Button */}
+      <motion.button
+        onClick={() => navigate('/')}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed top-4 left-4 z-50 flex items-center space-x-2 px-4 py-2 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md rounded-xl shadow-lg text-text-main dark:text-white hover:bg-white dark:hover:bg-primary/20 transition-colors border border-white/20 dark:border-white/10"
+        title="Back to home"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span className="font-medium">Back</span>
+      </motion.button>
+
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen w-full max-w-full">
         {/* Left Half: Auth Form */}
         <div className="w-full max-w-full flex items-center justify-center p-4 sm:p-6 md:p-8 bg-background-light dark:bg-background-dark overflow-y-auto overflow-x-hidden box-border">
