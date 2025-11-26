@@ -108,10 +108,13 @@ export default function Auth() {
   const validateForm = () => {
     const newErrors = {}
     
-    if (!formData.email) {
-      newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email'
+    // Skip email validation if updating password after reset
+    if (!isUpdatingPassword) {
+      if (!formData.email) {
+        newErrors.email = 'Email is required'
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Please enter a valid email'
+      }
     }
     
     if (!formData.password) {
