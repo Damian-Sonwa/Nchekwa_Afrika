@@ -474,7 +474,7 @@ router.post('/resend-confirmation', async (req, res) => {
     
     // Send confirmation email
     try {
-      await sendConfirmationEmail(user.emailHash ? email : undefined, confirmationLink, confirmationToken);
+      await sendConfirmationEmail(email, confirmationLink, confirmationToken);
     } catch (emailError) {
       console.error('⚠️  Failed to send confirmation email:', emailError);
       // Continue anyway - link is still returned in response

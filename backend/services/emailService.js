@@ -25,12 +25,15 @@ async function sendConfirmationEmail(email, confirmationLink, confirmationToken)
   // If no email provided, skip sending (development mode)
   if (!email) {
     console.log('⚠️  No email address provided, skipping email send');
+    console.log('💡 Email confirmation link (for manual use):', confirmationLink);
     return await sendViaConsole(email, confirmationLink, confirmationToken);
   }
   
   try {
     // Check which email service is configured
     const emailProvider = process.env.EMAIL_PROVIDER || 'console';
+    console.log(`📧 Email Provider: ${emailProvider}`);
+    console.log(`📧 Sending confirmation email to: ${email}`);
     
     switch (emailProvider.toLowerCase()) {
       case 'resend':
@@ -40,10 +43,12 @@ async function sendConfirmationEmail(email, confirmationLink, confirmationToken)
         return await sendViaNodemailer(email, confirmationLink, confirmationToken);
       case 'console':
       default:
+        console.log('💡 Using console mode - emails will be logged only. Set EMAIL_PROVIDER to "resend" or "nodemailer" to send actual emails.');
         return await sendViaConsole(email, confirmationLink, confirmationToken);
     }
   } catch (error) {
     console.error('❌ Email service error:', error);
+    console.error('❌ Error details:', error.message);
     // Fallback to console in case of error
     return await sendViaConsole(email, confirmationLink, confirmationToken);
   }
@@ -57,6 +62,7 @@ async function sendViaResend(email, confirmationLink, confirmationToken) {
   
   if (!resendApiKey) {
     console.warn('⚠️  RESEND_API_KEY not set, falling back to console');
+    console.warn('💡 To send emails via Resend, set RESEND_API_KEY in your .env file');
     return await sendViaConsole(email, confirmationLink, confirmationToken);
   }
 
@@ -65,7 +71,8 @@ async function sendViaResend(email, confirmationLink, confirmationToken) {
     const resend = new Resend(resendApiKey);
     
     const fromEmail = process.env.EMAIL_FROM || 'noreply@nchekwa-afrika.com';
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    console.log(`📧 From: ${fromEmail}`);
+    console.log(`📧 To: ${email}`);
     
     const htmlContent = getEmailTemplate(confirmationLink, 'confirm');
     
@@ -78,13 +85,16 @@ async function sendViaResend(email, confirmationLink, confirmationToken) {
 
     if (error) {
       console.error('❌ Resend API error:', error);
+      console.error('❌ Error details:', JSON.stringify(error, null, 2));
       throw error;
     }
 
-    console.log('✅ Confirmation email sent via Resend:', data?.id);
+    console.log('✅ Confirmation email sent via Resend');
+    console.log('✅ Email ID:', data?.id);
     return true;
   } catch (error) {
     console.error('❌ Failed to send email via Resend:', error);
+    console.error('❌ Error stack:', error.stack);
     throw error;
   }
 }
@@ -107,13 +117,20 @@ async function sendViaNodemailer(email, confirmationLink, confirmationToken) {
 
   if (!smtpConfig.host || !smtpConfig.auth.user || !smtpConfig.auth.pass) {
     console.warn('⚠️  SMTP configuration incomplete, falling back to console');
+    console.warn('💡 Required SMTP env vars: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD');
     return await sendViaConsole(email, confirmationLink, confirmationToken);
   }
 
   try {
+    console.log(`📧 SMTP Host: ${smtpConfig.host}:${smtpConfig.port}`);
+    console.log(`📧 SMTP User: ${smtpConfig.auth.user}`);
+    
     const transporter = nodemailer.createTransport(smtpConfig);
     
     const fromEmail = process.env.EMAIL_FROM || smtpConfig.auth.user;
+    console.log(`📧 From: ${fromEmail}`);
+    console.log(`📧 To: ${email}`);
+    
     const htmlContent = getEmailTemplate(confirmationLink, 'confirm');
     
     const info = await transporter.sendMail({
@@ -123,10 +140,13 @@ async function sendViaNodemailer(email, confirmationLink, confirmationToken) {
       html: htmlContent,
     });
 
-    console.log('✅ Confirmation email sent via Nodemailer:', info.messageId);
+    console.log('✅ Confirmation email sent via Nodemailer');
+    console.log('✅ Message ID:', info.messageId);
     return true;
   } catch (error) {
     console.error('❌ Failed to send email via Nodemailer:', error);
+    console.error('❌ Error details:', error.message);
+    console.error('❌ Error code:', error.code);
     throw error;
   }
 }
@@ -244,6 +264,7 @@ async function sendPasswordResetViaResend(email, resetLink, resetToken) {
   
   if (!resendApiKey) {
     console.warn('⚠️  RESEND_API_KEY not set, falling back to console');
+    console.warn('💡 To send emails via Resend, set RESEND_API_KEY in your .env file');
     return await sendPasswordResetViaConsole(email, resetLink, resetToken);
   }
 
@@ -252,6 +273,9 @@ async function sendPasswordResetViaResend(email, resetLink, resetToken) {
     const resend = new Resend(resendApiKey);
     
     const fromEmail = process.env.EMAIL_FROM || 'noreply@nchekwa-afrika.com';
+    console.log(`📧 From: ${fromEmail}`);
+    console.log(`📧 To: ${email}`);
+    
     const htmlContent = getEmailTemplate(resetLink, 'reset');
     
     const { data, error } = await resend.emails.send({
@@ -263,13 +287,16 @@ async function sendPasswordResetViaResend(email, resetLink, resetToken) {
 
     if (error) {
       console.error('❌ Resend API error:', error);
+      console.error('❌ Error details:', JSON.stringify(error, null, 2));
       throw error;
     }
 
-    console.log('✅ Password reset email sent via Resend:', data?.id);
+    console.log('✅ Password reset email sent via Resend');
+    console.log('✅ Email ID:', data?.id);
     return true;
   } catch (error) {
     console.error('❌ Failed to send email via Resend:', error);
+    console.error('❌ Error stack:', error.stack);
     throw error;
   }
 }
@@ -292,13 +319,20 @@ async function sendPasswordResetViaNodemailer(email, resetLink, resetToken) {
 
   if (!smtpConfig.host || !smtpConfig.auth.user || !smtpConfig.auth.pass) {
     console.warn('⚠️  SMTP configuration incomplete, falling back to console');
+    console.warn('💡 Required SMTP env vars: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD');
     return await sendPasswordResetViaConsole(email, resetLink, resetToken);
   }
 
   try {
+    console.log(`📧 SMTP Host: ${smtpConfig.host}:${smtpConfig.port}`);
+    console.log(`📧 SMTP User: ${smtpConfig.auth.user}`);
+    
     const transporter = nodemailer.createTransport(smtpConfig);
     
     const fromEmail = process.env.EMAIL_FROM || smtpConfig.auth.user;
+    console.log(`📧 From: ${fromEmail}`);
+    console.log(`📧 To: ${email}`);
+    
     const htmlContent = getEmailTemplate(resetLink, 'reset');
     
     const info = await transporter.sendMail({
@@ -308,10 +342,13 @@ async function sendPasswordResetViaNodemailer(email, resetLink, resetToken) {
       html: htmlContent,
     });
 
-    console.log('✅ Password reset email sent via Nodemailer:', info.messageId);
+    console.log('✅ Password reset email sent via Nodemailer');
+    console.log('✅ Message ID:', info.messageId);
     return true;
   } catch (error) {
     console.error('❌ Failed to send email via Nodemailer:', error);
+    console.error('❌ Error details:', error.message);
+    console.error('❌ Error code:', error.code);
     throw error;
   }
 }
