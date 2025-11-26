@@ -271,15 +271,24 @@ export default function Auth() {
         // Signup with Supabase
         // Always use Vercel URL for email confirmation links (even in development)
         const emailConfirmationUrl = getEmailConfirmationUrl()
+        const redirectUrl = `${emailConfirmationUrl}/auth?verified=true`
+        
+        console.log('📧 Signing up user:', formData.email)
+        console.log('🔗 Email confirmation redirect URL:', redirectUrl)
+        console.log('🌍 Supabase URL:', import.meta.env.VITE_SUPABASE_URL || 'Not set')
+        
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
-            emailRedirectTo: `${emailConfirmationUrl}/auth?verified=true`,
+            emailRedirectTo: redirectUrl,
           }
         })
 
+        console.log('📧 Signup response:', { data, error })
+
         if (error) {
+          console.error('❌ Signup error:', error)
           if (error.message.includes('already registered')) {
             setErrors({ submit: 'An account with this email already exists. Please sign in instead.' })
           } else {
@@ -288,6 +297,11 @@ export default function Auth() {
           setLoading(false)
           return
         }
+        
+        console.log('✅ Signup successful')
+        console.log('📧 User data:', data.user)
+        console.log('📧 Session:', data.session)
+        console.log('📧 Email confirmed?', data.user?.email_confirmed_at)
 
         if (data.user) {
           // Check if email confirmation is required
@@ -351,15 +365,24 @@ export default function Auth() {
     try {
       // Always use Vercel URL for email confirmation links
       const emailConfirmationUrl = getEmailConfirmationUrl()
-      const { error } = await supabase.auth.resend({
+      const redirectUrl = `${emailConfirmationUrl}/auth?verified=true`
+      
+      console.log('📧 Resending confirmation email to:', pendingEmail)
+      console.log('🔗 Email confirmation redirect URL:', redirectUrl)
+      
+      // Use the correct Supabase API for resending confirmation emails
+      const { data, error } = await supabase.auth.resend({
         type: 'signup',
         email: pendingEmail,
         options: {
-          emailRedirectTo: `${emailConfirmationUrl}/auth?verified=true`,
+          emailRedirectTo: redirectUrl,
         }
       })
 
+      console.log('📧 Resend response:', { data, error })
+
       if (error) {
+        console.error('❌ Resend error:', error)
         setErrors({ 
           submit: error.message || 'Failed to resend confirmation email. Please try again.' 
         })
@@ -367,10 +390,11 @@ export default function Auth() {
         return
       }
 
+      console.log('✅ Confirmation email resent successfully')
       setMessage('Confirmation email sent! Please check your inbox (and spam folder) for the confirmation link.')
       setLoading(false)
     } catch (error) {
-      console.error('Resend confirmation error:', error)
+      console.error('❌ Resend confirmation error:', error)
       setErrors({ 
         submit: error.message || 'Failed to resend confirmation email. Please try again.' 
       })
