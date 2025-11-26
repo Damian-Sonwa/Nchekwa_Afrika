@@ -313,7 +313,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background-light dark:bg-background-dark">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden" style={{ background: '#0a0a0a' }}>
       {/* Back to Landing Button */}
       <motion.button
         onClick={() => navigate('/')}
@@ -321,16 +321,31 @@ export default function Auth() {
         animate={{ opacity: 1, x: 0 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed top-4 left-4 z-50 flex items-center space-x-2 px-4 py-2 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md rounded-xl shadow-lg text-text-main dark:text-white hover:bg-white dark:hover:bg-primary/20 transition-colors border border-white/20 dark:border-white/10"
+        className="fixed top-4 left-4 z-50 flex items-center space-x-2 px-4 py-2 rounded-xl shadow-lg transition-colors border"
+        style={{
+          background: 'rgba(10, 61, 47, 0.95)',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          color: '#f0f0f0',
+          borderColor: 'rgba(163, 255, 127, 0.3)'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = 'rgba(10, 61, 47, 1)'
+          e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.5)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'rgba(10, 61, 47, 0.95)'
+          e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+        }}
         title="Back to home"
       >
-        <ArrowLeft className="w-5 h-5" />
-        <span className="font-medium">Back</span>
+        <ArrowLeft className="w-5 h-5" style={{ color: '#f0f0f0' }} />
+        <span className="font-medium" style={{ color: '#f0f0f0' }}>Back</span>
       </motion.button>
 
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen w-full max-w-full">
         {/* Left Half: Auth Form */}
-        <div className="w-full max-w-full flex items-center justify-center p-4 sm:p-6 md:p-8 bg-background-light dark:bg-background-dark overflow-y-auto overflow-x-hidden box-border">
+        <div className="w-full max-w-full flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-y-auto overflow-x-hidden box-border" style={{ background: '#0a0a0a' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -356,12 +371,13 @@ export default function Auth() {
                     style={{ 
                       transformStyle: 'preserve-3d',
                       backfaceVisibility: 'hidden',
-                      background: 'rgba(255, 255, 255, 0.95)',
+                      background: '#0a3d2f',
                       backdropFilter: 'blur(20px) saturate(180%)',
                       WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
+                      boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
+                      border: '1px solid rgba(163, 255, 127, 0.2)'
                     }}
-                    className="dark:bg-background-dark/95 rounded-2xl shadow-2xl p-6 md:p-10 border border-white/20 dark:border-white/10"
+                    className="rounded-2xl shadow-2xl p-6 md:p-10"
                   >
                     {/* Logo/Header */}
                     <motion.div
@@ -382,16 +398,16 @@ export default function Auth() {
                           />
                         </motion.div>
                       </div>
-                      <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2 drop-shadow-sm">
+                      <h1 className="text-3xl font-heading font-bold mb-2 drop-shadow-sm" style={{ color: '#f0f0f0' }}>
                         {isLogin ? 'Welcome Back' : 'Create Account'}
                       </h1>
-                      <p className="text-lg font-body text-text-secondary dark:text-white/90 leading-relaxed drop-shadow-sm">
+                      <p className="text-lg font-body leading-relaxed drop-shadow-sm" style={{ color: '#f0f0f0' }}>
                         {isLogin 
                           ? 'Sign in to your Nchekwa_Afrika account'
                           : 'Start your journey to safety and support'
                         }
                       </p>
-                      <p className="font-body text-primary dark:text-primary-light text-sm italic mt-2 drop-shadow-sm">
+                      <p className="font-body text-sm italic mt-2 drop-shadow-sm" style={{ color: '#b0ff9e' }}>
                         Together, we stand strong. Your hands in ours, your safety our promise.
                       </p>
                     </motion.div>
@@ -409,14 +425,17 @@ export default function Auth() {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ type: "spring", stiffness: 200 }}
-                            className="inline-flex p-4 bg-success/20 dark:bg-success/20 rounded-full"
+                            className="inline-flex p-4 rounded-full"
+                            style={{
+                              background: 'rgba(163, 255, 127, 0.2)'
+                            }}
                           >
-                            <CheckCircle className="w-16 h-16 text-success dark:text-success" />
+                            <CheckCircle className="w-16 h-16" style={{ color: '#a3ff7f' }} />
                           </motion.div>
-                          <h2 className="text-2xl font-heading font-bold text-text-main dark:text-white">
+                          <h2 className="text-2xl font-heading font-bold" style={{ color: '#f0f0f0' }}>
                             {message || (isLogin ? 'Welcome back!' : 'Account created!')}
                           </h2>
-                          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+                          <p className="text-lg font-body leading-relaxed" style={{ color: '#b0ff9e' }}>
                             Redirecting you...
                           </p>
                         </motion.div>
@@ -434,12 +453,12 @@ export default function Auth() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                           >
-                            <label htmlFor="email" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
+                            <label htmlFor="email" className="block text-sm font-body font-medium mb-2" style={{ color: '#f0f0f0' }}>
                               Email Address
                             </label>
                             <div className="relative">
                               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Mail className="w-5 h-5 text-text-secondary dark:text-white/60" />
+                                <Mail className="w-5 h-5" style={{ color: '#b0ff9e' }} />
                               </div>
                               <input
                                 id="email"
@@ -449,22 +468,43 @@ export default function Auth() {
                                   setFormData({ ...formData, email: e.target.value })
                                   setErrors({ ...errors, email: '' })
                                 }}
-                                className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-main dark:text-white font-body ${
-                                  errors.email
-                                    ? 'border-error focus:border-error focus:ring-error/20'
-                                    : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
-                                }`}
+                                className="w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 font-body"
+                                style={{
+                                  background: 'rgba(0, 0, 0, 0.3)',
+                                  backdropFilter: 'blur(10px)',
+                                  color: '#f0f0f0',
+                                  borderColor: errors.email ? '#ef4444' : 'rgba(163, 255, 127, 0.3)',
+                                  ...(errors.email ? {} : { '--tw-ring-color': 'rgba(163, 255, 127, 0.3)' })
+                                }}
                                 placeholder="your.email@example.com"
                                 autoComplete="email"
+                                onFocus={(e) => {
+                                  if (!errors.email) {
+                                    e.target.style.borderColor = '#a3ff7f'
+                                    e.target.style.boxShadow = '0 0 0 3px rgba(163, 255, 127, 0.2)'
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  if (!errors.email) {
+                                    e.target.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+                                    e.target.style.boxShadow = 'none'
+                                  }
+                                }}
                               />
+                              <style>{`
+                                #email::placeholder {
+                                  color: #888888;
+                                }
+                              `}</style>
                             </div>
                             {errors.email && (
                               <motion.p
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mt-2 text-sm font-body text-error dark:text-error flex items-center space-x-1"
+                                className="mt-2 text-sm font-body flex items-center space-x-1"
+                                style={{ color: '#ef4444' }}
                               >
-                                <AlertCircle className="w-4 h-4" />
+                                <AlertCircle className="w-4 h-4" style={{ color: '#ef4444' }} />
                                 <span>{errors.email}</span>
                               </motion.p>
                             )}
@@ -476,12 +516,12 @@ export default function Auth() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
                           >
-                            <label htmlFor="password" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
+                            <label htmlFor="password" className="block text-sm font-body font-medium mb-2" style={{ color: '#f0f0f0' }}>
                               Password
                             </label>
                             <div className="relative">
                               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Lock className="w-5 h-5 text-text-secondary dark:text-white/60" />
+                                <Lock className="w-5 h-5" style={{ color: '#b0ff9e' }} />
                               </div>
                               <input
                                 id="password"
@@ -491,18 +531,40 @@ export default function Auth() {
                                   setFormData({ ...formData, password: e.target.value })
                                   setErrors({ ...errors, password: '' })
                                 }}
-                                className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-main dark:text-white font-body ${
-                                  errors.password
-                                    ? 'border-error focus:border-error focus:ring-error/20'
-                                    : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
-                                }`}
+                                className="w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 font-body"
+                                style={{
+                                  background: 'rgba(0, 0, 0, 0.3)',
+                                  backdropFilter: 'blur(10px)',
+                                  color: '#f0f0f0',
+                                  borderColor: errors.password ? '#ef4444' : 'rgba(163, 255, 127, 0.3)'
+                                }}
                                 placeholder="Enter your password"
                                 autoComplete={isLogin ? 'current-password' : 'new-password'}
+                                onFocus={(e) => {
+                                  if (!errors.password) {
+                                    e.target.style.borderColor = '#a3ff7f'
+                                    e.target.style.boxShadow = '0 0 0 3px rgba(163, 255, 127, 0.2)'
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  if (!errors.password) {
+                                    e.target.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+                                    e.target.style.boxShadow = 'none'
+                                  }
+                                }}
                               />
+                              <style>{`
+                                #password::placeholder {
+                                  color: #888888;
+                                }
+                              `}</style>
                               <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-secondary dark:text-white/60 hover:text-text-main dark:hover:text-white transition-colors"
+                                className="absolute inset-y-0 right-0 pr-4 flex items-center transition-colors"
+                                style={{ color: '#b0ff9e' }}
+                                onMouseEnter={(e) => e.currentTarget.style.color = '#a3ff7f'}
+                                onMouseLeave={(e) => e.currentTarget.style.color = '#b0ff9e'}
                               >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                               </button>
@@ -527,12 +589,12 @@ export default function Auth() {
                               exit={{ opacity: 0, height: 0 }}
                               transition={{ delay: 0.2 }}
                             >
-                              <label htmlFor="confirmPassword" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
+                            <label htmlFor="confirmPassword" className="block text-sm font-body font-medium mb-2" style={{ color: '#f0f0f0' }}>
                                 Confirm Password
                               </label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                  <Lock className="w-5 h-5 text-text-secondary dark:text-white/60" />
+                                  <Lock className="w-5 h-5" style={{ color: '#b0ff9e' }} />
                                 </div>
                                 <input
                                   id="confirmPassword"
@@ -542,18 +604,40 @@ export default function Auth() {
                                     setFormData({ ...formData, confirmPassword: e.target.value })
                                     setErrors({ ...errors, confirmPassword: '' })
                                   }}
-                                  className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-main dark:text-white font-body ${
-                                  errors.confirmPassword
-                                    ? 'border-error focus:border-error focus:ring-error/20'
-                                    : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
-                                }`}
+                                  className="w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 font-body"
+                                  style={{
+                                    background: 'rgba(0, 0, 0, 0.3)',
+                                    backdropFilter: 'blur(10px)',
+                                    color: '#f0f0f0',
+                                    borderColor: errors.confirmPassword ? '#ef4444' : 'rgba(163, 255, 127, 0.3)'
+                                  }}
                                   placeholder="Confirm your password"
                                   autoComplete="new-password"
+                                  onFocus={(e) => {
+                                    if (!errors.confirmPassword) {
+                                      e.target.style.borderColor = '#a3ff7f'
+                                      e.target.style.boxShadow = '0 0 0 3px rgba(163, 255, 127, 0.2)'
+                                    }
+                                  }}
+                                  onBlur={(e) => {
+                                    if (!errors.confirmPassword) {
+                                      e.target.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+                                      e.target.style.boxShadow = 'none'
+                                    }
+                                  }}
                                 />
+                                <style>{`
+                                  #confirmPassword::placeholder {
+                                    color: #888888;
+                                  }
+                                `}</style>
                                 <button
                                   type="button"
                                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-secondary dark:text-white/60 hover:text-text-main dark:hover:text-white transition-colors"
+                                  className="absolute inset-y-0 right-0 pr-4 flex items-center transition-colors"
+                                  style={{ color: '#b0ff9e' }}
+                                  onMouseEnter={(e) => e.currentTarget.style.color = '#a3ff7f'}
+                                  onMouseLeave={(e) => e.currentTarget.style.color = '#b0ff9e'}
                                 >
                                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                 </button>
@@ -595,8 +679,8 @@ export default function Auth() {
                               animate={{ opacity: 1, y: 0 }}
                               className="p-4 bg-error/10 dark:bg-error/20 border border-error/30 dark:border-error/50 rounded-xl flex items-start space-x-3"
                             >
-                              <AlertCircle className="w-5 h-5 text-error dark:text-error flex-shrink-0 mt-0.5" />
-                              <p className="text-sm font-inter text-error dark:text-error">{errors.submit}</p>
+                              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#ef4444' }} />
+                              <p className="text-sm font-inter" style={{ color: '#ef4444' }}>{errors.submit}</p>
                             </motion.div>
                           )}
 
@@ -605,10 +689,14 @@ export default function Auth() {
                             <motion.div
                               initial={{ opacity: 0, y: -10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="p-4 bg-success/10 dark:bg-success/20 border border-success/30 dark:border-success/50 rounded-xl flex items-start space-x-3"
+                              className="p-4 rounded-xl flex items-start space-x-3"
+                              style={{
+                                background: 'rgba(163, 255, 127, 0.15)',
+                                border: '1px solid rgba(163, 255, 127, 0.3)'
+                              }}
                             >
-                              <CheckCircle className="w-5 h-5 text-success dark:text-success flex-shrink-0 mt-0.5" />
-                              <p className="text-sm font-inter text-success dark:text-success">{message}</p>
+                              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#a3ff7f' }} />
+                              <p className="text-sm font-inter" style={{ color: '#a3ff7f' }}>{message}</p>
                             </motion.div>
                           )}
 
@@ -618,7 +706,24 @@ export default function Auth() {
                             disabled={loading}
                             whileHover={{ scale: loading ? 1 : 1.05 }}
                             whileTap={{ scale: loading ? 1 : 0.98 }}
-                            className="w-full py-4 px-6 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-4 px-6 rounded-xl font-heading font-semibold shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            style={{
+                              background: loading ? '#888888' : '#a3ff7f',
+                              color: '#0a3d2f',
+                              boxShadow: loading ? 'none' : '0 4px 14px 0 rgba(163, 255, 127, 0.4)'
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!loading) {
+                                e.currentTarget.style.background = '#ffd700'
+                                e.currentTarget.style.boxShadow = '0 6px 20px 0 rgba(255, 215, 0, 0.5)'
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!loading) {
+                                e.currentTarget.style.background = '#a3ff7f'
+                                e.currentTarget.style.boxShadow = '0 4px 14px 0 rgba(163, 255, 127, 0.4)'
+                              }
+                            }}
                           >
                             {loading ? (
                               <>
@@ -636,10 +741,13 @@ export default function Auth() {
                           {/* Divider */}
                           <div className="relative">
                             <div className="absolute inset-0 flex items-center">
-                              <div className="w-full border-t border-light dark:border-light/30"></div>
+                              <div className="w-full border-t" style={{ borderColor: 'rgba(163, 255, 127, 0.2)' }}></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
-                              <span className="px-4 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-secondary dark:text-white/90 font-body">Or continue with</span>
+                              <span className="px-4 backdrop-blur-sm font-body" style={{ 
+                                background: '#0a3d2f',
+                                color: '#b0ff9e'
+                              }}>Or continue with</span>
                             </div>
                           </div>
 
@@ -651,7 +759,20 @@ export default function Auth() {
                               whileTap={{ scale: 0.98 }}
                               onClick={() => handleSocialLogin('google')}
                               disabled={loading}
-                              className="py-3 px-4 border-2 border-primary-light dark:border-primary/30 rounded-xl font-body font-medium text-text-main dark:text-white hover:border-primary dark:hover:border-primary hover:bg-background-light dark:hover:bg-primary transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
+                              className="py-3 px-4 border-2 rounded-xl font-body font-medium transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
+                              style={{
+                                borderColor: 'rgba(163, 255, 127, 0.3)',
+                                background: 'rgba(0, 0, 0, 0.2)',
+                                color: '#f0f0f0'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.borderColor = '#a3ff7f'
+                                e.currentTarget.style.background = 'rgba(163, 255, 127, 0.1)'
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+                                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.2)'
+                              }}
                             >
                               <svg className="w-5 h-5" viewBox="0 0 24 24">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -668,7 +789,20 @@ export default function Auth() {
                               whileTap={{ scale: 0.98 }}
                               onClick={() => handleSocialLogin('apple')}
                               disabled={loading}
-                              className="py-3 px-4 border-2 border-primary-light dark:border-primary/30 rounded-xl font-body font-medium text-text-main dark:text-white hover:border-primary dark:hover:border-primary hover:bg-background-light dark:hover:bg-primary transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
+                              className="py-3 px-4 border-2 rounded-xl font-body font-medium transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
+                              style={{
+                                borderColor: 'rgba(163, 255, 127, 0.3)',
+                                background: 'rgba(0, 0, 0, 0.2)',
+                                color: '#f0f0f0'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.borderColor = '#a3ff7f'
+                                e.currentTarget.style.background = 'rgba(163, 255, 127, 0.1)'
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+                                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.2)'
+                              }}
                             >
                               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
@@ -687,12 +821,15 @@ export default function Auth() {
                       transition={{ delay: 0.4 }}
                       className="mt-6 text-center"
                     >
-                      <p className="text-sm font-body text-text-secondary dark:text-white/80">
+                      <p className="text-sm font-body" style={{ color: '#f0f0f0' }}>
                         {isLogin ? "Don't have an account? " : 'Already have an account? '}
                         <button
                           type="button"
                           onClick={handleFlip}
-                          className="text-primary hover:text-primary-dark dark:text-primary-light dark:hover:text-primary font-semibold transition-colors"
+                          className="font-semibold transition-colors"
+                          style={{ color: '#b0ff9e' }}
+                          onMouseEnter={(e) => e.currentTarget.style.color = '#cce5ff'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#b0ff9e'}
                         >
                           {isLogin ? 'Sign up' : 'Sign in'}
                         </button>
@@ -706,12 +843,13 @@ export default function Auth() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     style={{
-                      background: 'rgba(11, 47, 42, 0.95)',
+                      background: '#0a3d2f',
                       backdropFilter: 'blur(20px) saturate(180%)',
                       WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                      boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+                      boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
+                      border: '1px solid rgba(163, 255, 127, 0.2)'
                     }}
-                    className="bg-white/95 dark:bg-background-dark/95 rounded-2xl shadow-2xl p-6 md:p-10 border border-white/20 dark:border-white/10"
+                    className="rounded-2xl shadow-2xl p-6 md:p-10"
                   >
                     <div className="text-center mb-8">
                       <div className="flex justify-center mb-4">
@@ -727,25 +865,25 @@ export default function Auth() {
                           />
                         </motion.div>
                       </div>
-                      <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mt-4 mb-2">
+                      <h1 className="text-3xl font-heading font-bold mt-4 mb-2" style={{ color: '#f0f0f0' }}>
                         Forgot Password?
                       </h1>
-                      <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+                      <p className="text-lg font-body leading-relaxed" style={{ color: '#f0f0f0' }}>
                         Enter your email and we'll send you a reset link
                       </p>
-                      <p className="font-body text-primary text-sm italic mt-2">
+                      <p className="font-body text-sm italic mt-2" style={{ color: '#b0ff9e' }}>
                         Together, we stand strong. Your hands in ours, your safety our promise.
                       </p>
                     </div>
 
                     <form onSubmit={handleForgotPassword} className="space-y-6">
                       <div>
-                        <label htmlFor="forgot-email" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
+                        <label htmlFor="forgot-email" className="block text-sm font-body font-medium mb-2" style={{ color: '#f0f0f0' }}>
                           Email Address
                         </label>
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <Mail className="w-5 h-5 text-text-secondary dark:text-white/60" />
+                            <Mail className="w-5 h-5" style={{ color: '#b0ff9e' }} />
                           </div>
                           <input
                             id="forgot-email"
@@ -755,25 +893,50 @@ export default function Auth() {
                               setFormData({ ...formData, email: e.target.value })
                               setErrors({ ...errors, email: '' })
                             }}
-                            className="w-full pl-12 pr-4 py-3.5 border-2 border-primary-light dark:border-primary/30 rounded-xl focus:outline-none focus:ring-2 focus:border-primary focus:ring-accent/20 bg-white/90 dark:bg-background-dark/90 backdrop-blur-sm text-text-main dark:text-white font-body transition-all duration-300"
+                            className="w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 font-body transition-all duration-300"
+                            style={{
+                              background: 'rgba(0, 0, 0, 0.3)',
+                              backdropFilter: 'blur(10px)',
+                              color: '#f0f0f0',
+                              borderColor: 'rgba(163, 255, 127, 0.3)'
+                            }}
                             placeholder="your.email@example.com"
                             required
+                            onFocus={(e) => {
+                              e.target.style.borderColor = '#a3ff7f'
+                              e.target.style.boxShadow = '0 0 0 3px rgba(163, 255, 127, 0.2)'
+                            }}
+                            onBlur={(e) => {
+                              e.target.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+                              e.target.style.boxShadow = 'none'
+                            }}
                           />
+                          <style>{`
+                            #forgot-email::placeholder {
+                              color: #888888;
+                            }
+                          `}</style>
                         </div>
                         {errors.email && (
-                          <p className="mt-2 text-sm font-body text-error dark:text-error">{errors.email}</p>
+                          <p className="mt-2 text-sm font-body" style={{ color: '#ef4444' }}>{errors.email}</p>
                         )}
                       </div>
 
                       {errors.submit && (
-                        <div className="p-4 bg-error/10 dark:bg-error/20 border border-error/30 dark:border-error/50 rounded-xl">
-                          <p className="text-sm font-body text-error dark:text-error">{errors.submit}</p>
+                        <div className="p-4 rounded-xl" style={{
+                          background: 'rgba(239, 68, 68, 0.15)',
+                          border: '1px solid rgba(239, 68, 68, 0.3)'
+                        }}>
+                          <p className="text-sm font-body" style={{ color: '#ef4444' }}>{errors.submit}</p>
                         </div>
                       )}
 
                       {message && (
-                        <div className="p-4 bg-success/10 dark:bg-success/20 border border-success/30 dark:border-success/50 rounded-xl">
-                          <p className="text-sm font-body text-success dark:text-success">{message}</p>
+                        <div className="p-4 rounded-xl" style={{
+                          background: 'rgba(163, 255, 127, 0.15)',
+                          border: '1px solid rgba(163, 255, 127, 0.3)'
+                        }}>
+                          <p className="text-sm font-body" style={{ color: '#a3ff7f' }}>{message}</p>
                         </div>
                       )}
 
@@ -783,7 +946,24 @@ export default function Auth() {
                           disabled={loading}
                           whileHover={{ scale: loading ? 1 : 1.05 }}
                           whileTap={{ scale: loading ? 1 : 0.98 }}
-                          className="flex-1 py-3 px-6 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 flex items-center justify-center space-x-2"
+                          className="flex-1 py-3 px-6 rounded-xl font-heading font-semibold shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 disabled:opacity-50 flex items-center justify-center space-x-2"
+                          style={{
+                            background: loading ? '#888888' : '#a3ff7f',
+                            color: '#0a3d2f',
+                            boxShadow: loading ? 'none' : '0 4px 14px 0 rgba(163, 255, 127, 0.4)'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!loading) {
+                              e.currentTarget.style.background = '#ffd700'
+                              e.currentTarget.style.boxShadow = '0 6px 20px 0 rgba(255, 215, 0, 0.5)'
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!loading) {
+                              e.currentTarget.style.background = '#a3ff7f'
+                              e.currentTarget.style.boxShadow = '0 4px 14px 0 rgba(163, 255, 127, 0.4)'
+                            }
+                          }}
                         >
                           {loading ? (
                             <>
@@ -806,7 +986,20 @@ export default function Auth() {
                           }}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="px-6 py-3 border-2 border-primary-light dark:border-primary/30 text-text-main dark:text-white rounded-xl font-body font-medium hover:bg-background-light dark:hover:bg-primary transition-all duration-300"
+                          className="px-6 py-3 border-2 rounded-xl font-body font-medium transition-all duration-300"
+                          style={{
+                            borderColor: 'rgba(163, 255, 127, 0.3)',
+                            background: 'rgba(0, 0, 0, 0.2)',
+                            color: '#f0f0f0'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = '#a3ff7f'
+                            e.currentTarget.style.background = 'rgba(163, 255, 127, 0.1)'
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = 'rgba(163, 255, 127, 0.3)'
+                            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.2)'
+                          }}
                         >
                           Cancel
                         </motion.button>
@@ -824,7 +1017,7 @@ export default function Auth() {
             transition={{ delay: 0.5 }}
             className="mt-6 text-center"
           >
-            <p className="text-xs font-body text-text-secondary dark:text-white/70 max-w-md mx-auto flex items-center justify-center space-x-2">
+            <p className="text-xs font-body max-w-md mx-auto flex items-center justify-center space-x-2" style={{ color: '#b0ff9e' }}>
               <Shield className="w-4 h-4" />
               <span>Your information is encrypted and secure. You can delete your account at any time.</span>
             </p>
