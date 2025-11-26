@@ -11,6 +11,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([])
   const [inputText, setInputText] = useState('')
   const [isConnected, setIsConnected] = useState(false)
+  const [connectionStatus, setConnectionStatus] = useState('connecting') // 'connecting', 'connected', 'disconnected'
   const [loading, setLoading] = useState(true)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
@@ -33,38 +34,45 @@ export default function Chat() {
       if (sessionResponse.success) {
         setSessionId(sessionResponse.sessionId)
 
-        // Initialize socket
-        initializeSocket(sessionResponse.sessionId, (message) => {
-          try {
-            const decrypted = decryptData(message.content)
-            const messageId = message.id || Date.now().toString()
-            setMessages((prev) => {
-              // Check if message already exists to prevent duplicates
-              const exists = prev.some(msg => msg.id === messageId || 
-                (msg.content === (decrypted || message.content) && 
-                 msg.senderType === message.senderType &&
-                 Math.abs(new Date(msg.timestamp) - new Date(message.timestamp || new Date())) < 1000))
-              if (exists) return prev
-              return [
-                ...prev,
-                {
-                  id: messageId,
-                  content: decrypted || message.content,
-                  senderType: message.senderType,
-                  timestamp: message.timestamp || new Date(),
-                },
-              ]
-            })
-          } catch (error) {
-            const messageId = message.id || Date.now().toString()
-            setMessages((prev) => {
-              // Check if message already exists
-              const exists = prev.some(msg => msg.id === messageId)
-              if (exists) return prev
-              return [...prev, message]
-            })
+        // Initialize socket with connection status callback
+        initializeSocket(
+          sessionResponse.sessionId, 
+          (message) => {
+            try {
+              const decrypted = decryptData(message.content)
+              const messageId = message.id || Date.now().toString()
+              setMessages((prev) => {
+                // Check if message already exists to prevent duplicates
+                const exists = prev.some(msg => msg.id === messageId || 
+                  (msg.content === (decrypted || message.content) && 
+                   msg.senderType === message.senderType &&
+                   Math.abs(new Date(msg.timestamp) - new Date(message.timestamp || new Date())) < 1000))
+                if (exists) return prev
+                return [
+                  ...prev,
+                  {
+                    id: messageId,
+                    content: decrypted || message.content,
+                    senderType: message.senderType,
+                    timestamp: message.timestamp || new Date(),
+                  },
+                ]
+              })
+            } catch (error) {
+              const messageId = message.id || Date.now().toString()
+              setMessages((prev) => {
+                // Check if message already exists
+                const exists = prev.some(msg => msg.id === messageId)
+                if (exists) return prev
+                return [...prev, message]
+              })
+            }
+          },
+          (connected) => {
+            setIsConnected(connected)
+            setConnectionStatus(connected ? 'connected' : 'disconnected')
           }
-        })
+        )
 
         // Load previous messages
         const messagesResponse = await getMessages(sessionResponse.sessionId)
@@ -76,7 +84,8 @@ export default function Chat() {
           setMessages(decryptedMessages)
         }
 
-        setIsConnected(true)
+        // Connection status will be updated by the socket callback
+        setConnectionStatus('connecting')
       }
     } catch (error) {
       console.error('Initialize chat error:', error)
@@ -134,11 +143,21 @@ export default function Chat() {
       <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-3 sm:p-4 mb-3 sm:mb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 sm:space-x-3">
-            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-success dark:bg-success animate-pulse"></div>
+            <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
+              connectionStatus === 'connected' 
+                ? 'bg-success dark:bg-success' 
+                : connectionStatus === 'connecting'
+                ? 'bg-warning dark:bg-warning animate-pulse'
+                : 'bg-error dark:bg-error animate-pulse'
+            }`}></div>
             <div>
               <h2 className="text-base sm:text-lg font-heading font-semibold text-text-main dark:text-white">Support Chat</h2>
               <p className="text-xs sm:text-sm font-body text-text-secondary dark:text-white/80">
-                {isConnected ? 'Connected to counselor' : 'Connecting...'}
+                {connectionStatus === 'connected' 
+                  ? 'Connected to counselor' 
+                  : connectionStatus === 'connecting'
+                  ? 'Connecting...'
+                  : 'Disconnected - Reconnecting...'}
               </p>
             </div>
           </div>
