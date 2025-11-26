@@ -45,14 +45,14 @@ export default function Wellness() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-2"
       >
-        <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white">
+        <h1 className="text-3xl font-heading font-bold text-text-main">
           Wellness & Mental Health
         </h1>
         <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Take care of yourself, one moment at a time</p>
       </motion.div>
 
       {/* Tabs */}
-      <div className="flex space-x-2 border-b border-primary-light dark:border-primary/20">
+      <div className="flex space-x-2 border-b border-accent/20">
         {[
           { id: 'mood', label: 'Mood Tracker', icon: Heart },
           { id: 'exercises', label: 'Grounding', icon: Smile },
@@ -67,8 +67,8 @@ export default function Wellness() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center space-x-2 px-4 py-2 border-b-2 transition-all duration-300 font-heading ${
                 activeTab === tab.id
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-text-secondary dark:text-white/80 hover:text-text-main dark:hover:text-white'
+                  ? 'border-accent text-accent'
+                  : 'border-transparent text-text-secondary hover:text-text-main'
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -86,23 +86,23 @@ export default function Wellness() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-primary-light dark:bg-primary/20 border border-primary-light rounded-2xl p-6"
+              className="bg-accent/20 border border-primary-light rounded-2xl p-6"
             >
               <div className="flex items-center space-x-4">
                 <div className="text-4xl">{currentMood.emoji}</div>
                 <div>
-                  <h3 className="text-3xl font-heading font-bold text-text-main dark:text-white">
+                  <h3 className="text-3xl font-heading font-bold text-text-main">
                     Current Mood: {currentMood.label}
                   </h3>
-                  <p className="text-sm font-body text-text-secondary dark:text-white/80">Last logged: {new Date().toLocaleDateString()}</p>
+                  <p className="text-sm font-body text-text-secondary">Last logged: {new Date().toLocaleDateString()}</p>
                 </div>
               </div>
             </motion.div>
           )}
 
           {/* Log Mood */}
-          <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6">
-            <h2 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-4">How are you feeling right now?</h2>
+          <div className="bg-background/90 border border-primary-light rounded-2xl shadow-lg p-6">
+            <h2 className="text-3xl font-heading font-bold text-text-main mb-4">How are you feeling right now?</h2>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4 w-full max-w-full">
               {moodOptions.map((mood) => (
                 <motion.button
@@ -112,12 +112,12 @@ export default function Wellness() {
                   onClick={() => setSelectedMood(mood.id)}
                   className={`p-4 rounded-xl border-2 transition-all duration-300 ${
                     selectedMood === mood.id
-                      ? 'border-primary bg-primary-light dark:bg-primary/20'
-                      : 'border-primary-light dark:border-primary/20 hover:border-primary'
+                      ? 'border-primary bg-accent/20'
+                      : 'border-accent/20 hover:border-primary'
                   }`}
                 >
                   <div className="text-3xl mb-2">{mood.emoji}</div>
-                  <div className="text-xs font-body font-medium text-text-main dark:text-white">{mood.label}</div>
+                  <div className="text-xs font-body font-medium text-text-main">{mood.label}</div>
                 </motion.button>
               ))}
             </div>
@@ -125,7 +125,7 @@ export default function Wellness() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Optional: Add notes about how you're feeling..."
-              className="w-full p-3 font-body border-2 border-primary-light dark:border-primary/30 rounded-xl mb-4 focus:border-primary focus:ring-2 focus:ring-accent bg-white dark:bg-background-dark text-text-main dark:text-white transition-all duration-300"
+              className="w-full p-3 font-body border-2 border-primary-light dark:border-primary/30 rounded-xl mb-4 focus:border-primary focus:ring-2 focus:ring-accent bg-white dark:bg-background-dark text-text-main transition-all duration-300"
               rows={3}
             />
             <motion.button
@@ -141,8 +141,8 @@ export default function Wellness() {
 
           {/* Mood Stats */}
           {Object.keys(moodStats).length > 0 && (
-            <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6">
-              <h2 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-4 flex items-center">
+            <div className="bg-background/90 border border-primary-light rounded-2xl shadow-lg p-6">
+              <h2 className="text-3xl font-heading font-bold text-text-main mb-4 flex items-center">
                 <TrendingUp className="w-5 h-5 mr-2 text-primary" />
                 This Week's Mood
               </h2>
@@ -154,7 +154,7 @@ export default function Wellness() {
                     <div key={moodId} className="flex items-center space-x-3">
                       <span className="text-2xl">{mood.emoji}</span>
                       <div className="flex-1">
-                        <div className="flex justify-between text-sm font-body mb-1 text-text-main dark:text-white">
+                        <div className="flex justify-between text-sm font-body mb-1 text-text-main">
                           <span>{mood.label}</span>
                           <span>{count} times</span>
                         </div>
