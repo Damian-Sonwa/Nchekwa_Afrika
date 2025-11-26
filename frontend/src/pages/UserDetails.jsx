@@ -247,7 +247,7 @@ export default function UserDetails() {
   const iconPositions = generateIconPositions()
 
   return (
-    <div className="min-h-screen bg-background dark:bg-dark flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background-light dark:bg-background-dark flex items-center justify-center p-4 relative">
       {/* WhatsApp-style background pattern */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Grid pattern overlay */}
@@ -281,9 +281,9 @@ export default function UserDetails() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-2xl relative z-10"
+        className="w-full max-w-2xl mx-4 relative z-10 box-border"
       >
-        <div className="bg-white dark:bg-dark rounded-2xl shadow-2xl p-8 md:p-10 border border-light dark:border-light/30">
+        <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-2xl p-8 md:p-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -362,18 +362,18 @@ export default function UserDetails() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <label htmlFor="name" className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
-                Name <span className="text-light text-xs">(Optional - you can use an alias)</span>
+              <label htmlFor="name" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
+                Name <span className="text-text-secondary dark:text-white/70 text-xs">(Optional - you can use an alias)</span>
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light" />
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text-secondary dark:text-white/60" />
                 <input
                   id="name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Your name or alias"
-                  className="w-full pl-12 pr-4 py-3 border-2 border-light dark:border-light/30 rounded-xl bg-white dark:bg-dark text-dark dark:text-white font-inter focus:outline-none focus:ring-2 focus:ring-primaryLight focus:border-primaryLight transition-all"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
                 />
               </div>
             </motion.div>
@@ -422,7 +422,7 @@ export default function UserDetails() {
               <label className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
                 Sex <span className="text-error">*</span>
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 w-full">
                 {sexOptions.map((option) => (
                   <button
                     key={option.value}
@@ -455,7 +455,7 @@ export default function UserDetails() {
               <label className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
                 Marital Status <span className="text-error">*</span>
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full">
                 {maritalStatusOptions.map((option) => (
                   <button
                     key={option.value}

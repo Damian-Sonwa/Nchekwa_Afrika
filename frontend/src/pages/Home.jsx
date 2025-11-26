@@ -154,54 +154,160 @@ export default function Home() {
   ]
 
   return (
-    <div className="space-y-8 pb-20 md:pb-8 min-h-screen">
+    <div className="w-full max-w-full overflow-x-hidden box-border space-y-4 sm:space-y-5 md:space-y-6 pb-20 md:pb-8">
       {/* Welcome Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="space-y-2"
       >
-        <h1 className="text-4xl md:text-5xl font-poppins font-semibold text-dark dark:text-white">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-main dark:text-white">
           Welcome back, you're safe here
         </h1>
-        <p className="text-lg font-inter text-light dark:text-light">
+        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
           How can we support you today?
         </p>
       </motion.div>
 
-      {/* SOS Emergency Button */}
+      {/* SOS Emergency Button - Compact Design */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="flex justify-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        className="relative w-full max-w-full overflow-hidden"
       >
+        {/* Pulsing background effect - smaller */}
+        <motion.div
+          animate={{
+            scale: [1, 1.02, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute inset-0 bg-gradient-to-r from-red-600 via-red-500 to-red-600 rounded-2xl blur-lg -z-10"
+        />
+        
         <button
           onClick={handleSOS}
           disabled={sosPressed}
-          className="relative w-full max-w-md h-48 bg-error dark:bg-error rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white transform transition-all duration-200 hover:shadow-error/50 disabled:opacity-75"
+          className="relative w-full group overflow-hidden"
         >
-          {sosPressed && (
+          {/* Main button - much smaller */}
+          <div className="relative bg-error dark:bg-error rounded-2xl shadow-xl p-4 sm:p-5 md:p-6 flex flex-row items-center justify-between text-white transform transition-all duration-300 hover:shadow-error/50 disabled:opacity-75 border-2 border-error/30 min-h-[100px] sm:min-h-[120px] md:min-h-[140px] w-full max-w-full box-border">
+            {/* Background image with overlay */}
+            <div className="absolute inset-0 rounded-2xl overflow-hidden">
+              <img 
+                src="/StockCake-someone_pressing_an_emergency_button_Images_and_Photos_1763940162.jpg"
+                alt="Emergency button"
+                className="w-full h-full object-cover opacity-15 dark:opacity-8"
+              />
+              {/* Dark overlay for better text readability */}
+              <div className="absolute inset-0 bg-error/95 dark:bg-error/97" />
+            </div>
+            
+            {/* Shine effect on hover */}
             <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 1 }}
-              className="absolute inset-0 bg-error rounded-2xl opacity-50"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
             />
-          )}
-          <AlertCircle className="w-16 h-16 mb-4" />
-          <span className="text-3xl font-bold">Emergency Assistance</span>
-          <span className="text-sm mt-2 opacity-90">Press if you need immediate help</span>
+            
+            {/* Content - horizontal layout */}
+            <div className="relative z-10 flex flex-row items-center justify-between w-full gap-3 sm:gap-4 md:gap-6">
+              {/* Left side - Icon and text */}
+              <div className="flex flex-row items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                {/* Icon - smaller */}
+                <div className="relative flex-shrink-0">
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      opacity: [0.4, 0.7, 0.4],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="absolute inset-0 bg-white/20 rounded-full blur-sm"
+                  />
+                  <motion.div
+                    animate={sosPressed ? {
+                      rotate: 360,
+                      scale: [1, 1.1, 1],
+                    } : {}}
+                    transition={{
+                      duration: 0.5,
+                      repeat: sosPressed ? Infinity : 0,
+                    }}
+                    className="relative"
+                  >
+                    <AlertCircle className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 drop-shadow-lg" strokeWidth={2.5} />
+                  </motion.div>
+                </div>
+                
+                {/* Text content */}
+                <div className="flex flex-col min-w-0 flex-1">
+                  <motion.h2
+                    animate={sosPressed ? {
+                      scale: [1, 1.03, 1],
+                    } : {}}
+                    transition={{
+                      duration: 0.5,
+                      repeat: sosPressed ? Infinity : 0,
+                    }}
+                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-heading font-extrabold mb-1 drop-shadow-md tracking-tight break-words"
+                  >
+                    EMERGENCY SOS
+                  </motion.h2>
+                  
+                  <p className="text-xs sm:text-sm md:text-base font-body font-medium text-white/90 break-words">
+                    {sosPressed ? 'Sending alert...' : 'Tap for immediate help'}
+                  </p>
+                  
+                  {/* Urgency indicator - compact */}
+                  <div className="mt-1 sm:mt-2 flex items-center space-x-1.5 text-[10px] sm:text-xs font-body font-semibold">
+                    <motion.div
+                      animate={{
+                        opacity: [1, 0.5, 1],
+                      }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                      }}
+                      className="w-1.5 h-1.5 bg-white rounded-full"
+                    />
+                    <span>24/7 Available</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Right side - Image - smaller */}
+              <div className="relative flex-shrink-0 hidden sm:block">
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28"
+                >
+                  <img 
+                    src="/StockCake-someone_pressing_an_emergency_button_Images_and_Photos_1763940162.jpg"
+                    alt="Emergency assistance"
+                    className="w-full h-full rounded-xl shadow-lg border-2 border-white/30 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-red-600/20 to-transparent rounded-xl" />
+                </motion.div>
+              </div>
+            </div>
+          </div>
         </button>
       </motion.div>
 
       {/* Stats Cards */}
-      <div>
-        <h2 className="text-2xl font-poppins font-semibold text-dark dark:text-white mb-4 flex items-center">
-          <TrendingUp className="w-6 h-6 mr-2 text-primary dark:text-primary-light" />
+      <div className="w-full">
+        <h2 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-3 sm:mb-4 md:mb-5 flex items-center">
+          <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-primary dark:text-primary-light" />
           Your Progress
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 w-full max-w-full">
           {statCards.map((stat, index) => {
             const Icon = stat.icon
             return (
@@ -210,33 +316,33 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.03, y: -4 }}
                 onClick={() => stat.href && navigate(stat.href)}
-                className={`bg-white dark:bg-dark rounded-2xl p-6 shadow-md border border-light dark:border-light/30 ${
-                  stat.href ? 'cursor-pointer hover:shadow-lg transition-all' : ''
+                className={`bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 ${
+                  stat.href ? 'cursor-pointer hover:border-primary' : ''
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Icon className="w-6 h-6 text-primary" />
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10">
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
                   </div>
                   {stat.href && (
                     <motion.div
                       whileHover={{ x: 5 }}
-                      className="text-light dark:text-light"
+                      className="text-light dark:text-light text-xl"
                     >
                       →
                     </motion.div>
                   )}
                 </div>
-                <h3 className="text-sm font-inter font-medium text-light dark:text-light mb-1">
+                <h3 className="text-base font-body font-medium text-text-secondary dark:text-white/80 mb-2">
                   {stat.label}
                 </h3>
-                <p className="text-2xl font-poppins font-semibold text-dark dark:text-white mb-1">
+                <p className="text-2xl sm:text-3xl font-heading font-bold text-text-main dark:text-white mb-1">
                   {stat.value}
                 </p>
                 {stat.subtitle && (
-                  <p className="text-xs font-inter text-light dark:text-light">
+                  <p className="text-sm font-body text-text-secondary dark:text-white/70 mt-1">
                     {stat.subtitle}
                   </p>
                 )}
@@ -247,45 +353,47 @@ export default function Home() {
       </div>
 
       {/* Quick Actions */}
-      <div>
-        <h2 className="text-2xl font-poppins font-semibold text-dark dark:text-white mb-4 flex items-center">
-          <Clock className="w-6 h-6 mr-2 text-accent dark:text-accent" />
+      <div className="w-full">
+        <h2 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-3 sm:mb-4 md:mb-5 flex items-center">
+          <Clock className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-accent dark:text-accent" />
           Quick Access
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full max-w-full">
           {quickActions.map((action, index) => (
             <motion.button
               key={action.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => navigate(action.href)}
-              className="bg-primary hover:bg-primaryLight rounded-xl p-6 text-white shadow-md hover:shadow-lg transition-all duration-200"
+              className="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent"
             >
-              <action.icon className="w-8 h-8 mb-3 mx-auto" />
-              <p className="text-sm font-inter font-semibold mb-1">{action.name}</p>
-              <p className="text-xs font-inter opacity-90">{action.description}</p>
+              <action.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 mb-2 mx-auto" />
+              <p className="text-xs sm:text-sm font-body font-semibold mb-1 break-words">{action.name}</p>
+              <p className="text-[10px] sm:text-xs font-body opacity-90 break-words">{action.description}</p>
             </motion.button>
           ))}
         </div>
       </div>
 
+      {/* Safety Reminder & Emergency Contacts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 w-full max-w-full">
       {/* Safety Reminder */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-primary/10 dark:bg-primary/20 rounded-2xl p-6 border border-primary/30 dark:border-primary/50"
+          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
       >
         <div className="flex items-start space-x-4">
-          <div className="flex-shrink-0">
-            <Heart className="w-6 h-6 text-accent dark:text-accent" />
+            <div className="flex-shrink-0 p-3 rounded-xl bg-accent/20 dark:bg-accent/30">
+              <Heart className="w-6 h-6 sm:w-7 sm:h-7 text-accent dark:text-accent" />
           </div>
           <div>
-            <h3 className="font-poppins font-semibold text-dark dark:text-white mb-2">Remember</h3>
-            <p className="text-sm font-inter text-light dark:text-light">
+              <h3 className="font-heading font-semibold text-lg sm:text-xl text-text-main dark:text-white mb-2">Remember</h3>
+              <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
               You can exit quickly using the quick exit button. Your privacy and safety are our top priorities.
             </p>
           </div>
@@ -294,28 +402,40 @@ export default function Home() {
 
       {/* Emergency Contacts */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5 }}
-        className="bg-white dark:bg-dark rounded-2xl p-6 shadow-md border border-light dark:border-light/30"
-      >
-        <h3 className="font-poppins font-semibold text-dark dark:text-white mb-4 flex items-center">
-          <Phone className="w-5 h-5 mr-2 text-primary dark:text-primary-light" />
+          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+        >
+          <h3 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-4 sm:mb-6 flex items-center">
+            <div className="p-2 rounded-lg bg-primary/10 dark:bg-primary/20 mr-3">
+              <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-primary dark:text-primary-light" />
+            </div>
           Emergency Contacts
         </h3>
         <div className="space-y-3">
-          <div className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
-            <span className="text-sm font-inter font-medium text-dark dark:text-light">National Helpline</span>
-            <a href="tel:1-800-799-7233" className="text-primary dark:text-primary-light font-inter font-semibold hover:underline">
+            <motion.a
+              href="tel:1-800-799-7233"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex justify-between items-center p-4 bg-background-light dark:bg-background-dark border border-primary-light rounded-xl hover:shadow-md transition-all duration-300 group"
+            >
+              <span className="text-lg font-body text-text-main dark:text-white">National Helpline</span>
+              <span className="text-primary dark:text-primary-light font-body font-semibold group-hover:underline">
               1-800-799-7233
-            </a>
+              </span>
+            </motion.a>
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex justify-between items-center p-4 bg-background-light dark:bg-background-dark border border-primary-light rounded-xl hover:shadow-md transition-all duration-300"
+            >
+              <span className="text-lg font-body text-text-main dark:text-white">Crisis Text Line</span>
+              <span className="text-primary dark:text-primary-light font-body font-semibold">Text HOME to 741741</span>
+            </motion.div>
           </div>
-          <div className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
-            <span className="text-sm font-inter font-medium text-dark dark:text-light">Crisis Text Line</span>
-            <span className="text-primary dark:text-primary-light font-inter font-semibold">Text HOME to 741741</span>
-          </div>
+        </motion.div>
         </div>
-      </motion.div>
     </div>
   )
 }

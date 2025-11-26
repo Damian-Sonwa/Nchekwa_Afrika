@@ -291,40 +291,15 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-dark flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
-          {/* Left Side: Logo/Illustration */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background-light dark:bg-background-dark">
+      <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen w-full max-w-full">
+        {/* Left Half: Auth Form */}
+        <div className="w-full max-w-full flex items-center justify-center p-4 sm:p-6 md:p-8 bg-background-light dark:bg-background-dark overflow-y-auto overflow-x-hidden box-border">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="hidden lg:flex flex-col items-center justify-center space-y-6"
-          >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-96 h-96 rounded-2xl overflow-hidden shadow-lg border-4 border-primary/20"
-            >
-              <img
-                src="/helping-hands.jpg"
-                alt="Helping hands - Together we stand strong"
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
-            <div className="text-center space-y-2">
-              <h1 className="text-4xl font-poppins font-bold text-dark dark:text-white">Nchekwa_Afrika</h1>
-              <p className="text-xl font-inter text-light dark:text-light">You are safe here</p>
-              <p className="font-inter text-light dark:text-light italic">Together, we stand strong. Your hands in ours, your safety our promise.</p>
-            </div>
-          </motion.div>
-
-          {/* Right Side: Flip Card Container */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="relative"
+            className="w-full max-w-md mx-auto box-border"
             style={{ perspective: '1000px' }}
           >
             <div className="relative w-full" style={{ transformStyle: 'preserve-3d', height: 'auto' }}>
@@ -362,21 +337,21 @@ export default function Auth() {
                         >
                           <img
                             src="/helping-hands.jpg"
-                            alt="Helping hands - Together we stand strong"
+                            alt="Hands forming a circle - Unity and support"
                             className="w-full h-full object-cover"
                           />
                         </motion.div>
                       </div>
-                      <h1 className="text-4xl font-poppins font-semibold text-dark dark:text-white mb-2">
+                      <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
                         {isLogin ? 'Welcome Back' : 'Create Account'}
                       </h1>
-                      <p className="font-inter text-light dark:text-light text-lg">
+                      <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
                         {isLogin 
                           ? 'Sign in to your Nchekwa_Afrika account'
                           : 'Start your journey to safety and support'
                         }
                       </p>
-                      <p className="font-inter text-primary text-sm italic mt-2">
+                      <p className="font-body text-primary text-sm italic mt-2">
                         Together, we stand strong. Your hands in ours, your safety our promise.
                       </p>
                     </motion.div>
@@ -398,10 +373,10 @@ export default function Auth() {
                           >
                             <CheckCircle className="w-16 h-16 text-success dark:text-success" />
                           </motion.div>
-                          <h2 className="text-2xl font-poppins font-semibold text-dark dark:text-white">
+                          <h2 className="text-2xl font-heading font-bold text-text-main dark:text-white">
                             {message || (isLogin ? 'Welcome back!' : 'Account created!')}
                           </h2>
-                          <p className="font-inter text-light dark:text-light">
+                          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
                             Redirecting you...
                           </p>
                         </motion.div>
@@ -419,7 +394,7 @@ export default function Auth() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                           >
-                            <label htmlFor="email" className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
+                            <label htmlFor="email" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
                               Email Address
                             </label>
                             <div className="relative">
@@ -434,10 +409,10 @@ export default function Auth() {
                                   setFormData({ ...formData, email: e.target.value })
                                   setErrors({ ...errors, email: '' })
                                 }}
-                                className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 bg-white dark:bg-dark text-dark dark:text-white font-inter ${
+                                className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white dark:bg-background-dark text-text-main dark:text-white font-body ${
                                   errors.email
                                     ? 'border-error focus:border-error focus:ring-error/20'
-                                    : 'border-light dark:border-light/30 focus:border-primaryLight focus:ring-primaryLight/20'
+                                    : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
                                 }`}
                                 placeholder="your.email@example.com"
                                 autoComplete="email"
@@ -447,7 +422,7 @@ export default function Auth() {
                               <motion.p
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mt-2 text-sm font-inter text-error dark:text-error flex items-center space-x-1"
+                                className="mt-2 text-sm font-body text-error dark:text-error flex items-center space-x-1"
                               >
                                 <AlertCircle className="w-4 h-4" />
                                 <span>{errors.email}</span>
@@ -461,7 +436,7 @@ export default function Auth() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
                           >
-                            <label htmlFor="password" className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
+                            <label htmlFor="password" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
                               Password
                             </label>
                             <div className="relative">
@@ -476,10 +451,10 @@ export default function Auth() {
                                   setFormData({ ...formData, password: e.target.value })
                                   setErrors({ ...errors, password: '' })
                                 }}
-                                className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 bg-white dark:bg-dark text-dark dark:text-white font-inter ${
+                                className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white dark:bg-background-dark text-text-main dark:text-white font-body ${
                                   errors.password
                                     ? 'border-error focus:border-error focus:ring-error/20'
-                                    : 'border-light dark:border-light/30 focus:border-primaryLight focus:ring-primaryLight/20'
+                                    : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
                                 }`}
                                 placeholder="Enter your password"
                                 autoComplete={isLogin ? 'current-password' : 'new-password'}
@@ -496,7 +471,7 @@ export default function Auth() {
                               <motion.p
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mt-2 text-sm font-inter text-error dark:text-error flex items-center space-x-1"
+                                className="mt-2 text-sm font-body text-error dark:text-error flex items-center space-x-1"
                               >
                                 <AlertCircle className="w-4 h-4" />
                                 <span>{errors.password}</span>
@@ -512,7 +487,7 @@ export default function Auth() {
                               exit={{ opacity: 0, height: 0 }}
                               transition={{ delay: 0.2 }}
                             >
-                              <label htmlFor="confirmPassword" className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
+                              <label htmlFor="confirmPassword" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
                                 Confirm Password
                               </label>
                               <div className="relative">
@@ -527,11 +502,11 @@ export default function Auth() {
                                     setFormData({ ...formData, confirmPassword: e.target.value })
                                     setErrors({ ...errors, confirmPassword: '' })
                                   }}
-                                  className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 bg-white dark:bg-dark text-dark dark:text-white font-inter ${
-                                    errors.confirmPassword
-                                      ? 'border-error focus:border-error focus:ring-error/20'
-                                      : 'border-light dark:border-light/30 focus:border-primaryLight focus:ring-primaryLight/20'
-                                  }`}
+                                  className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-white dark:bg-background-dark text-text-main dark:text-white font-body ${
+                                  errors.confirmPassword
+                                    ? 'border-error focus:border-error focus:ring-error/20'
+                                    : 'border-primary-light dark:border-primary/30 focus:border-primary focus:ring-accent/20'
+                                }`}
                                   placeholder="Confirm your password"
                                   autoComplete="new-password"
                                 />
@@ -547,7 +522,7 @@ export default function Auth() {
                                 <motion.p
                                   initial={{ opacity: 0, y: -10 }}
                                   animate={{ opacity: 1, y: 0 }}
-                                  className="mt-2 text-sm font-inter text-error dark:text-error flex items-center space-x-1"
+                                  className="mt-2 text-sm font-body text-error dark:text-error flex items-center space-x-1"
                                 >
                                   <AlertCircle className="w-4 h-4" />
                                   <span>{errors.confirmPassword}</span>
@@ -603,7 +578,7 @@ export default function Auth() {
                             disabled={loading}
                             whileHover={{ scale: loading ? 1 : 1.05 }}
                             whileTap={{ scale: loading ? 1 : 0.98 }}
-                            className="w-full py-4 bg-primary hover:bg-primaryLight text-white rounded-xl font-inter font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-4 px-6 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {loading ? (
                               <>
@@ -624,7 +599,7 @@ export default function Auth() {
                               <div className="w-full border-t border-light dark:border-light/30"></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
-                              <span className="px-4 bg-white dark:bg-dark text-light dark:text-light font-inter">Or continue with</span>
+                              <span className="px-4 bg-white dark:bg-background-dark text-text-secondary dark:text-white/80 font-body">Or continue with</span>
                             </div>
                           </div>
 
@@ -636,7 +611,7 @@ export default function Auth() {
                               whileTap={{ scale: 0.98 }}
                               onClick={() => handleSocialLogin('google')}
                               disabled={loading}
-                              className="py-3 px-4 border-2 border-light dark:border-light/30 rounded-xl font-inter font-medium text-dark dark:text-light hover:border-primaryLight dark:hover:border-primaryLight hover:bg-background dark:hover:bg-dark/50 transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50"
+                              className="py-3 px-4 border-2 border-primary-light dark:border-primary/30 rounded-xl font-body font-medium text-text-main dark:text-white hover:border-primary dark:hover:border-primary hover:bg-background-light dark:hover:bg-primary transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
                             >
                               <svg className="w-5 h-5" viewBox="0 0 24 24">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -653,7 +628,7 @@ export default function Auth() {
                               whileTap={{ scale: 0.98 }}
                               onClick={() => handleSocialLogin('apple')}
                               disabled={loading}
-                              className="py-3 px-4 border-2 border-light dark:border-light/30 rounded-xl font-inter font-medium text-dark dark:text-light hover:border-primaryLight dark:hover:border-primaryLight hover:bg-background dark:hover:bg-dark/50 transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50"
+                              className="py-3 px-4 border-2 border-primary-light dark:border-primary/30 rounded-xl font-body font-medium text-text-main dark:text-white hover:border-primary dark:hover:border-primary hover:bg-background-light dark:hover:bg-primary transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
                             >
                               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
@@ -672,12 +647,12 @@ export default function Auth() {
                       transition={{ delay: 0.4 }}
                       className="mt-6 text-center"
                     >
-                      <p className="text-sm font-inter text-light dark:text-light">
+                      <p className="text-sm font-body text-text-secondary dark:text-white/80">
                         {isLogin ? "Don't have an account? " : 'Already have an account? '}
                         <button
                           type="button"
                           onClick={handleFlip}
-                          className="text-primary hover:text-primary-light dark:text-primary-light dark:hover:text-primary font-semibold transition-colors"
+                          className="text-primary hover:text-primary-dark dark:text-primary-light dark:hover:text-primary font-semibold transition-colors"
                         >
                           {isLogin ? 'Sign up' : 'Sign in'}
                         </button>
@@ -701,30 +676,30 @@ export default function Auth() {
                         >
                           <img
                             src="/helping-hands.jpg"
-                            alt="Helping hands - Together we stand strong"
+                            alt="Hands forming a circle - Unity and support"
                             className="w-full h-full object-cover"
                           />
                         </motion.div>
                       </div>
-                      <h1 className="text-3xl font-poppins font-semibold text-dark dark:text-white mt-4 mb-2">
+                      <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mt-4 mb-2">
                         Forgot Password?
                       </h1>
-                      <p className="font-inter text-light dark:text-light">
+                      <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
                         Enter your email and we'll send you a reset link
                       </p>
-                      <p className="font-inter text-primary text-sm italic mt-2">
+                      <p className="font-body text-primary text-sm italic mt-2">
                         Together, we stand strong. Your hands in ours, your safety our promise.
                       </p>
                     </div>
 
                     <form onSubmit={handleForgotPassword} className="space-y-6">
                       <div>
-                        <label htmlFor="forgot-email" className="block text-sm font-inter font-medium text-dark dark:text-light mb-2">
+                        <label htmlFor="forgot-email" className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
                           Email Address
                         </label>
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <Mail className="w-5 h-5 text-light" />
+                            <Mail className="w-5 h-5 text-text-secondary dark:text-white/60" />
                           </div>
                           <input
                             id="forgot-email"
@@ -734,25 +709,25 @@ export default function Auth() {
                               setFormData({ ...formData, email: e.target.value })
                               setErrors({ ...errors, email: '' })
                             }}
-                            className="w-full pl-12 pr-4 py-3.5 border-2 border-light dark:border-light/30 rounded-xl focus:outline-none focus:ring-2 focus:border-primaryLight focus:ring-primaryLight/20 bg-white dark:bg-dark text-dark dark:text-white font-inter"
+                            className="w-full pl-12 pr-4 py-3.5 border-2 border-primary-light dark:border-primary/30 rounded-xl focus:outline-none focus:ring-2 focus:border-primary focus:ring-accent/20 bg-white dark:bg-background-dark text-text-main dark:text-white font-body transition-all duration-300"
                             placeholder="your.email@example.com"
                             required
                           />
                         </div>
                         {errors.email && (
-                          <p className="mt-2 text-sm font-inter text-error dark:text-error">{errors.email}</p>
+                          <p className="mt-2 text-sm font-body text-error dark:text-error">{errors.email}</p>
                         )}
                       </div>
 
                       {errors.submit && (
                         <div className="p-4 bg-error/10 dark:bg-error/20 border border-error/30 dark:border-error/50 rounded-xl">
-                          <p className="text-sm font-inter text-error dark:text-error">{errors.submit}</p>
+                          <p className="text-sm font-body text-error dark:text-error">{errors.submit}</p>
                         </div>
                       )}
 
                       {message && (
                         <div className="p-4 bg-success/10 dark:bg-success/20 border border-success/30 dark:border-success/50 rounded-xl">
-                          <p className="text-sm font-inter text-success dark:text-success">{message}</p>
+                          <p className="text-sm font-body text-success dark:text-success">{message}</p>
                         </div>
                       )}
 
@@ -762,7 +737,7 @@ export default function Auth() {
                           disabled={loading}
                           whileHover={{ scale: loading ? 1 : 1.05 }}
                           whileTap={{ scale: loading ? 1 : 0.98 }}
-                          className="flex-1 py-3 bg-primary hover:bg-primaryLight text-white rounded-xl font-inter font-semibold shadow-md hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center space-x-2"
+                          className="flex-1 py-3 px-6 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 flex items-center justify-center space-x-2"
                         >
                           {loading ? (
                             <>
@@ -785,7 +760,7 @@ export default function Auth() {
                           }}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="px-6 py-3 border-2 border-light dark:border-light/30 text-dark dark:text-light rounded-xl font-inter font-medium hover:bg-background dark:hover:bg-dark/50 transition-all"
+                          className="px-6 py-3 border-2 border-primary-light dark:border-primary/30 text-text-main dark:text-white rounded-xl font-body font-medium hover:bg-background-light dark:hover:bg-primary transition-all duration-300"
                         >
                           Cancel
                         </motion.button>
@@ -796,19 +771,34 @@ export default function Auth() {
               </AnimatePresence>
             </div>
 
-            {/* Safety Notice */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="mt-6 text-center"
-            >
-              <p className="text-xs font-inter text-light dark:text-light max-w-md mx-auto flex items-center justify-center space-x-2">
-                <Shield className="w-4 h-4" />
-                <span>Your information is encrypted and secure. You can delete your account at any time.</span>
-              </p>
-            </motion.div>
+          {/* Safety Notice */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-6 text-center"
+          >
+            <p className="text-xs font-body text-text-secondary dark:text-white/70 max-w-md mx-auto flex items-center justify-center space-x-2">
+              <Shield className="w-4 h-4" />
+              <span>Your information is encrypted and secure. You can delete your account at any time.</span>
+            </p>
           </motion.div>
+        </motion.div>
+      </div>
+
+        {/* Right Half: Full-Height Illustration */}
+        <div className="hidden md:flex w-full h-full min-h-screen max-w-full overflow-hidden relative">
+          <motion.img
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            src="/helping-hands.jpg"
+            alt="Hands forming a circle - Unity and support"
+            className="object-cover w-full h-full max-w-full"
+            style={{ filter: 'blur(2px)' }}
+          />
+          {/* Subtle overlay for coverage */}
+          <div className="absolute inset-0 bg-background-light/20 dark:bg-background-dark/25"></div>
         </div>
       </div>
     </div>

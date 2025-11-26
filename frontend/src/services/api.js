@@ -470,6 +470,57 @@ export const getEmotionalCheckins = async (anonymousId, days = 30) => {
   }
 }
 
+// Community Posts
+export const getCommunityPosts = async (filters = {}) => {
+  try {
+    const response = await api.get('/community', { params: filters })
+    return response.data
+  } catch (error) {
+    console.error('Get community posts error:', error)
+    throw error
+  }
+}
+
+export const createCommunityPost = async (postData) => {
+  try {
+    const response = await api.post('/community', postData)
+    return response.data
+  } catch (error) {
+    console.error('Create community post error:', error)
+    throw error
+  }
+}
+
+export const likeCommunityPost = async (postId, userId) => {
+  try {
+    const response = await api.post(`/community/${postId}/like`, { userId })
+    return response.data
+  } catch (error) {
+    console.error('Like community post error:', error)
+    throw error
+  }
+}
+
+export const commentOnPost = async (postId, commentData) => {
+  try {
+    const response = await api.post(`/community/${postId}/comment`, commentData)
+    return response.data
+  } catch (error) {
+    console.error('Comment on post error:', error)
+    throw error
+  }
+}
+
+export const reportPost = async (postId, userId, reason) => {
+  try {
+    const response = await api.post(`/community/${postId}/report`, { userId, reason })
+    return response.data
+  } catch (error) {
+    console.error('Report post error:', error)
+    throw error
+  }
+}
+
 // Settings
 export const getSettings = async (anonymousId) => {
   try {

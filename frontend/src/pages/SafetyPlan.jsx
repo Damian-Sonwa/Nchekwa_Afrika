@@ -63,58 +63,66 @@ export default function SafetyPlan() {
   ]
 
   return (
-    <div className="space-y-6 pb-20 md:pb-8">
+    <div className="w-full max-w-full overflow-x-hidden box-border space-y-6 pb-20 md:pb-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Your Safety Plan</h1>
-        <p className="text-gray-600 dark:text-gray-300">Create a personalized plan for your safety</p>
+        <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">Your Safety Plan</h1>
+        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Create a personalized plan for your safety</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex space-x-2 overflow-x-auto pb-2">
+      <div className="flex flex-wrap gap-2 pb-2 w-full max-w-full overflow-x-hidden">
         {tabs.map((tab) => (
-          <button
+          <motion.button
             key={tab.id}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-6 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
+            className={`px-6 py-2 rounded-lg font-heading font-medium whitespace-nowrap transition-all duration-300 ${
               activeTab === tab.id
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-primary text-white shadow-md'
+                : 'bg-background-light dark:bg-background-dark text-text-main dark:text-white hover:bg-primary-light dark:hover:bg-primary border border-primary-light dark:border-primary/20'
             }`}
           >
             {tab.label}
-          </button>
+          </motion.button>
         ))}
       </div>
 
       {/* Tab Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
+      <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6">
         {activeTab === 'overview' && (
           <div className="space-y-4">
             <textarea
               value={plan.content}
               onChange={(e) => setPlan({ ...plan, content: e.target.value })}
               placeholder="Write your safety plan here..."
-              className="w-full h-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full h-64 px-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
             />
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={handleSave}
               disabled={saving}
-              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all flex items-center space-x-2 disabled:opacity-50"
+              className="px-6 py-3 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent flex items-center space-x-2 disabled:opacity-50"
             >
               <Save className="w-5 h-5" />
               <span>{saving ? 'Saving...' : 'Save Plan'}</span>
-            </button>
+            </motion.button>
           </div>
         )}
 
         {activeTab === 'steps' && (
           <div className="space-y-4">
             {plan.steps.map((step, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-start space-x-3 p-4 bg-background-light dark:bg-background-dark border border-primary-light rounded-xl"
               >
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={() => {
                     const updated = [...plan.steps]
                     updated[index].completed = !updated[index].completed
@@ -122,18 +130,18 @@ export default function SafetyPlan() {
                   }}
                 >
                   {step.completed ? (
-                    <CheckCircle2 className="w-6 h-6 text-green-500" />
+                    <CheckCircle2 className="w-6 h-6 text-success" />
                   ) : (
-                    <Circle className="w-6 h-6 text-gray-400" />
+                    <Circle className="w-6 h-6 text-text-secondary dark:text-white/60" />
                   )}
-                </button>
+                </motion.button>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900">{step.title}</h4>
+                  <h4 className="font-heading font-semibold text-text-main dark:text-white">{step.title}</h4>
                   {step.description && (
-                    <p className="text-sm text-gray-600 mt-1">{step.description}</p>
+                    <p className="text-sm font-body text-text-secondary dark:text-white/80 mt-1">{step.description}</p>
                   )}
                 </div>
-              </div>
+              </motion.div>
             ))}
             <AddStepForm
               onAdd={(step) => setPlan({ ...plan, steps: [...plan.steps, step] })}
@@ -144,18 +152,23 @@ export default function SafetyPlan() {
         {activeTab === 'contacts' && (
           <div className="space-y-4">
             {plan.emergencyContacts.map((contact, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-lg">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 bg-background-light dark:bg-background-dark border border-primary-light rounded-xl"
+              >
                 <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-blue-500" />
+                  <Phone className="w-5 h-5 text-primary" />
                   <div>
-                    <p className="font-semibold text-gray-900">{contact.name}</p>
-                    <p className="text-sm text-gray-600">{contact.phone}</p>
+                    <p className="font-heading font-semibold text-text-main dark:text-white">{contact.name}</p>
+                    <p className="text-sm font-body text-text-secondary dark:text-white/80">{contact.phone}</p>
                     {contact.relationship && (
-                      <p className="text-xs text-gray-500">{contact.relationship}</p>
+                      <p className="text-xs font-body text-text-secondary dark:text-white/70">{contact.relationship}</p>
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
             <AddContactForm
               onAdd={(contact) =>
@@ -168,20 +181,25 @@ export default function SafetyPlan() {
         {activeTab === 'places' && (
           <div className="space-y-4">
             {plan.safePlaces.map((place, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-lg">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 bg-background-light dark:bg-background-dark border border-primary-light rounded-xl"
+              >
                 <div className="flex items-start space-x-3">
-                  <MapPin className="w-5 h-5 text-green-500 mt-1" />
+                  <MapPin className="w-5 h-5 text-success mt-1" />
                   <div>
-                    <p className="font-semibold text-gray-900">{place.name}</p>
+                    <p className="font-heading font-semibold text-text-main dark:text-white">{place.name}</p>
                     {place.address && (
-                      <p className="text-sm text-gray-600">{place.address}</p>
+                      <p className="text-sm font-body text-text-secondary dark:text-white/80">{place.address}</p>
                     )}
                     {place.notes && (
-                      <p className="text-xs text-gray-500 mt-1">{place.notes}</p>
+                      <p className="text-xs font-body text-text-secondary dark:text-white/70 mt-1">{place.notes}</p>
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
             <AddPlaceForm
               onAdd={(place) =>
@@ -212,47 +230,53 @@ function AddStepForm({ onAdd }) {
 
   if (!showForm) {
     return (
-      <button
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => setShowForm(true)}
-        className="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-500 transition-colors flex items-center justify-center space-x-2"
+        className="w-full p-4 border-2 border-dashed border-primary-light dark:border-primary/30 rounded-xl text-text-secondary dark:text-white/80 hover:border-primary hover:text-primary dark:hover:text-primary-light transition-all duration-300 flex items-center justify-center space-x-2"
       >
         <Plus className="w-5 h-5" />
-        <span>Add Step</span>
-      </button>
+        <span className="font-body">Add Step</span>
+      </motion.button>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border border-gray-300 rounded-lg space-y-3">
+    <form onSubmit={handleSubmit} className="p-4 border border-primary-light dark:border-primary/30 rounded-xl space-y-3">
       <input
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Step title"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
         required
       />
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Step description (optional)"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
         rows={3}
       />
       <div className="flex space-x-2">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          className="px-4 py-2 rounded-lg bg-primary text-white font-heading font-semibold hover:bg-primary-dark transition-all duration-300"
         >
           Add
-        </button>
-        <button
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           type="button"
           onClick={() => setShowForm(false)}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+          className="px-4 py-2 rounded-lg bg-background-light dark:bg-background-dark border border-primary-light dark:border-primary/30 text-text-main dark:text-white font-body hover:bg-primary-light dark:hover:bg-primary transition-all duration-300"
         >
           Cancel
-        </button>
+        </motion.button>
       </div>
     </form>
   )
@@ -277,24 +301,26 @@ function AddContactForm({ onAdd }) {
 
   if (!showForm) {
     return (
-      <button
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => setShowForm(true)}
-        className="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-500 transition-colors flex items-center justify-center space-x-2"
+        className="w-full p-4 border-2 border-dashed border-primary-light dark:border-primary/30 rounded-xl text-text-secondary dark:text-white/80 hover:border-primary hover:text-primary dark:hover:text-primary-light transition-all duration-300 flex items-center justify-center space-x-2"
       >
         <Plus className="w-5 h-5" />
-        <span>Add Contact</span>
-      </button>
+        <span className="font-body">Add Contact</span>
+      </motion.button>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border border-gray-300 rounded-lg space-y-3">
+    <form onSubmit={handleSubmit} className="p-4 border border-primary-light dark:border-primary/30 rounded-xl space-y-3">
       <input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Contact name"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
         required
       />
       <input
@@ -302,7 +328,7 @@ function AddContactForm({ onAdd }) {
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
         placeholder="Phone number"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
         required
       />
       <input
@@ -310,22 +336,26 @@ function AddContactForm({ onAdd }) {
         value={relationship}
         onChange={(e) => setRelationship(e.target.value)}
         placeholder="Relationship (optional)"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
       />
       <div className="flex space-x-2">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          className="px-4 py-2 rounded-lg bg-primary text-white font-heading font-semibold hover:bg-primary-dark transition-all duration-300"
         >
           Add
-        </button>
-        <button
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           type="button"
           onClick={() => setShowForm(false)}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+          className="px-4 py-2 rounded-lg bg-background-light dark:bg-background-dark border border-primary-light dark:border-primary/30 text-text-main dark:text-white font-body hover:bg-primary-light dark:hover:bg-primary transition-all duration-300"
         >
           Cancel
-        </button>
+        </motion.button>
       </div>
     </form>
   )
@@ -350,24 +380,26 @@ function AddPlaceForm({ onAdd }) {
 
   if (!showForm) {
     return (
-      <button
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => setShowForm(true)}
-        className="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-500 transition-colors flex items-center justify-center space-x-2"
+        className="w-full p-4 border-2 border-dashed border-primary-light dark:border-primary/30 rounded-xl text-text-secondary dark:text-white/80 hover:border-primary hover:text-primary dark:hover:text-primary-light transition-all duration-300 flex items-center justify-center space-x-2"
       >
         <Plus className="w-5 h-5" />
-        <span>Add Safe Place</span>
-      </button>
+        <span className="font-body">Add Safe Place</span>
+      </motion.button>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border border-gray-300 rounded-lg space-y-3">
+    <form onSubmit={handleSubmit} className="p-4 border border-primary-light dark:border-primary/30 rounded-xl space-y-3">
       <input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Place name"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
         required
       />
       <input
@@ -375,29 +407,33 @@ function AddPlaceForm({ onAdd }) {
         value={address}
         onChange={(e) => setAddress(e.target.value)}
         placeholder="Address (optional)"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
       />
       <textarea
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         placeholder="Notes (optional)"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
         rows={2}
       />
       <div className="flex space-x-2">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          className="px-4 py-2 rounded-lg bg-primary text-white font-heading font-semibold hover:bg-primary-dark transition-all duration-300"
         >
           Add
-        </button>
-        <button
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           type="button"
           onClick={() => setShowForm(false)}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+          className="px-4 py-2 rounded-lg bg-background-light dark:bg-background-dark border border-primary-light dark:border-primary/30 text-text-main dark:text-white font-body hover:bg-primary-light dark:hover:bg-primary transition-all duration-300"
         >
           Cancel
-        </button>
+        </motion.button>
       </div>
     </form>
   )

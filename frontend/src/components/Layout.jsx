@@ -40,23 +40,25 @@ export default function Layout() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Collapsible Sidebar */}
+    <div className="min-h-screen bg-background-light dark:bg-background-dark overflow-x-hidden w-full max-w-full relative">
+      {/* Collapsible Sidebar - z-50 to be above main content */}
       <Sidebar />
 
       {/* Main Content - adjusts for sidebar width dynamically */}
+      {/* Z-index: 0 (default) ensures main content is below sidebar (z-50) */}
       <motion.main
         animate={{
           marginLeft: isMobile ? 0 : sidebarWidth,
+          width: isMobile ? '100%' : `calc(100% - ${sidebarWidth}px)`,
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="min-h-screen overflow-y-auto"
+        className="min-h-screen overflow-y-auto overflow-x-hidden box-border relative z-0"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+          className="w-full max-w-full px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 box-border"
         >
           <Outlet />
         </motion.div>

@@ -16,6 +16,9 @@ import Education from './pages/Education'
 import Settings from './pages/Settings'
 import AdvancedSafety from './pages/AdvancedSafety'
 import Wellness from './pages/Wellness'
+import Legal from './pages/Legal'
+import Community from './pages/Community'
+import Tech from './pages/Tech'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -51,6 +54,9 @@ function App() {
             <Route path="advanced-safety" element={<AdvancedSafety />} />
             <Route path="wellness" element={<Wellness />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="legal" element={<Legal />} />
+            <Route path="community" element={<Community />} />
+            <Route path="tech" element={<Tech />} />
           </Route>
           
           {/* Redirect root to landing */}

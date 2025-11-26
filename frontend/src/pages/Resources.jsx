@@ -297,35 +297,35 @@ export default function Resources() {
   }
 
   return (
-    <div className="space-y-6 pb-20 md:pb-8">
+    <div className="w-full max-w-full overflow-x-hidden box-border space-y-6 pb-20 md:pb-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl md:text-4xl font-poppins font-bold text-dark dark:text-white mb-2">
+        <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
           Resource Directory
         </h1>
-        <p className="text-light dark:text-light">
+        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
           Find support services and safe accommodations in your area
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex space-x-2 border-b border-light dark:border-light/30">
+      <div className="flex flex-wrap gap-2 border-b border-primary-light dark:border-primary/20 w-full max-w-full overflow-x-hidden">
         <button
           onClick={() => setActiveTab('resources')}
-          className={`px-6 py-3 font-poppins font-medium transition-all duration-200 border-b-2 ${
+          className={`px-4 sm:px-6 py-3 font-heading font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${
             activeTab === 'resources'
               ? 'border-primary text-primary'
-              : 'border-transparent text-light dark:text-light hover:text-dark dark:hover:text-white'
+              : 'border-transparent text-text-secondary dark:text-white/80 hover:text-text-main dark:hover:text-white'
           }`}
         >
           Support Services
         </button>
         <button
           onClick={() => setActiveTab('shelters')}
-          className={`px-6 py-3 font-poppins font-medium transition-all duration-200 border-b-2 ${
+          className={`px-4 sm:px-6 py-3 font-heading font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${
             activeTab === 'shelters'
               ? 'border-primary text-primary'
-              : 'border-transparent text-light dark:text-light hover:text-dark dark:hover:text-white'
+              : 'border-transparent text-text-secondary dark:text-white/80 hover:text-text-main dark:hover:text-white'
           }`}
         >
           <span className="flex items-center space-x-2">
@@ -347,33 +347,35 @@ export default function Resources() {
           >
             {/* Search */}
             <div className="relative mb-6">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-light w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-white/60 w-5 h-5" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search resources..."
-                className="w-full pl-12 pr-4 py-3 border border-light dark:border-light/30 rounded-xl bg-white dark:bg-dark text-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-inter"
+                className="w-full pl-12 pr-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary font-body transition-all duration-300"
               />
             </div>
 
             {/* Categories */}
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex flex-wrap gap-2 mb-6 w-full max-w-full overflow-x-hidden">
               {categories.map((category) => {
                 const Icon = category.icon
                 return (
-                  <button
+                  <motion.button
                     key={category.id}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`px-4 py-2 rounded-lg font-inter font-medium whitespace-nowrap transition-all duration-200 flex items-center space-x-2 ${
+                    className={`px-3 sm:px-4 py-2 rounded-lg font-body font-medium whitespace-nowrap transition-all duration-300 flex items-center space-x-2 flex-shrink-0 ${
                       selectedCategory === category.id
-                        ? 'bg-primary text-white shadow-lg'
-                        : 'bg-background dark:bg-dark/50 text-dark dark:text-light hover:bg-primaryLight/10 dark:hover:bg-dark'
+                        ? 'bg-primary text-white shadow-md'
+                        : 'bg-background-light dark:bg-background-dark text-text-main dark:text-white hover:bg-primary-light dark:hover:bg-primary border border-primary-light dark:border-primary/20'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span>{category.label}</span>
-                  </button>
+                    <Icon className="w-4 h-4 flex-shrink-0" />
+                    <span className="text-xs sm:text-sm">{category.label}</span>
+                  </motion.button>
                 )
               })}
             </div>
@@ -384,7 +386,7 @@ export default function Resources() {
                 <p className="text-light dark:text-light">No resources found</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {filteredResources.map((resource, index) => (
                   <motion.div
                     key={resource._id}
@@ -398,7 +400,7 @@ export default function Resources() {
                       <div
                         className={`px-3 py-1 rounded-lg bg-gradient-to-r ${
                           categoryColors[resource.category] || 'from-gray-500 to-gray-600'
-                        } text-white text-xs font-semibold capitalize font-inter`}
+                        } text-white text-xs font-semibold capitalize font-body`}
                       >
                         {resource.category}
                       </div>
@@ -407,16 +409,16 @@ export default function Resources() {
                       )}
                     </div>
 
-                    <h3 className="text-xl font-poppins font-semibold text-dark dark:text-white mb-2">
+                    <h3 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
                       {resource.title}
                     </h3>
-                    <p className="text-light dark:text-light text-sm mb-4 line-clamp-3 font-inter">
+                    <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80 mb-4 line-clamp-3">
                       {resource.description}
                     </p>
 
                     <div className="space-y-2">
                       {resource.contactInfo?.phone && (
-                        <div className="flex items-center text-sm text-dark dark:text-light font-inter">
+                        <div className="flex items-center text-sm font-body text-text-main dark:text-white">
                           <Phone className="w-4 h-4 mr-2 text-primary" />
                           <a
                             href={`tel:${resource.contactInfo.phone}`}
@@ -427,7 +429,7 @@ export default function Resources() {
                         </div>
                       )}
                       {resource.contactInfo?.email && (
-                        <div className="flex items-center text-sm text-dark dark:text-light font-inter">
+                        <div className="flex items-center text-sm font-body text-text-main dark:text-white">
                           <Mail className="w-4 h-4 mr-2 text-primary" />
                           <a
                             href={`mailto:${resource.contactInfo.email}`}
@@ -438,7 +440,7 @@ export default function Resources() {
                         </div>
                       )}
                       {resource.contactInfo?.website && (
-                        <div className="flex items-center text-sm text-dark dark:text-light font-inter">
+                        <div className="flex items-center text-sm font-body text-text-main dark:text-white">
                           <Globe className="w-4 h-4 mr-2 text-primary" />
                           <a
                             href={resource.contactInfo.website}
@@ -483,12 +485,12 @@ export default function Resources() {
                   value={shelterSearch}
                   onChange={(e) => setShelterSearch(e.target.value)}
                   placeholder="Search shelters by name, city, or address..."
-                  className="w-full pl-12 pr-4 py-3 border border-light dark:border-light/30 rounded-xl bg-white dark:bg-dark text-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-inter"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary font-body transition-all duration-300"
                 />
               </div>
 
               {/* Filter Row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {/* Country Filter */}
                 <div>
                   <label className="block text-sm font-poppins font-medium text-dark dark:text-white mb-2">
@@ -497,7 +499,7 @@ export default function Resources() {
                   <select
                     value={selectedCountry}
                     onChange={(e) => setSelectedCountry(e.target.value)}
-                    className="w-full px-4 py-2 border border-light dark:border-light/30 rounded-lg bg-white dark:bg-dark text-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
                     <option value="">All Countries</option>
                     {countries.map((country) => (
@@ -517,7 +519,7 @@ export default function Resources() {
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
                     disabled={!selectedCountry}
-                    className="w-full px-4 py-2 border border-light dark:border-light/30 rounded-lg bg-white dark:bg-dark text-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-primary font-inter disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">All Cities</option>
                     {cities.map((city) => (
@@ -536,7 +538,7 @@ export default function Resources() {
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="w-full px-4 py-2 border border-light dark:border-light/30 rounded-lg bg-white dark:bg-dark text-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
                     <option value="">All Types</option>
                     <option value="shelter">Shelter</option>
@@ -555,7 +557,7 @@ export default function Resources() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full px-4 py-2 border border-light dark:border-light/30 rounded-lg bg-white dark:bg-dark text-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
                     {sortOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -575,7 +577,7 @@ export default function Resources() {
                     onChange={(e) => setShowVerifiedOnly(e.target.checked)}
                     className="w-4 h-4 text-primary border-light rounded focus:ring-primary"
                   />
-                  <span className="text-sm font-inter text-dark dark:text-white">
+                  <span className="text-sm font-body text-text-main dark:text-white">
                     Verified shelters only
                   </span>
                 </label>
@@ -583,26 +585,30 @@ export default function Resources() {
                 {/* Location Button */}
                 <div className="flex items-center space-x-2">
                   {userLocation ? (
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={clearLocation}
-                      className="px-4 py-2 bg-success text-white rounded-lg font-inter text-sm hover:bg-success/80 transition-colors flex items-center space-x-2"
+                      className="px-4 py-2 rounded-lg bg-success text-white font-body text-sm hover:bg-success/80 transition-all duration-300 flex items-center space-x-2"
                     >
                       <Navigation className="w-4 h-4" />
                       <span>Using Location</span>
-                    </button>
+                    </motion.button>
                   ) : (
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={getCurrentLocation}
-                      className="px-4 py-2 bg-primary text-white rounded-lg font-inter text-sm hover:bg-primaryLight transition-colors flex items-center space-x-2"
+                      className="px-4 py-2 rounded-lg bg-primary text-white font-body text-sm hover:bg-primary-dark transition-all duration-300 flex items-center space-x-2"
                     >
                       <Navigation className="w-4 h-4" />
                       <span>Find Nearest</span>
-                    </button>
+                    </motion.button>
                   )}
                 </div>
 
                 {locationError && (
-                  <p className="text-sm text-error font-inter">{locationError}</p>
+                  <p className="text-sm font-body text-error">{locationError}</p>
                 )}
               </div>
             </div>
@@ -616,7 +622,7 @@ export default function Resources() {
               <>
                 {/* Results Count */}
                 <div className="mb-4">
-                  <p className="text-light dark:text-light font-inter">
+                  <p className="text-lg font-body text-text-secondary dark:text-white/80">
                     Found {filteredShelters.length} shelter{filteredShelters.length !== 1 ? 's' : ''}
                     {userLocation && ' (sorted by distance)'}
                   </p>
@@ -625,23 +631,23 @@ export default function Resources() {
                 {/* Shelters Grid */}
                 {filteredShelters.length === 0 ? (
                   <div className="text-center py-12">
-                    <Home className="w-16 h-16 text-light dark:text-light mx-auto mb-4" />
-                    <p className="text-light dark:text-light font-inter">
+                    <Home className="w-16 h-16 text-text-secondary dark:text-white/60 mx-auto mb-4" />
+                    <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
                       No shelters found. Try adjusting your filters.
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-full">
                     {filteredShelters.map((shelter, index) => {
                       const TypeIcon = shelterTypeIcons[shelter.type] || Home
                       return (
                         <motion.div
                           key={shelter._id}
-                          initial={{ opacity: 0, y: 20 }}
+                          initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
-                          whileHover={{ scale: 1.02 }}
-                          className="bg-white dark:bg-dark rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200 p-6 border border-light dark:border-light/30"
+                          whileHover={{ scale: 1.03 }}
+                          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
                         >
                           {/* Header */}
                           <div className="flex items-start justify-between mb-4">
@@ -651,7 +657,7 @@ export default function Resources() {
                               </div>
                               <div>
                                 <div className="flex items-center space-x-2">
-                                  <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-semibold rounded font-inter capitalize">
+                                  <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-semibold rounded font-body capitalize">
                                     {shelter.type}
                                   </span>
                                   {shelter.verified && (
@@ -663,15 +669,15 @@ export default function Resources() {
                           </div>
 
                           {/* Name */}
-                          <h3 className="text-xl font-poppins font-semibold text-dark dark:text-white mb-2">
+                          <h3 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
                             {shelter.name}
                           </h3>
 
                           {/* Location */}
                           <div className="flex items-start space-x-2 mb-3">
                             <MapPin className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                            <div className="text-sm text-light dark:text-light font-inter">
-                              <p className="font-medium text-dark dark:text-white">
+                            <div className="text-sm font-body text-text-secondary dark:text-white/80">
+                              <p className="font-medium text-text-main dark:text-white">
                                 {shelter.city}, {shelter.country}
                               </p>
                               {shelter.address && (
@@ -688,7 +694,7 @@ export default function Resources() {
                           {/* Contact Info */}
                           <div className="space-y-2 mb-3">
                             {shelter.contactInfo?.phone && (
-                              <div className="flex items-center text-sm text-dark dark:text-light font-inter">
+                              <div className="flex items-center text-sm font-body text-text-main dark:text-white">
                                 <Phone className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
                                 <a
                                   href={`tel:${shelter.contactInfo.phone}`}
@@ -699,7 +705,7 @@ export default function Resources() {
                               </div>
                             )}
                             {shelter.contactInfo?.email && (
-                              <div className="flex items-center text-sm text-dark dark:text-light font-inter">
+                              <div className="flex items-center text-sm font-body text-text-main dark:text-white">
                                 <Mail className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
                                 <a
                                   href={`mailto:${shelter.contactInfo.email}`}
@@ -710,7 +716,7 @@ export default function Resources() {
                               </div>
                             )}
                             {shelter.contactInfo?.website && (
-                              <div className="flex items-center text-sm text-dark dark:text-light font-inter">
+                              <div className="flex items-center text-sm font-body text-text-main dark:text-white">
                                 <Globe className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
                                 <a
                                   href={shelter.contactInfo.website}
@@ -725,21 +731,21 @@ export default function Resources() {
                           </div>
 
                           {/* Additional Info */}
-                          <div className="space-y-2 pt-3 border-t border-light dark:border-light/30">
+                          <div className="space-y-2 pt-3 border-t border-primary-light dark:border-primary/20">
                             {shelter.capacity && (
-                              <div className="flex items-center text-sm text-light dark:text-light font-inter">
+                              <div className="flex items-center text-sm font-body text-text-secondary dark:text-white/80">
                                 <Users className="w-4 h-4 mr-2 text-primary" />
                                 Capacity: {shelter.capacity} people
                               </div>
                             )}
                             {shelter.available24h && (
-                              <div className="flex items-center text-sm text-success font-inter">
+                              <div className="flex items-center text-sm font-body text-success">
                                 <Clock className="w-4 h-4 mr-2" />
                                 Available 24/7
                               </div>
                             )}
                             {shelter.notes && (
-                              <p className="text-sm text-light dark:text-light font-inter line-clamp-2">
+                              <p className="text-sm font-body text-text-secondary dark:text-white/80 line-clamp-2">
                                 {shelter.notes}
                               </p>
                             )}

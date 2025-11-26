@@ -102,27 +102,27 @@ export default function ConfirmEmail() {
 
   if (success && token) {
     return (
-      <div className="min-h-screen bg-background dark:bg-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-background-light dark:bg-background-dark flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white dark:bg-slate-800 rounded-2xl shadow-md p-6 md:p-10 border border-slate-200 dark:border-slate-700 max-w-md w-full text-center space-y-4"
+          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-4 sm:p-6 md:p-10 w-full max-w-md mx-4 box-border text-center space-y-4"
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 200 }}
-            className="inline-flex p-4 bg-success/20 dark:bg-success/20 rounded-full"
+            className="inline-flex p-4 bg-success/20 rounded-full"
           >
-            <CheckCircle className="w-16 h-16 text-success dark:text-success" />
+            <CheckCircle className="w-16 h-16 text-success" />
           </motion.div>
-          <h2 className="text-2xl font-poppins font-semibold text-text-dark dark:text-white">
+          <h2 className="text-2xl font-heading font-bold text-text-main dark:text-white">
             Email Confirmed!
           </h2>
-          <p className="font-inter text-text-light dark:text-slate-300">
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
             Your email has been successfully confirmed. You can now sign in to your Nchekwa_Afrika account.
           </p>
-          <p className="text-sm font-inter text-text-light dark:text-slate-400">
+          <p className="text-sm font-body text-text-secondary dark:text-white/70">
             Redirecting to login...
           </p>
         </motion.div>
@@ -131,18 +131,18 @@ export default function ConfirmEmail() {
   }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-slate-800 rounded-2xl shadow-md p-6 md:p-10 border border-slate-200 dark:border-slate-700 max-w-md w-full"
+        className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-4 sm:p-6 md:p-10 w-full max-w-md mx-4 box-border"
       >
         <div className="text-center mb-8">
           <NchekwaLogo size="w-20 h-20" />
-          <h1 className="text-3xl font-poppins font-semibold text-text-dark dark:text-white mt-4 mb-2">
+          <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mt-4 mb-2">
             Confirm Your Email
           </h1>
-          <p className="font-inter text-text-light dark:text-slate-300">
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
             {token ? 'Verifying your email...' : confirmationLink ? 'Development mode: Use the link below to confirm' : 'Please check your email for a confirmation link'}
           </p>
         </div>
@@ -150,13 +150,13 @@ export default function ConfirmEmail() {
         {loading ? (
           <div className="text-center py-8">
             <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-            <p className="font-inter text-text-light dark:text-slate-300">Verifying your email address...</p>
+            <p className="text-lg font-body text-text-secondary dark:text-white/80">Verifying your email address...</p>
           </div>
         ) : (
           <div className="space-y-6">
             {error && (
               <div className="p-4 bg-error/10 dark:bg-error/20 border border-error/30 dark:border-error/50 rounded-xl">
-                <p className="text-sm font-inter text-error dark:text-error flex items-center space-x-2">
+                <p className="text-sm font-body text-error dark:text-error flex items-center space-x-2">
                   <AlertCircle className="w-5 h-5" />
                   <span>{error}</span>
                 </p>
@@ -165,7 +165,7 @@ export default function ConfirmEmail() {
 
             {success && !token && (
               <div className="p-4 bg-success/10 dark:bg-success/20 border border-success/30 dark:border-success/50 rounded-xl">
-                <p className="text-sm font-inter text-success dark:text-success flex items-center space-x-2">
+                <p className="text-sm font-body text-success dark:text-success flex items-center space-x-2">
                   <CheckCircle className="w-5 h-5" />
                   <span>Confirmation email sent! Please check your inbox.</span>
                 </p>
@@ -248,7 +248,7 @@ export default function ConfirmEmail() {
               disabled={resending}
               whileHover={{ scale: resending ? 1 : 1.05 }}
               whileTap={{ scale: resending ? 1 : 0.98 }}
-              className="w-full py-4 bg-primary hover:bg-primary-light text-white rounded-xl font-inter font-semibold text-lg shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              className="w-full py-4 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {resending ? (
                 <>

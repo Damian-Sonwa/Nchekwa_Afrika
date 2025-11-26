@@ -85,6 +85,7 @@ app.use('/api/settings', require('./routes/settings'));
 app.use('/api/mood', require('./routes/mood'));
 app.use('/api/legal', require('./routes/legal'));
 app.use('/api/emotional-checkin', require('./routes/emotionalCheckin'));
+app.use('/api/community', require('./routes/community'));
 
 // Health check
 app.get('/health', (req, res) => {

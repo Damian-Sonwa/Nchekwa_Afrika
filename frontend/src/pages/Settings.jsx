@@ -341,20 +341,20 @@ export default function Settings() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-4"
+        className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg overflow-hidden mb-4"
       >
         <button
           onClick={() => setActiveSection(isOpen ? null : id)}
-          className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+          className="w-full px-6 py-4 flex items-center justify-between hover:bg-background-light dark:hover:bg-primary/10 transition-colors"
         >
           <div className="flex items-center space-x-3">
-            <Icon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
+            <Icon className="w-5 h-5 text-text-secondary dark:text-white/80" />
+            <h2 className="text-lg font-heading font-semibold text-text-main dark:text-white">{title}</h2>
           </div>
           {isOpen ? (
-            <ChevronUp className="w-5 h-5 text-gray-400" />
+            <ChevronUp className="w-5 h-5 text-text-secondary dark:text-white/80" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-gray-400" />
+            <ChevronDown className="w-5 h-5 text-text-secondary dark:text-white/80" />
           )}
         </button>
         
@@ -413,8 +413,10 @@ export default function Settings() {
     <div className="space-y-6 pb-20 md:pb-8 min-h-screen">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Settings & Preferences</h1>
-        <p className="text-gray-600 dark:text-gray-300">Manage your app preferences and privacy</p>
+        <div className="w-full max-w-full overflow-x-hidden box-border">
+          <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">Settings & Preferences</h1>
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Manage your app preferences and privacy</p>
+        </div>
       </div>
 
       {/* Message Banner */}

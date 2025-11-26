@@ -32,57 +32,61 @@ export default function AdvancedSafety() {
     <>
       <SilentEscapeScreen />
       
-      <div className="space-y-6 pb-24">
+      <div className="w-full max-w-full overflow-x-hidden box-border space-y-6 pb-24">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-2"
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white">
             Advanced Safety Features
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">Enhanced protection and emergency tools</p>
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Enhanced protection and emergency tools</p>
         </motion.div>
 
         {/* Silent Escape Mode */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <Eye className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-primary/10 rounded-lg">
+                <Eye className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Silent Escape Mode</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Instantly switch to a decoy screen</p>
+                <h2 className="text-3xl font-heading font-bold text-text-main dark:text-white">Silent Escape Mode</h2>
+                <p className="text-sm font-body text-text-secondary dark:text-white/80">Instantly switch to a decoy screen</p>
               </div>
             </div>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => activateEscape(decoyType)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 rounded-lg bg-primary text-white font-heading font-medium hover:bg-primary-dark transition-all duration-300"
             >
               Activate
-            </button>
+            </motion.button>
           </div>
           <div className="flex space-x-2">
             {['news', 'calculator', 'weather'].map((type) => (
-              <button
+              <motion.button
                 key={type}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setDecoyType(type)}
-                className={`px-3 py-1 rounded text-sm ${
+                className={`px-3 py-1 rounded-lg text-sm font-body transition-all duration-300 ${
                   decoyType === type
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-primary text-white'
+                    : 'bg-background-light dark:bg-background-dark text-text-main dark:text-white border border-primary-light dark:border-primary/20 hover:border-primary'
                 }`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
-              </button>
+              </motion.button>
             ))}
           </div>
-          <p className="mt-3 text-xs text-gray-500">
+          <p className="mt-3 text-xs font-body text-text-secondary dark:text-white/70">
             Triple tap anywhere or press Ctrl+Shift+E to activate
           </p>
         </motion.div>

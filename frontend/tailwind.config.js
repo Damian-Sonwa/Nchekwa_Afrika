@@ -7,25 +7,30 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        inter: ["Inter", "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
-      },
       colors: {
-        // Nchekwa_Afrika - Vibrant African-inspired color palette
-        primary: "#E63946",        // Vibrant coral red - energy and passion
-        primaryLight: "#F77F7F",  // Soft coral - warmth and comfort
-        accent: "#F4A261",         // Golden orange - sunshine and hope
-        accentLight: "#F9C784",    // Light golden - brightness
-        secondary: "#2A9D8F",      // Teal green - growth and healing
-        secondaryLight: "#4ECDC4", // Light teal - freshness
-        background: "#FFF8F0",     // Warm cream - soft and welcoming
-        dark: "#1A1A2E",           // Deep navy - depth and stability
-        light: "#6B7280",          // Soft gray - balanced text
-        success: "#10B981",        // Emerald green - growth and success
-        error: "#EF4444",          // Bright red - alert and attention
-        warning: "#F59E0B",        // Amber - caution and warmth
-        info: "#3B82F6",           // Sky blue - clarity and trust
+        primary: {
+          DEFAULT: "#2D9C8A",
+          light: "#A8E8DB",
+          dark: "#0B2F2A",
+        },
+        accent: "#56CFCB",
+        background: {
+          light: "#F4FBF9",
+          dark: "#0B2F2A",
+        },
+        text: {
+          main: "#07332F",
+          secondary: "#3E6D68",
+        },
+        // Keep utility colors for alerts/notifications
+        success: "#10B981",
+        error: "#EF4444",
+        warning: "#F59E0B",
+        info: "#3B82F6",
+      },
+      fontFamily: {
+        heading: ["Inter", "sans-serif"],
+        body: ["Inter", "sans-serif"],
       },
       borderRadius: {
         lg: "0.5rem",
@@ -53,6 +58,10 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
         },
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -60,6 +69,7 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         "slide-in": "slide-in 0.3s ease-out",
         "pulse-slow": "pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "float": "float 3s ease-in-out infinite",
       },
     },
   },

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { cn } from '../../lib/utils'
 
 /**
- * Reusable Button Component
+ * Reusable Button Component - Trauma-Informed Design
  * 
  * Usage:
  * <Button variant="primary" size="lg">Click Me</Button>
@@ -20,13 +20,13 @@ export default function Button({
   loading = false,
   ...props
 }) {
-  const baseStyles = 'font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed'
+  const baseStyles = 'font-heading font-semibold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2'
   
   const variants = {
-    primary: 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl',
-    secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-    outline: 'border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600',
-    danger: 'bg-red-500 text-white hover:bg-red-600 shadow-lg hover:shadow-xl',
+    primary: 'bg-primary text-white shadow-md hover:bg-primary-dark hover:shadow-lg focus:ring-accent dark:bg-primary dark:hover:bg-primary-dark',
+    secondary: 'bg-background-light text-text-main hover:bg-primary-light border border-primary-light dark:bg-background-dark dark:text-white dark:border-primary dark:hover:bg-primary',
+    outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white dark:border-primary-light dark:text-primary-light dark:hover:bg-primary dark:hover:text-white',
+    danger: 'bg-error text-white hover:bg-error/90 shadow-md hover:shadow-lg focus:ring-error',
   }
   
   const sizes = {
@@ -37,8 +37,8 @@ export default function Button({
 
   return (
     <motion.button
-      whileHover={!disabled && !loading ? { scale: 1.02 } : {}}
-      whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
+      whileHover={!disabled && !loading ? { scale: 1.03 } : {}}
+      whileTap={!disabled && !loading ? { scale: 0.97 } : {}}
       disabled={disabled || loading}
       className={cn(baseStyles, variants[variant], sizes[size], className)}
       {...props}
