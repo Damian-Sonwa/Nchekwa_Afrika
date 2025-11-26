@@ -55,13 +55,13 @@ export default function Onboarding() {
   const Icon = steps[currentStep].icon
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-background-dark dark:via-background-dark dark:to-background-dark flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       {/* Theme Toggle Button */}
       <motion.button
         onClick={toggleTheme}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed top-4 right-4 z-50 p-3 rounded-full bg-white/90 dark:bg-background-dark/90 backdrop-blur-md shadow-lg text-gray-700 dark:text-white hover:bg-white dark:hover:bg-primary/20 transition-colors"
+        className="fixed top-4 right-4 z-50 p-3 rounded-full bg-background/90 backdrop-blur-md shadow-lg text-text-main hover:bg-accent/10 transition-colors"
         title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       >
         {isDark ? (
@@ -76,7 +76,7 @@ export default function Onboarding() {
         animate={{ opacity: 1, scale: 1 }}
         className="max-w-2xl w-full"
       >
-        <div className="bg-white/80 dark:bg-background-dark/90 backdrop-blur-md rounded-2xl shadow-xl p-8 md:p-12 border border-gray-200 dark:border-primary/20">
+        <div className="bg-background/90 backdrop-blur-md rounded-2xl shadow-xl p-8 md:p-12 border border-accent/20">
           <motion.div
             key={currentStep}
             initial={{ opacity: 0, x: 50 }}
@@ -85,14 +85,14 @@ export default function Onboarding() {
             className="text-center"
           >
             <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${steps[currentStep].color} mb-6`}>
-              <Icon className="w-16 h-16 text-white" />
+              <Icon className="w-16 h-16 text-text-main" />
             </div>
             
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-text-main mb-4">
               {steps[currentStep].title}
             </h1>
             
-            <p className="text-lg text-gray-600 dark:text-white/90 mb-8 leading-relaxed">
+            <p className="text-lg text-gray-600 dark:text-text-main/90 mb-8 leading-relaxed">
               {steps[currentStep].description}
             </p>
           </motion.div>
@@ -117,13 +117,13 @@ export default function Onboarding() {
               <>
                 <button
                   onClick={handleSkip}
-                  className="px-6 py-3 text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
+                  className="px-6 py-3 text-gray-600 dark:text-text-main/80 hover:text-gray-900 dark:hover:text-text-main font-medium transition-colors"
                 >
                   Skip
                 </button>
                 <button
                   onClick={handleNext}
-                  className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                  className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-text-main rounded-lg font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105"
                 >
                   Next
                 </button>
@@ -131,7 +131,7 @@ export default function Onboarding() {
             ) : (
               <button
                 onClick={handleNext}
-                className="w-full px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                className="w-full px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-text-main rounded-lg font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105"
               >
                 Get Started
               </button>
