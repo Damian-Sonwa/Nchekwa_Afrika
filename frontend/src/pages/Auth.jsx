@@ -20,6 +20,16 @@ import { supabase } from '../lib/supabase'
  * - Smooth animations and transitions
  */
 
+// Get base URL based on environment
+const getBaseUrl = () => {
+  // Check if we're in development mode
+  if (import.meta.env.DEV) {
+    return 'http://localhost:3000'
+  }
+  // Production mode - use Vercel URL
+  return 'https://nchekwa-afrika.vercel.app'
+}
+
 export default function Auth() {
   const navigate = useNavigate()
   const { login: setAuth, setAnonymousId, isAuthenticated, logout } = useAuthStore()
@@ -250,11 +260,12 @@ export default function Auth() {
         }
       } else {
         // Signup with Supabase
+        const baseUrl = getBaseUrl()
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
-            emailRedirectTo: `${window.location.origin}/auth?verified=true`,
+            emailRedirectTo: `${baseUrl}/auth?verified=true`,
           }
         })
 
@@ -330,8 +341,9 @@ export default function Auth() {
     setMessage('')
     
     try {
+      const baseUrl = getBaseUrl()
       const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
-        redirectTo: `${window.location.origin}/auth?reset=true`,
+        redirectTo: `${baseUrl}/auth?reset=true`,
       })
 
       if (error) {
@@ -360,14 +372,20 @@ export default function Auth() {
     setMessage('')
     
     try {
+      // Get base URL based on environment
+      const baseUrl = getBaseUrl()
+      
       // Get redirect parameter from current URL query string
       const urlParams = new URLSearchParams(window.location.search)
       const redirectPath = urlParams.get('redirect') || ''
       
-      // Construct redirect URL with the redirect parameter preserved
+      // Construct redirect URL with environment-aware base URL and optional redirect parameter
       const redirectTo = redirectPath 
-        ? `${window.location.origin}/auth?oauth=true&redirect=${encodeURIComponent(redirectPath)}`
-        : `${window.location.origin}/auth?oauth=true`
+        ? `${baseUrl}/auth?oauth=true&redirect=${encodeURIComponent(redirectPath)}`
+        : `${baseUrl}/auth?oauth=true`
+      
+      console.log('🔐 OAuth redirect URL:', redirectTo)
+      console.log('🌍 Environment:', import.meta.env.DEV ? 'Development' : 'Production')
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: provider === 'apple' ? 'apple' : 'google',
@@ -377,6 +395,7 @@ export default function Auth() {
       })
 
       if (error) {
+        console.error('OAuth error:', error)
         setErrors({ 
           submit: `Unable to sign in with ${provider}. Please try again.` 
         })
