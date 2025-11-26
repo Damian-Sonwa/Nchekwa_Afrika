@@ -388,7 +388,7 @@ export default function UserDetails() {
                 Age <span className="text-error">*</span>
               </label>
               <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light" />
+                <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light dark:text-white/60" />
                 <input
                   id="age"
                   type="number"
@@ -434,7 +434,7 @@ export default function UserDetails() {
                     className={`p-3 rounded-xl border-2 transition-all font-inter ${
                       formData.sex === option.value
                         ? 'border-primary bg-primaryLight/20 text-primary dark:text-primaryLight'
-                        : 'border-light dark:border-light/30 hover:border-primaryLight dark:hover:border-primaryLight text-dark dark:text-light'
+                        : 'border-light dark:border-light/30 hover:border-primaryLight dark:hover:border-primaryLight text-dark dark:text-white'
                     }`}
                   >
                     {option.label}
@@ -467,7 +467,7 @@ export default function UserDetails() {
                     className={`p-3 rounded-xl border-2 transition-all font-inter ${
                       formData.maritalStatus === option.value
                         ? 'border-primary bg-primaryLight/20 text-primary dark:text-primaryLight'
-                        : 'border-light dark:border-light/30 hover:border-primaryLight dark:hover:border-primaryLight text-dark dark:text-light'
+                        : 'border-light dark:border-light/30 hover:border-primaryLight dark:hover:border-primaryLight text-dark dark:text-white'
                     }`}
                   >
                     {option.label}
@@ -489,7 +489,7 @@ export default function UserDetails() {
                 Country <span className="text-error">*</span>
               </label>
               <div className="relative">
-                <Globe className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light" />
+                <Globe className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light dark:text-white/60" />
                 <select
                   id="country"
                   value={formData.country}
@@ -559,7 +559,7 @@ export default function UserDetails() {
                 type="button"
                 onClick={handleSkip}
                 disabled={loading}
-                className="px-6 py-4 border-2 border-light dark:border-light/30 text-dark dark:text-light rounded-xl font-inter font-medium hover:bg-background dark:hover:bg-dark/50 transition-colors disabled:opacity-50"
+                className="px-6 py-4 border-2 border-light dark:border-light/30 text-dark dark:text-white rounded-xl font-inter font-medium hover:bg-background dark:hover:bg-dark/50 transition-colors disabled:opacity-50"
               >
                 Skip for now
               </button>

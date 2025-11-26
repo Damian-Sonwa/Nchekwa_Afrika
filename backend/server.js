@@ -149,28 +149,23 @@ const server = app.listen(PORT, () => {
 });
 
 // Socket.IO for real-time chat
+// Socket.IO CORS configuration - use array format for better compatibility
+const socketIOOrigins = allowedOrigins.includes('*') 
+  ? '*' 
+  : allowedOrigins.length > 0 
+    ? allowedOrigins 
+    : '*';
+
+console.log('🔌 Socket.IO allowed origins:', socketIOOrigins);
+
 const io = require('socket.io')(server, {
   cors: {
-    origin: function(origin, callback) {
-      // Allow requests with no origin
-      if (!origin) return callback(null, true);
-      
-      // If ALLOWED_ORIGINS is set to '*', allow all origins
-      if (allowedOrigins.includes('*')) {
-        return callback(null, true);
-      }
-      
-      // Check if origin is in allowed list
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.warn('⚠️  Blocked Socket.IO CORS request from origin:', origin);
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: socketIOOrigins,
     methods: ['GET', 'POST'],
-    credentials: true
-  }
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+  },
+  allowEIO3: true // Allow Engine.IO v3 clients for better compatibility
 });
 
 // Socket.IO connection handling
