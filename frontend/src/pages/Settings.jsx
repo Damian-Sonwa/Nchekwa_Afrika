@@ -345,16 +345,16 @@ export default function Settings() {
       >
         <button
           onClick={() => setActiveSection(isOpen ? null : id)}
-          className="w-full px-6 py-4 flex items-center justify-between hover:bg-background-light dark:hover:bg-primary/10 transition-colors"
+          className="w-full px-6 py-4 flex items-center justify-between hover:bg-background-light dark:hover:bg-accent/10 transition-colors"
         >
           <div className="flex items-center space-x-3">
-            <Icon className="w-5 h-5 text-text-secondary dark:text-white/80" />
-            <h2 className="text-lg font-heading font-semibold text-text-main dark:text-white">{title}</h2>
+            <Icon className="w-5 h-5 text-text-secondary" />
+            <h2 className="text-lg font-heading font-semibold text-text-main">{title}</h2>
           </div>
           {isOpen ? (
-            <ChevronUp className="w-5 h-5 text-text-secondary dark:text-white/80" />
+            <ChevronUp className="w-5 h-5 text-text-secondary" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-text-secondary dark:text-white/80" />
+            <ChevronDown className="w-5 h-5 text-text-secondary" />
           )}
         </button>
         
@@ -381,7 +381,7 @@ export default function Settings() {
   const ToggleSwitch = ({ enabled, onToggle, label, description }) => (
     <div className="flex items-center justify-between py-3">
       <div className="flex-1">
-        <p className="font-medium text-gray-900 dark:text-white">{label}</p>
+        <p className="font-medium text-gray-900 dark:text-text-main">{label}</p>
         {description && (
           <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
         )}
@@ -414,8 +414,8 @@ export default function Settings() {
       {/* Header */}
       <div>
         <div className="w-full max-w-full overflow-x-hidden box-border">
-          <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">Settings & Preferences</h1>
-          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Manage your app preferences and privacy</p>
+          <h1 className="text-3xl font-heading font-bold text-text-main mb-2">Settings & Preferences</h1>
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">Manage your app preferences and privacy</p>
         </div>
       </div>
 
@@ -445,7 +445,7 @@ export default function Settings() {
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm text-gray-500 dark:text-gray-400">Name</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{accountInfo.name || 'Not set'}</p>
+                  <p className="font-medium text-gray-900 dark:text-text-main">{accountInfo.name || 'Not set'}</p>
                 </div>
                 <button
                   onClick={() => setEditingAccount(true)}
@@ -457,19 +457,19 @@ export default function Settings() {
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Age</p>
-                <p className="font-medium text-gray-900 dark:text-white">{accountInfo.age || 'Not set'}</p>
+                <p className="font-medium text-gray-900 dark:text-text-main">{accountInfo.age || 'Not set'}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Sex</p>
-                <p className="font-medium text-gray-900 dark:text-white">{accountInfo.sex || 'Not set'}</p>
+                <p className="font-medium text-gray-900 dark:text-text-main">{accountInfo.sex || 'Not set'}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Marital Status</p>
-                <p className="font-medium text-gray-900 dark:text-white">{accountInfo.maritalStatus || 'Not set'}</p>
+                <p className="font-medium text-gray-900 dark:text-text-main">{accountInfo.maritalStatus || 'Not set'}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Country</p>
-                <p className="font-medium text-gray-900 dark:text-white">{accountInfo.country || 'Not set'}</p>
+                <p className="font-medium text-gray-900 dark:text-text-main">{accountInfo.country || 'Not set'}</p>
               </div>
             </div>
           ) : (
@@ -480,7 +480,7 @@ export default function Settings() {
                   type="text"
                   value={accountInfo.name}
                   onChange={(e) => setAccountInfo({ ...accountInfo, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
               </div>
               <div>
@@ -489,7 +489,7 @@ export default function Settings() {
                   type="number"
                   value={accountInfo.age}
                   onChange={(e) => setAccountInfo({ ...accountInfo, age: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
               </div>
               <div>
@@ -497,13 +497,13 @@ export default function Settings() {
                 <select
                   value={accountInfo.sex}
                   onChange={(e) => setAccountInfo({ ...accountInfo, sex: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 >
-                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Select...</option>
-                  <option value="female" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Female</option>
-                  <option value="male" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Male</option>
-                  <option value="other" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Other</option>
-                  <option value="prefer-not-to-say" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Prefer not to say</option>
+                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Select...</option>
+                  <option value="female" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Female</option>
+                  <option value="male" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Male</option>
+                  <option value="other" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Other</option>
+                  <option value="prefer-not-to-say" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Prefer not to say</option>
                 </select>
               </div>
               <div>
@@ -511,15 +511,15 @@ export default function Settings() {
                 <select
                   value={accountInfo.maritalStatus}
                   onChange={(e) => setAccountInfo({ ...accountInfo, maritalStatus: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 >
-                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Select...</option>
-                  <option value="single" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Single</option>
-                  <option value="married" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Married</option>
-                  <option value="divorced" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Divorced</option>
-                  <option value="widowed" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Widowed</option>
-                  <option value="separated" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Separated</option>
-                  <option value="prefer-not-to-say" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Prefer not to say</option>
+                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Select...</option>
+                  <option value="single" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Single</option>
+                  <option value="married" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Married</option>
+                  <option value="divorced" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Divorced</option>
+                  <option value="widowed" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Widowed</option>
+                  <option value="separated" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Separated</option>
+                  <option value="prefer-not-to-say" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Prefer not to say</option>
                 </select>
               </div>
               <div>
@@ -528,14 +528,14 @@ export default function Settings() {
                   type="text"
                   value={accountInfo.country}
                   onChange={(e) => setAccountInfo({ ...accountInfo, country: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
               </div>
               <div className="flex space-x-2">
                 <button
                   onClick={handleSaveAccountInfo}
                   disabled={saving}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50 flex items-center space-x-2"
+                  className="px-4 py-2 bg-blue-500 text-text-main rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50 flex items-center space-x-2"
                 >
                   <Save className="w-4 h-4" />
                   <span>{saving ? 'Saving...' : 'Save'}</span>
@@ -563,7 +563,7 @@ export default function Settings() {
           <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <p className="font-medium text-gray-900 dark:text-white">Password</p>
+                <p className="font-medium text-gray-900 dark:text-text-main">Password</p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Change your account password</p>
               </div>
               <button
@@ -584,21 +584,21 @@ export default function Settings() {
                   placeholder="Current password"
                   value={passwordForm.currentPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="New password"
                   value={passwordForm.newPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Confirm new password"
                   value={passwordForm.confirmPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
                 <div className="flex items-center space-x-2">
                   <button
@@ -612,7 +612,7 @@ export default function Settings() {
                 <button
                   onClick={handleChangePassword}
                   disabled={saving}
-                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50"
+                  className="w-full px-4 py-2 bg-blue-500 text-text-main rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50"
                 >
                   {saving ? 'Changing...' : 'Change Password'}
                 </button>
@@ -624,7 +624,7 @@ export default function Settings() {
           <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <p className="font-medium text-gray-900 dark:text-white">App PIN</p>
+                <p className="font-medium text-gray-900 dark:text-text-main">App PIN</p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {hasPin ? 'Change your app PIN' : 'Set a PIN to lock the app'}
                 </p>
@@ -649,7 +649,7 @@ export default function Settings() {
                     value={pinForm.currentPin}
                     onChange={(e) => setPinForm({ ...pinForm, currentPin: e.target.value })}
                     maxLength={6}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                   />
                 )}
                 <input
@@ -658,7 +658,7 @@ export default function Settings() {
                   value={pinForm.newPin}
                   onChange={(e) => setPinForm({ ...pinForm, newPin: e.target.value.replace(/\D/g, '') })}
                   maxLength={6}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
                 <input
                   type="password"
@@ -666,12 +666,12 @@ export default function Settings() {
                   value={pinForm.confirmPin}
                   onChange={(e) => setPinForm({ ...pinForm, confirmPin: e.target.value.replace(/\D/g, '') })}
                   maxLength={6}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
                 <button
                   onClick={handleSetPin}
                   disabled={saving}
-                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50"
+                  className="w-full px-4 py-2 bg-blue-500 text-text-main rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50"
                 >
                   {saving ? 'Setting...' : hasPin ? 'Update PIN' : 'Set PIN'}
                 </button>
@@ -737,12 +737,12 @@ export default function Settings() {
       <CollapsibleSection id="sos" title="SOS Configuration" icon={AlertCircle}>
         <div className="space-y-4">
           <div>
-            <p className="font-medium text-gray-900 dark:text-white mb-3">Trusted Contacts</p>
+            <p className="font-medium text-gray-900 dark:text-text-main mb-3">Trusted Contacts</p>
             <div className="space-y-2 mb-3">
               {sosConfig.trustedContacts.map((contact, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{contact.name}</p>
+                    <p className="font-medium text-gray-900 dark:text-text-main">{contact.name}</p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{contact.phone}</p>
                     {contact.relationship && (
                       <p className="text-xs text-gray-400">{contact.relationship}</p>
@@ -763,32 +763,32 @@ export default function Settings() {
                 placeholder="Contact name"
                 value={newContact.name}
                 onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white mb-2"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-text-main mb-2"
               />
               <input
                 type="tel"
                 placeholder="Phone number"
                 value={newContact.phone}
                 onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white mb-2"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-text-main mb-2"
               />
               <input
                 type="email"
                 placeholder="Email (optional)"
                 value={newContact.email}
                 onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white mb-2"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-text-main mb-2"
               />
               <input
                 type="text"
                 placeholder="Relationship (optional)"
                 value={newContact.relationship}
                 onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white mb-2"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-text-main mb-2"
               />
               <button
                 onClick={handleAddContact}
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 flex items-center justify-center space-x-2"
+                className="w-full px-4 py-2 bg-blue-500 text-text-main rounded-lg font-medium hover:bg-blue-600 flex items-center justify-center space-x-2"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Contact</span>
@@ -797,7 +797,7 @@ export default function Settings() {
           </div>
           
           <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <p className="font-medium text-gray-900 dark:text-white mb-3">Alert Options</p>
+            <p className="font-medium text-gray-900 dark:text-text-main mb-3">Alert Options</p>
             <ToggleSwitch
               enabled={sosConfig.alertOptions.sendLocation}
               onToggle={() => {
@@ -849,11 +849,11 @@ export default function Settings() {
                 setEvidenceExport({ ...evidenceExport, defaultFormat: e.target.value })
                 saveSettings('Evidence export')
               }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
             >
-              <option value="zip" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">ZIP Archive</option>
-              <option value="pdf" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">PDF Document</option>
-              <option value="json" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">JSON File</option>
+              <option value="zip" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">ZIP Archive</option>
+              <option value="pdf" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">PDF Document</option>
+              <option value="json" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">JSON File</option>
             </select>
           </div>
           <ToggleSwitch
@@ -899,7 +899,7 @@ export default function Settings() {
                   setMoodTracker({ ...moodTracker, reminderTime: e.target.value })
                   saveSettings('Mood tracker')
                 }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
               />
             </div>
           )}
@@ -941,7 +941,7 @@ export default function Settings() {
                   setLegalReminders({ ...legalReminders, advanceDays: parseInt(e.target.value) })
                   saveSettings('Legal reminders')
                 }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
               />
             </div>
           )}
@@ -964,7 +964,7 @@ export default function Settings() {
                 setGroundingExercises({ ...groundingExercises, defaultDuration: parseInt(e.target.value) })
                 saveSettings('Grounding exercises')
               }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
             />
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -1019,12 +1019,12 @@ export default function Settings() {
                     setWearable({ ...wearable, deviceType: e.target.value })
                     saveSettings('Wearable integration')
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 >
-                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Select device...</option>
-                  <option value="smartwatch" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Smartwatch</option>
-                  <option value="fitness-tracker" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Fitness Tracker</option>
-                  <option value="panic-button" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Panic Button</option>
+                  <option value="" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Select device...</option>
+                  <option value="smartwatch" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Smartwatch</option>
+                  <option value="fitness-tracker" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Fitness Tracker</option>
+                  <option value="panic-button" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main">Panic Button</option>
                   <option value="other">Other</option>
                 </select>
               </div>
@@ -1038,7 +1038,7 @@ export default function Settings() {
                     setWearable({ ...wearable, deviceId: e.target.value })
                     saveSettings('Wearable integration')
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
                 />
               </div>
               <ToggleSwitch
@@ -1066,7 +1066,7 @@ export default function Settings() {
                 setLanguage(e.target.value)
                 saveSettings('Language')
               }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-text-main"
             >
               <option value="en">English</option>
               <option value="es">Spanish (Coming soon)</option>
@@ -1080,22 +1080,22 @@ export default function Settings() {
       <CollapsibleSection id="about" title="About & Help" icon={Info}>
         <div className="space-y-4">
           <div>
-            <p className="font-medium text-gray-900 dark:text-white mb-1">App Version</p>
+            <p className="font-medium text-gray-900 dark:text-text-main mb-1">App Version</p>
             <p className="text-sm text-gray-500 dark:text-gray-400">1.0.0</p>
           </div>
           <button
             onClick={() => alert('Privacy policy content...')}
             className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
           >
-            <Shield className="w-5 h-5 inline mr-2 text-gray-500 dark:text-white/60" />
-            <span className="font-medium text-gray-900 dark:text-white">Privacy Policy</span>
+            <Shield className="w-5 h-5 inline mr-2 text-gray-500 dark:text-text-main/60" />
+            <span className="font-medium text-gray-900 dark:text-text-main">Privacy Policy</span>
           </button>
           <button
             onClick={() => alert('Help content...')}
             className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
           >
-            <HelpCircle className="w-5 h-5 inline mr-2 text-gray-500 dark:text-white/60" />
-            <span className="font-medium text-gray-900 dark:text-white">Help & Support</span>
+            <HelpCircle className="w-5 h-5 inline mr-2 text-gray-500 dark:text-text-main/60" />
+            <span className="font-medium text-gray-900 dark:text-text-main">Help & Support</span>
           </button>
         </div>
       </CollapsibleSection>
@@ -1112,12 +1112,12 @@ export default function Settings() {
                 navigate('/auth', { replace: true }) // Redirect to login page
               }
             }}
-            className="w-full text-left px-4 py-3 bg-primary/10 dark:bg-primary/20 border-2 border-primary/30 dark:border-primary/50 rounded-lg hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors flex items-center space-x-3"
+            className="w-full text-left px-4 py-3 bg-accent/10 dark:bg-accent/20 border-2 border-primary/30 dark:border-primary/50 rounded-lg hover:bg-accent/20 dark:hover:bg-accent/30 transition-colors flex items-center space-x-3"
           >
-            <LogOut className="w-5 h-5 text-primary" />
+            <LogOut className="w-5 h-5 text-accent" />
             <div>
-              <p className="font-medium text-primary dark:text-primary">Sign Out</p>
-              <p className="text-sm text-primary/70 dark:text-primary/70">Log out and return to login page</p>
+              <p className="font-medium text-accent dark:text-accent">Sign Out</p>
+              <p className="text-sm text-accent/70 dark:text-accent/70">Log out and return to login page</p>
             </div>
           </button>
         </div>
