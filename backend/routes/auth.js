@@ -271,9 +271,16 @@ router.post('/forgot-password', async (req, res) => {
     
     // Send password reset email
     try {
-      await sendPasswordResetEmail(email, resetLink, resetToken);
+      const emailSent = await sendPasswordResetEmail(email, resetLink, resetToken);
+      if (!emailSent) {
+        console.error('⚠️  Email service returned false - email may not have been sent');
+      } else {
+        console.log('✅ Password reset email sent successfully');
+      }
     } catch (emailError) {
-      console.error('⚠️  Failed to send password reset email:', emailError);
+      console.error('❌ Failed to send password reset email:', emailError);
+      console.error('❌ Error message:', emailError.message);
+      console.error('❌ Error stack:', emailError.stack);
       // Continue anyway - link is still returned in response for development
     }
 
@@ -474,9 +481,16 @@ router.post('/resend-confirmation', async (req, res) => {
     
     // Send confirmation email
     try {
-      await sendConfirmationEmail(email, confirmationLink, confirmationToken);
+      const emailSent = await sendConfirmationEmail(email, confirmationLink, confirmationToken);
+      if (!emailSent) {
+        console.error('⚠️  Email service returned false - email may not have been sent');
+      } else {
+        console.log('✅ Confirmation email sent successfully');
+      }
     } catch (emailError) {
-      console.error('⚠️  Failed to send confirmation email:', emailError);
+      console.error('❌ Failed to send confirmation email:', emailError);
+      console.error('❌ Error message:', emailError.message);
+      console.error('❌ Error stack:', emailError.stack);
       // Continue anyway - link is still returned in response
     }
 
@@ -535,10 +549,17 @@ router.post('/register', async (req, res) => {
       
       // Send confirmation email
       try {
-        await sendConfirmationEmail(email, confirmationLink, confirmationToken);
+        const emailSent = await sendConfirmationEmail(email, confirmationLink, confirmationToken);
+        if (!emailSent) {
+          console.error('⚠️  Email service returned false - email may not have been sent');
+        } else {
+          console.log('✅ Confirmation email sent successfully');
+        }
       } catch (emailError) {
-        console.error('⚠️  Failed to send confirmation email:', emailError);
-        // Continue anyway - link is still returned in response
+        console.error('❌ Failed to send confirmation email:', emailError);
+        console.error('❌ Error message:', emailError.message);
+        console.error('❌ Error stack:', emailError.stack);
+        // Continue anyway - link is still returned in response for development
       }
       
       const token = existingUser.anonymousId; // In production, use JWT here
@@ -580,9 +601,16 @@ router.post('/register', async (req, res) => {
     
     // Send confirmation email
     try {
-      await sendConfirmationEmail(email, confirmationLink, confirmationToken);
+      const emailSent = await sendConfirmationEmail(email, confirmationLink, confirmationToken);
+      if (!emailSent) {
+        console.error('⚠️  Email service returned false - email may not have been sent');
+      } else {
+        console.log('✅ Confirmation email sent successfully');
+      }
     } catch (emailError) {
-      console.error('⚠️  Failed to send confirmation email:', emailError);
+      console.error('❌ Failed to send confirmation email:', emailError);
+      console.error('❌ Error message:', emailError.message);
+      console.error('❌ Error stack:', emailError.stack);
       // Continue anyway - link is still returned in response
     }
     
@@ -604,6 +632,68 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'An account with this email already exists. Please try logging in instead.' });
     }
     res.status(500).json({ error: 'Failed to create account' });
+  }
+});
+
+// Test Email Configuration Endpoint
+router.get('/test-email', async (req, res) => {
+  try {
+    const emailProvider = process.env.EMAIL_PROVIDER || 'console';
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const emailFrom = process.env.EMAIL_FROM;
+    const frontendUrl = process.env.FRONTEND_URL;
+    
+    const config = {
+      emailProvider,
+      hasResendApiKey: !!resendApiKey,
+      resendApiKeyLength: resendApiKey ? resendApiKey.length : 0,
+      emailFrom,
+      frontendUrl,
+      smtpHost: process.env.SMTP_HOST,
+      smtpPort: process.env.SMTP_PORT,
+      smtpUser: process.env.SMTP_USER,
+      hasSmtpPassword: !!process.env.SMTP_PASSWORD,
+    };
+    
+    // Try to send a test email if email is provided
+    const { testEmail } = req.query;
+    if (testEmail) {
+      const testLink = `${frontendUrl || 'http://localhost:3001'}/test`;
+      const testToken = 'test-token-123';
+      
+      try {
+        console.log('🧪 Testing email send to:', testEmail);
+        const result = await sendConfirmationEmail(testEmail, testLink, testToken);
+        config.testEmailSent = result;
+        config.testEmail = testEmail;
+      } catch (error) {
+        config.testEmailError = error.message;
+        config.testEmailStack = error.stack;
+      }
+    }
+    
+    res.json({
+      success: true,
+      message: 'Email configuration check',
+      config,
+      instructions: {
+        setup: 'To enable email sending, set the following environment variables in Render:',
+        resend: [
+          'EMAIL_PROVIDER=resend',
+          'RESEND_API_KEY=re_xxxxxxxxxxxxx',
+          'EMAIL_FROM=noreply@yourdomain.com (or onboarding@resend.dev for testing)',
+          'FRONTEND_URL=https://your-frontend-url.vercel.app'
+        ],
+        test: 'Add ?testEmail=your@email.com to this URL to test email sending'
+      }
+    });
+  } catch (error) {
+    console.error('Test email endpoint error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to check email configuration',
+      message: error.message
+    });
   }
 });
 

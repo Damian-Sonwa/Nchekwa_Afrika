@@ -29,18 +29,30 @@ async function sendConfirmationEmail(email, confirmationLink, confirmationToken)
     return await sendViaConsole(email, confirmationLink, confirmationToken);
   }
   
+  // Check which email service is configured
+  const emailProvider = process.env.EMAIL_PROVIDER || 'console';
+  console.log(`📧 Email Provider: ${emailProvider}`);
+  console.log(`📧 Sending confirmation email to: ${email}`);
+  console.log(`📧 FRONTEND_URL: ${process.env.FRONTEND_URL || 'NOT SET'}`);
+  console.log(`📧 EMAIL_FROM: ${process.env.EMAIL_FROM || 'NOT SET'}`);
+  
   try {
-    // Check which email service is configured
-    const emailProvider = process.env.EMAIL_PROVIDER || 'console';
-    console.log(`📧 Email Provider: ${emailProvider}`);
-    console.log(`📧 Sending confirmation email to: ${email}`);
-    
     switch (emailProvider.toLowerCase()) {
       case 'resend':
-        return await sendViaResend(email, confirmationLink, confirmationToken);
+        const resendResult = await sendViaResend(email, confirmationLink, confirmationToken);
+        if (!resendResult) {
+          console.error('❌ Resend returned false - email was not sent');
+          throw new Error('Resend email sending failed');
+        }
+        return resendResult;
       case 'nodemailer':
       case 'smtp':
-        return await sendViaNodemailer(email, confirmationLink, confirmationToken);
+        const nodemailerResult = await sendViaNodemailer(email, confirmationLink, confirmationToken);
+        if (!nodemailerResult) {
+          console.error('❌ Nodemailer returned false - email was not sent');
+          throw new Error('Nodemailer email sending failed');
+        }
+        return nodemailerResult;
       case 'console':
       default:
         console.log('💡 Using console mode - emails will be logged only. Set EMAIL_PROVIDER to "resend" or "nodemailer" to send actual emails.');
@@ -48,9 +60,10 @@ async function sendConfirmationEmail(email, confirmationLink, confirmationToken)
     }
   } catch (error) {
     console.error('❌ Email service error:', error);
-    console.error('❌ Error details:', error.message);
-    // Fallback to console in case of error
-    return await sendViaConsole(email, confirmationLink, confirmationToken);
+    console.error('❌ Error message:', error.message);
+    console.error('❌ Error stack:', error.stack);
+    // Re-throw the error so the calling code knows it failed
+    throw error;
   }
 }
 
@@ -235,24 +248,40 @@ async function sendPasswordResetEmail(email, resetLink, resetToken) {
     return await sendPasswordResetViaConsole(email, resetLink, resetToken);
   }
   
+  // Check which email service is configured
+  const emailProvider = process.env.EMAIL_PROVIDER || 'console';
+  console.log(`📧 Email Provider: ${emailProvider}`);
+  console.log(`📧 Sending password reset email to: ${email}`);
+  console.log(`📧 FRONTEND_URL: ${process.env.FRONTEND_URL || 'NOT SET'}`);
+  console.log(`📧 EMAIL_FROM: ${process.env.EMAIL_FROM || 'NOT SET'}`);
+  
   try {
-    // Check which email service is configured
-    const emailProvider = process.env.EMAIL_PROVIDER || 'console';
-    
     switch (emailProvider.toLowerCase()) {
       case 'resend':
-        return await sendPasswordResetViaResend(email, resetLink, resetToken);
+        const resendResult = await sendPasswordResetViaResend(email, resetLink, resetToken);
+        if (!resendResult) {
+          console.error('❌ Resend returned false - email was not sent');
+          throw new Error('Resend email sending failed');
+        }
+        return resendResult;
       case 'nodemailer':
       case 'smtp':
-        return await sendPasswordResetViaNodemailer(email, resetLink, resetToken);
+        const nodemailerResult = await sendPasswordResetViaNodemailer(email, resetLink, resetToken);
+        if (!nodemailerResult) {
+          console.error('❌ Nodemailer returned false - email was not sent');
+          throw new Error('Nodemailer email sending failed');
+        }
+        return nodemailerResult;
       case 'console':
       default:
         return await sendPasswordResetViaConsole(email, resetLink, resetToken);
     }
   } catch (error) {
     console.error('❌ Email service error:', error);
-    // Fallback to console in case of error
-    return await sendPasswordResetViaConsole(email, resetLink, resetToken);
+    console.error('❌ Error message:', error.message);
+    console.error('❌ Error stack:', error.stack);
+    // Re-throw the error so the calling code knows it failed
+    throw error;
   }
 }
 
