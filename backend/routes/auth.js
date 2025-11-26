@@ -309,7 +309,44 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
-// Confirm Email
+// Confirm Email (supports both GET with query param and POST with body)
+router.get('/confirm-email', async (req, res) => {
+  try {
+    const { token } = req.query;
+
+    if (!token) {
+      return res.status(400).json({ error: 'Confirmation token is required' });
+    }
+
+    // Find user with matching confirmation token
+    // In production, use a proper EmailConfirmation model
+    const users = await User.find({ 'settings.emailConfirmationToken': token });
+    const user = users.find(u => {
+      const expiry = u.settings?.emailConfirmationExpiry;
+      return expiry && new Date(expiry) > new Date();
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid or expired confirmation token' });
+    }
+
+    // Mark email as confirmed
+    user.settings.emailConfirmed = true;
+    user.settings.emailConfirmationToken = undefined;
+    user.settings.emailConfirmationExpiry = undefined;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Email confirmed successfully'
+    });
+  } catch (error) {
+    console.error('Confirm email error:', error);
+    res.status(500).json({ error: 'Failed to confirm email' });
+  }
+});
+
+// Confirm Email (POST - token in body)
 router.post('/confirm-email', async (req, res) => {
   try {
     const { token } = req.body;
