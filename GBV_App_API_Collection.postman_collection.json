@@ -1,0 +1,1743 @@
+{
+	"info": {
+		"_postman_id": "gbv-app-api-collection",
+		"name": "GBV App - Complete API Collection",
+		"description": "Complete RESTful API collection for the GBV (Gender-Based Violence) App. Includes all endpoints for authentication, SOS, chat, resources, shelters, safety plans, evidence, mood tracking, and more.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "gbv-app"
+	},
+	"item": [
+		{
+			"name": "Base URLs",
+			"item": [
+				{
+					"name": "Production",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://nchekwa-afrika.onrender.com/api",
+							"protocol": "https",
+							"host": [
+								"nchekwa-afrika",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api"
+							]
+						},
+						"description": "Production API base URL"
+					}
+				},
+				{
+					"name": "Local Development",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api"
+							]
+						},
+						"description": "Local development API base URL"
+					}
+				}
+			],
+			"description": "Base URLs for different environments"
+		},
+		{
+			"name": "Health & Info",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					}
+				},
+				{
+					"name": "API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api"
+							]
+						}
+					}
+				},
+				{
+					"name": "Auth Endpoints List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Create Anonymous Session",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"deviceId\": \"optional-device-id\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/anonymous",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"anonymous"
+							]
+						}
+					}
+				},
+				{
+					"name": "Set PIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"pin\": \"1234\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/set-pin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"set-pin"
+							]
+						}
+					}
+				},
+				{
+					"name": "Verify PIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"pin\": \"1234\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/verify-pin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verify-pin"
+							]
+						}
+					}
+				},
+				{
+					"name": "Register (Email/Password)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"SecurePassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Login (Email/Password)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"SecurePassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "Social Login (Google/Apple)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provider\": \"google\",\n  \"providerId\": \"google-user-id-123\",\n  \"email\": \"user@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/social",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"social"
+							]
+						}
+					}
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/forgot-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"forgot-password"
+							]
+						}
+					}
+				},
+				{
+					"name": "Validate Reset Token (GET)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth/reset-password?token={{resetToken}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"reset-password"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{resetToken}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Reset Password (POST)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"{{resetToken}}\",\n  \"newPassword\": \"NewSecurePassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/reset-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"reset-password"
+							]
+						}
+					}
+				},
+				{
+					"name": "Confirm Email (GET)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth/confirm-email?token={{confirmationToken}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"confirm-email"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{confirmationToken}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Confirm Email (POST)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"{{confirmationToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/confirm-email",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"confirm-email"
+							]
+						}
+					}
+				},
+				{
+					"name": "Resend Confirmation Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/resend-confirmation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"resend-confirmation"
+							]
+						}
+					}
+				},
+				{
+					"name": "Test Email Configuration",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth/test-email?testEmail=test@example.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"test-email"
+							],
+							"query": [
+								{
+									"key": "testEmail",
+									"value": "test@example.com"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "SOS Alerts",
+			"item": [
+				{
+					"name": "Create SOS Alert",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"location\": {\n    \"latitude\": -1.2921,\n    \"longitude\": 36.8219,\n    \"address\": \"Nairobi, Kenya\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/sos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"sos"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get SOS Alert Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/sos/{{alertId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"sos",
+								"{{alertId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update SOS Alert Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"resolved\",\n  \"notes\": \"User is safe\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/sos/{{alertId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"sos",
+								"{{alertId}}"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Chat",
+			"item": [
+				{
+					"name": "Start Chat Session",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chat/start",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chat",
+								"start"
+							]
+						}
+					}
+				},
+				{
+					"name": "Send Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sessionId\": \"{{sessionId}}\",\n  \"senderId\": \"{{anonymousId}}\",\n  \"senderType\": \"user\",\n  \"content\": \"Hello, I need help\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chat/send",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chat",
+								"send"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Messages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chat/{{sessionId}}/messages?limit=50&offset=0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chat",
+								"{{sessionId}}",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "End Chat Session",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chat/{{sessionId}}/end",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chat",
+								"{{sessionId}}",
+								"end"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Resources",
+			"item": [
+				{
+					"name": "Get All Resources",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/resources?category=legal&country=Kenya&search=help&verified=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"resources"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "legal",
+									"description": "Filter by category"
+								},
+								{
+									"key": "country",
+									"value": "Kenya",
+									"description": "Filter by country"
+								},
+								{
+									"key": "search",
+									"value": "help",
+									"description": "Search in title/description"
+								},
+								{
+									"key": "verified",
+									"value": "true",
+									"description": "Filter verified resources"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Resource by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/resources/{{resourceId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"resources",
+								"{{resourceId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Resource",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Legal Aid Service\",\n  \"description\": \"Free legal assistance for GBV survivors\",\n  \"category\": \"legal\",\n  \"location\": {\n    \"country\": \"Kenya\",\n    \"city\": \"Nairobi\"\n  },\n  \"contact\": {\n    \"phone\": \"+254700000000\",\n    \"email\": \"legal@example.com\"\n  },\n  \"verified\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/resources",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"resources"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Shelters",
+			"item": [
+				{
+					"name": "Get All Shelters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/shelters?country=Kenya&city=Nairobi&type=shelter&verified=true&search=safe&sort=name&lat=-1.2921&lng=36.8219",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"shelters"
+							],
+							"query": [
+								{
+									"key": "country",
+									"value": "Kenya"
+								},
+								{
+									"key": "city",
+									"value": "Nairobi"
+								},
+								{
+									"key": "type",
+									"value": "shelter"
+								},
+								{
+									"key": "verified",
+									"value": "true"
+								},
+								{
+									"key": "search",
+									"value": "safe"
+								},
+								{
+									"key": "sort",
+									"value": "name"
+								},
+								{
+									"key": "lat",
+									"value": "-1.2921"
+								},
+								{
+									"key": "lng",
+									"value": "36.8219"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Shelter by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/shelters/{{shelterId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"shelters",
+								"{{shelterId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Countries List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/shelters/meta/countries",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"shelters",
+								"meta",
+								"countries"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Cities by Country",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/shelters/meta/cities/Kenya",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"shelters",
+								"meta",
+								"cities",
+								"Kenya"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Safety Plans",
+			"item": [
+				{
+					"name": "Get User Safety Plans",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/safety-plans/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"safety-plans",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Create/Update Safety Plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"planName\": \"Emergency Plan\",\n  \"content\": \"My safety plan details\",\n  \"steps\": [\n    {\n      \"step\": 1,\n      \"action\": \"Call emergency contact\"\n    }\n  ],\n  \"emergencyContacts\": [\n    {\n      \"name\": \"Trusted Friend\",\n      \"phone\": \"+254700000000\"\n    }\n  ],\n  \"safePlaces\": [\n    {\n      \"name\": \"Safe House\",\n      \"address\": \"123 Safe Street\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/safety-plans",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"safety-plans"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Safety Plan",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/safety-plans/{{planId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"safety-plans",
+								"{{planId}}"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Evidence Vault",
+			"item": [
+				{
+					"name": "Upload Evidence",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "anonymousId",
+									"value": "{{anonymousId}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Evidence description",
+									"type": "text"
+								},
+								{
+									"key": "tags",
+									"value": "incident,photo",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/evidence/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evidence",
+								"upload"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get User Evidence",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/evidence/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evidence",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Download Evidence",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/evidence/download/{{evidenceId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evidence",
+								"download",
+								"{{evidenceId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Evidence",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/evidence/{{evidenceId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evidence",
+								"{{evidenceId}}"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "User Profile",
+			"item": [
+				{
+					"name": "Upload Profile Picture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profilePicture",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "anonymousId",
+									"value": "{{anonymousId}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/profile-picture",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"profile-picture"
+							]
+						}
+					}
+				},
+				{
+					"name": "Save User Details",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"userDetails\": {\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Doe\",\n    \"age\": 25,\n    \"location\": {\n      \"country\": \"Kenya\",\n      \"city\": \"Nairobi\"\n    },\n    \"preferredLanguage\": \"en\",\n    \"privacyConsent\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/details",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"details"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get User Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user/details/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"details",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Wipe User Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"confirm\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/wipe",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"wipe"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Settings",
+			"item": [
+				{
+					"name": "Get User Settings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/settings/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Settings",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notifications\": {\n    \"email\": true,\n    \"sms\": false\n  },\n  \"privacy\": {\n    \"shareLocation\": false\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"oldPassword\": \"OldPassword123!\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings/change-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"change-password"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Account",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"newemail@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings/account/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"account",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update PIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"oldPin\": \"1234\",\n  \"newPin\": \"5678\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings/pin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"pin"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update SOS Config",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"sosConfig\": {\n    \"autoSend\": true,\n    \"emergencyContacts\": [\"+254700000000\"],\n    \"silentMode\": false\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings/sos-config",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"sos-config"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Mood Tracking",
+			"item": [
+				{
+					"name": "Create Mood Entry",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"moodId\": 3,\n  \"moodLabel\": \"Anxious\",\n  \"emoji\": \"😰\",\n  \"notes\": \"Feeling anxious about upcoming meeting\",\n  \"geotag\": {\n    \"latitude\": -1.2921,\n    \"longitude\": 36.8219\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/mood",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mood"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Mood History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/mood/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mood",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Mood Statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/mood/{{anonymousId}}/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mood",
+								"{{anonymousId}}",
+								"stats"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Emotional Check-in",
+			"item": [
+				{
+					"name": "Create Emotional Check-in",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"feeling\": \"Overwhelmed\",\n  \"needs\": \"Support and understanding\",\n  \"notes\": \"Having a difficult day\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/emotional-checkin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"emotional-checkin"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Emotional Check-ins",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/emotional-checkin/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"emotional-checkin",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Legal & Advocacy",
+			"item": [
+				{
+					"name": "Create Legal Reminder",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"anonymousId\": \"{{anonymousId}}\",\n  \"title\": \"Court Hearing\",\n  \"description\": \"Appearance for case hearing\",\n  \"dueDate\": \"2024-12-31T10:00:00Z\",\n  \"priority\": \"high\",\n  \"reminder\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/legal",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legal"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Legal Reminders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/legal/{{anonymousId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legal",
+								"{{anonymousId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Legal Reminder",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Court Hearing\",\n  \"dueDate\": \"2024-12-31T11:00:00Z\",\n  \"completed\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/legal/{{reminderId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legal",
+								"{{reminderId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Legal Reminder",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/legal/{{reminderId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legal",
+								"{{reminderId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Upcoming Reminders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/legal/{{anonymousId}}/upcoming",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"legal",
+								"{{anonymousId}}",
+								"upcoming"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Community",
+			"item": [
+				{
+					"name": "Get Community Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/community?category=general&sort=newest&limit=50&offset=0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"community"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "general"
+								},
+								{
+									"key": "sort",
+									"value": "newest",
+									"description": "newest or popular"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{anonymousId}}\",\n  \"name\": \"Anonymous User\",\n  \"title\": \"Support Needed\",\n  \"content\": \"Looking for support and advice\",\n  \"category\": \"general\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/community",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"community"
+							]
+						}
+					}
+				},
+				{
+					"name": "Add Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{anonymousId}}\",\n  \"name\": \"Anonymous User\",\n  \"content\": \"I understand and support you\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/community/{{postId}}/comment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"community",
+								"{{postId}}",
+								"comment"
+							]
+						}
+					}
+				},
+				{
+					"name": "Like Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{anonymousId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/community/{{postId}}/like",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"community",
+								"{{postId}}",
+								"like"
+							]
+						}
+					}
+				},
+				{
+					"name": "Report Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{anonymousId}}\",\n  \"reason\": \"Inappropriate content\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/community/{{postId}}/report",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"community",
+								"{{postId}}",
+								"report"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Post",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/community/{{postId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"community",
+								"{{postId}}"
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://nchekwa-afrika.onrender.com",
+			"type": "string"
+		},
+		{
+			"key": "anonymousId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "sessionId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "alertId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "resetToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "confirmationToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "resourceId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "shelterId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "planId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "evidenceId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "postId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "reminderId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
+
