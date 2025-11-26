@@ -300,22 +300,22 @@ export default function Resources() {
     <div className="w-full max-w-full overflow-x-hidden box-border space-y-6 pb-20 md:pb-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
+        <h1 className="text-3xl font-heading font-bold text-text-main mb-2">
           Resource Directory
         </h1>
-        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
           Find support services and safe accommodations in your area
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-primary-light dark:border-primary/20 w-full max-w-full overflow-x-hidden">
+      <div className="flex flex-wrap gap-2 border-b border-accent/20 w-full max-w-full overflow-x-hidden">
         <button
           onClick={() => setActiveTab('resources')}
           className={`px-4 sm:px-6 py-3 font-heading font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${
             activeTab === 'resources'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-text-secondary dark:text-white/80 hover:text-text-main dark:hover:text-white'
+              ? 'border-primary text-accent'
+              : 'border-transparent text-text-secondary hover:text-text-main dark:hover:text-text-main'
           }`}
         >
           Support Services
@@ -324,8 +324,8 @@ export default function Resources() {
           onClick={() => setActiveTab('shelters')}
           className={`px-4 sm:px-6 py-3 font-heading font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${
             activeTab === 'shelters'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-text-secondary dark:text-white/80 hover:text-text-main dark:hover:text-white'
+              ? 'border-primary text-accent'
+              : 'border-transparent text-text-secondary hover:text-text-main dark:hover:text-text-main'
           }`}
         >
           <span className="flex items-center space-x-2">
@@ -347,13 +347,13 @@ export default function Resources() {
           >
             {/* Search */}
             <div className="relative mb-6">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-white/60 w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-text-main/60 w-5 h-5" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search resources..."
-                className="w-full pl-12 pr-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary font-body transition-all duration-300"
+                className="w-full pl-12 pr-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-background text-text-main focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary font-body transition-all duration-300"
               />
             </div>
 
@@ -369,8 +369,8 @@ export default function Resources() {
                     onClick={() => setSelectedCategory(category.id)}
                     className={`px-3 sm:px-4 py-2 rounded-lg font-body font-medium whitespace-nowrap transition-all duration-300 flex items-center space-x-2 flex-shrink-0 ${
                       selectedCategory === category.id
-                        ? 'bg-primary text-white shadow-md'
-                        : 'bg-background-light dark:bg-background-dark text-text-main dark:text-white hover:bg-primary-light dark:hover:bg-primary border border-primary-light dark:border-primary/20'
+                        ? 'bg-accent text-text-main shadow-md'
+                        : 'bg-background text-text-main hover:bg-accent-light dark:hover:bg-accent border border-accent/20'
                     }`}
                   >
                     <Icon className="w-4 h-4 flex-shrink-0" />
@@ -400,7 +400,7 @@ export default function Resources() {
                       <div
                         className={`px-3 py-1 rounded-lg bg-gradient-to-r ${
                           categoryColors[resource.category] || 'from-gray-500 to-gray-600'
-                        } text-white text-xs font-semibold capitalize font-body`}
+                        } text-text-main text-xs font-semibold capitalize font-body`}
                       >
                         {resource.category}
                       </div>
@@ -409,44 +409,44 @@ export default function Resources() {
                       )}
                     </div>
 
-                    <h3 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
+                    <h3 className="text-3xl font-heading font-bold text-text-main mb-2">
                       {resource.title}
                     </h3>
-                    <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80 mb-4 line-clamp-3">
+                    <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80 mb-4 line-clamp-3">
                       {resource.description}
                     </p>
 
                     <div className="space-y-2">
                       {resource.contactInfo?.phone && (
-                        <div className="flex items-center text-sm font-body text-text-main dark:text-white">
-                          <Phone className="w-4 h-4 mr-2 text-primary" />
+                        <div className="flex items-center text-sm font-body text-text-main">
+                          <Phone className="w-4 h-4 mr-2 text-accent" />
                           <a
                             href={`tel:${resource.contactInfo.phone}`}
-                            className="hover:text-primary hover:underline"
+                            className="hover:text-accent hover:underline"
                           >
                             {resource.contactInfo.phone}
                           </a>
                         </div>
                       )}
                       {resource.contactInfo?.email && (
-                        <div className="flex items-center text-sm font-body text-text-main dark:text-white">
-                          <Mail className="w-4 h-4 mr-2 text-primary" />
+                        <div className="flex items-center text-sm font-body text-text-main">
+                          <Mail className="w-4 h-4 mr-2 text-accent" />
                           <a
                             href={`mailto:${resource.contactInfo.email}`}
-                            className="hover:text-primary hover:underline"
+                            className="hover:text-accent hover:underline"
                           >
                             {resource.contactInfo.email}
                           </a>
                         </div>
                       )}
                       {resource.contactInfo?.website && (
-                        <div className="flex items-center text-sm font-body text-text-main dark:text-white">
-                          <Globe className="w-4 h-4 mr-2 text-primary" />
+                        <div className="flex items-center text-sm font-body text-text-main">
+                          <Globe className="w-4 h-4 mr-2 text-accent" />
                           <a
                             href={resource.contactInfo.website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-primary hover:underline"
+                            className="hover:text-accent hover:underline"
                           >
                             Visit Website
                           </a>
@@ -485,7 +485,7 @@ export default function Resources() {
                   value={shelterSearch}
                   onChange={(e) => setShelterSearch(e.target.value)}
                   placeholder="Search shelters by name, city, or address..."
-                  className="w-full pl-12 pr-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary font-body transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-primary-light dark:border-primary/30 rounded-xl bg-background text-text-main focus:outline-none focus:ring-2 focus:ring-accent focus:border-primary font-body transition-all duration-300"
                 />
               </div>
 
@@ -493,17 +493,17 @@ export default function Resources() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {/* Country Filter */}
                 <div>
-                  <label className="block text-sm font-poppins font-medium text-dark dark:text-white mb-2">
+                  <label className="block text-sm font-poppins font-medium text-dark dark:text-text-main mb-2">
                     Country
                   </label>
                   <select
                     value={selectedCountry}
                     onChange={(e) => setSelectedCountry(e.target.value)}
-                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
+                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-background text-text-main focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
-                    <option value="" className="bg-white dark:bg-background-dark text-text-main dark:text-white">All Countries</option>
+                    <option value="" className="bg-background text-text-main">All Countries</option>
                     {countries.map((country) => (
-                      <option key={country} value={country} className="bg-white dark:bg-background-dark text-text-main dark:text-white">
+                      <option key={country} value={country} className="bg-background text-text-main">
                         {country}
                       </option>
                     ))}
@@ -512,18 +512,18 @@ export default function Resources() {
 
                 {/* City Filter */}
                 <div>
-                  <label className="block text-sm font-poppins font-medium text-dark dark:text-white mb-2">
+                  <label className="block text-sm font-poppins font-medium text-dark dark:text-text-main mb-2">
                     City
                   </label>
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
                     disabled={!selectedCountry}
-                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-background text-text-main focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <option value="" className="bg-white dark:bg-background-dark text-text-main dark:text-white">All Cities</option>
+                    <option value="" className="bg-background text-text-main">All Cities</option>
                     {cities.map((city) => (
-                      <option key={city} value={city} className="bg-white dark:bg-background-dark text-text-main dark:text-white">
+                      <option key={city} value={city} className="bg-background text-text-main">
                         {city}
                       </option>
                     ))}
@@ -532,35 +532,35 @@ export default function Resources() {
 
                 {/* Type Filter */}
                 <div>
-                  <label className="block text-sm font-poppins font-medium text-dark dark:text-white mb-2">
+                  <label className="block text-sm font-poppins font-medium text-dark dark:text-text-main mb-2">
                     Type
                   </label>
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
+                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-background text-text-main focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
-                    <option value="" className="bg-white dark:bg-background-dark text-text-main dark:text-white">All Types</option>
-                    <option value="shelter" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Shelter</option>
-                    <option value="safe-house" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Safe House</option>
-                    <option value="hotel" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Hotel</option>
-                    <option value="refuge" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Refuge</option>
-                    <option value="accommodation" className="bg-white dark:bg-background-dark text-text-main dark:text-white">Accommodation</option>
+                    <option value="" className="bg-background text-text-main">All Types</option>
+                    <option value="shelter" className="bg-background text-text-main">Shelter</option>
+                    <option value="safe-house" className="bg-background text-text-main">Safe House</option>
+                    <option value="hotel" className="bg-background text-text-main">Hotel</option>
+                    <option value="refuge" className="bg-background text-text-main">Refuge</option>
+                    <option value="accommodation" className="bg-background text-text-main">Accommodation</option>
                   </select>
                 </div>
 
                 {/* Sort */}
                 <div>
-                  <label className="block text-sm font-poppins font-medium text-dark dark:text-white mb-2">
+                  <label className="block text-sm font-poppins font-medium text-dark dark:text-text-main mb-2">
                     Sort By
                   </label>
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
+                    className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-background text-text-main focus:outline-none focus:ring-2 focus:ring-accent font-body transition-all duration-300"
                   >
                     {sortOptions.map((option) => (
-                      <option key={option.value} value={option.value} className="bg-white dark:bg-background-dark text-text-main dark:text-white">
+                      <option key={option.value} value={option.value} className="bg-background text-text-main">
                         {option.label}
                       </option>
                     ))}
@@ -575,9 +575,9 @@ export default function Resources() {
                     type="checkbox"
                     checked={showVerifiedOnly}
                     onChange={(e) => setShowVerifiedOnly(e.target.checked)}
-                    className="w-4 h-4 text-primary border-light rounded focus:ring-primary"
+                    className="w-4 h-4 text-accent border-light rounded focus:ring-primary"
                   />
-                  <span className="text-sm font-body text-text-main dark:text-white">
+                  <span className="text-sm font-body text-text-main">
                     Verified shelters only
                   </span>
                 </label>
@@ -589,7 +589,7 @@ export default function Resources() {
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
                       onClick={clearLocation}
-                      className="px-4 py-2 rounded-lg bg-success text-white font-body text-sm hover:bg-success/80 transition-all duration-300 flex items-center space-x-2"
+                      className="px-4 py-2 rounded-lg bg-success text-text-main font-body text-sm hover:bg-success/80 transition-all duration-300 flex items-center space-x-2"
                     >
                       <Navigation className="w-4 h-4" />
                       <span>Using Location</span>
@@ -599,7 +599,7 @@ export default function Resources() {
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
                       onClick={getCurrentLocation}
-                      className="px-4 py-2 rounded-lg bg-primary text-white font-body text-sm hover:bg-primary-dark transition-all duration-300 flex items-center space-x-2"
+                      className="px-4 py-2 rounded-lg bg-accent text-text-main font-body text-sm hover:bg-accent-dark transition-all duration-300 flex items-center space-x-2"
                     >
                       <Navigation className="w-4 h-4" />
                       <span>Find Nearest</span>
@@ -622,7 +622,7 @@ export default function Resources() {
               <>
                 {/* Results Count */}
                 <div className="mb-4">
-                  <p className="text-lg font-body text-text-secondary dark:text-white/80">
+                  <p className="text-lg font-body text-text-secondary">
                     Found {filteredShelters.length} shelter{filteredShelters.length !== 1 ? 's' : ''}
                     {userLocation && ' (sorted by distance)'}
                   </p>
@@ -631,8 +631,8 @@ export default function Resources() {
                 {/* Shelters Grid */}
                 {filteredShelters.length === 0 ? (
                   <div className="text-center py-12">
-                    <Home className="w-16 h-16 text-text-secondary dark:text-white/60 mx-auto mb-4" />
-                    <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+                    <Home className="w-16 h-16 text-text-secondary dark:text-text-main/60 mx-auto mb-4" />
+                    <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">
                       No shelters found. Try adjusting your filters.
                     </p>
                   </div>
@@ -652,12 +652,12 @@ export default function Resources() {
                           {/* Header */}
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex items-center space-x-2">
-                              <div className="p-2 bg-primary/10 rounded-lg">
-                                <TypeIcon className="w-5 h-5 text-primary" />
+                              <div className="p-2 bg-accent/10 rounded-lg">
+                                <TypeIcon className="w-5 h-5 text-accent" />
                               </div>
                               <div>
                                 <div className="flex items-center space-x-2">
-                                  <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-semibold rounded font-body capitalize">
+                                  <span className="px-2 py-1 bg-accent/10 text-accent text-xs font-semibold rounded font-body capitalize">
                                     {shelter.type}
                                   </span>
                                   {shelter.verified && (
@@ -669,22 +669,22 @@ export default function Resources() {
                           </div>
 
                           {/* Name */}
-                          <h3 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">
+                          <h3 className="text-3xl font-heading font-bold text-text-main mb-2">
                             {shelter.name}
                           </h3>
 
                           {/* Location */}
                           <div className="flex items-start space-x-2 mb-3">
-                            <MapPin className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                            <div className="text-sm font-body text-text-secondary dark:text-white/80">
-                              <p className="font-medium text-text-main dark:text-white">
+                            <MapPin className="w-4 h-4 text-accent mt-1 flex-shrink-0" />
+                            <div className="text-sm font-body text-text-secondary">
+                              <p className="font-medium text-text-main">
                                 {shelter.city}, {shelter.country}
                               </p>
                               {shelter.address && (
                                 <p className="mt-1">{shelter.address}</p>
                               )}
                               {shelter.distance !== undefined && (
-                                <p className="mt-1 text-primary font-semibold">
+                                <p className="mt-1 text-accent font-semibold">
                                   {shelter.distance.toFixed(1)} km away
                                 </p>
                               )}
@@ -694,35 +694,35 @@ export default function Resources() {
                           {/* Contact Info */}
                           <div className="space-y-2 mb-3">
                             {shelter.contactInfo?.phone && (
-                              <div className="flex items-center text-sm font-body text-text-main dark:text-white">
-                                <Phone className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
+                              <div className="flex items-center text-sm font-body text-text-main">
+                                <Phone className="w-4 h-4 mr-2 text-accent flex-shrink-0" />
                                 <a
                                   href={`tel:${shelter.contactInfo.phone}`}
-                                  className="hover:text-primary hover:underline truncate"
+                                  className="hover:text-accent hover:underline truncate"
                                 >
                                   {shelter.contactInfo.phone}
                                 </a>
                               </div>
                             )}
                             {shelter.contactInfo?.email && (
-                              <div className="flex items-center text-sm font-body text-text-main dark:text-white">
-                                <Mail className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
+                              <div className="flex items-center text-sm font-body text-text-main">
+                                <Mail className="w-4 h-4 mr-2 text-accent flex-shrink-0" />
                                 <a
                                   href={`mailto:${shelter.contactInfo.email}`}
-                                  className="hover:text-primary hover:underline truncate"
+                                  className="hover:text-accent hover:underline truncate"
                                 >
                                   {shelter.contactInfo.email}
                                 </a>
                               </div>
                             )}
                             {shelter.contactInfo?.website && (
-                              <div className="flex items-center text-sm font-body text-text-main dark:text-white">
-                                <Globe className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
+                              <div className="flex items-center text-sm font-body text-text-main">
+                                <Globe className="w-4 h-4 mr-2 text-accent flex-shrink-0" />
                                 <a
                                   href={shelter.contactInfo.website}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="hover:text-primary hover:underline truncate"
+                                  className="hover:text-accent hover:underline truncate"
                                 >
                                   Visit Website
                                 </a>
@@ -731,10 +731,10 @@ export default function Resources() {
                           </div>
 
                           {/* Additional Info */}
-                          <div className="space-y-2 pt-3 border-t border-primary-light dark:border-primary/20">
+                          <div className="space-y-2 pt-3 border-t border-accent/20">
                             {shelter.capacity && (
-                              <div className="flex items-center text-sm font-body text-text-secondary dark:text-white/80">
-                                <Users className="w-4 h-4 mr-2 text-primary" />
+                              <div className="flex items-center text-sm font-body text-text-secondary">
+                                <Users className="w-4 h-4 mr-2 text-accent" />
                                 Capacity: {shelter.capacity} people
                               </div>
                             )}
@@ -745,7 +745,7 @@ export default function Resources() {
                               </div>
                             )}
                             {shelter.notes && (
-                              <p className="text-sm font-body text-text-secondary dark:text-white/80 line-clamp-2">
+                              <p className="text-sm font-body text-text-secondary line-clamp-2">
                                 {shelter.notes}
                               </p>
                             )}
