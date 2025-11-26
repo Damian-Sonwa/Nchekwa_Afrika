@@ -341,7 +341,7 @@ export default function UserDetails() {
                 />
               </div>
               {errors.profilePicture && (
-                <p className="mt-2 text-sm font-inter text-error dark:text-error text-center">
+                <p className="mt-2 text-sm font-inter text-error text-center">
                   {errors.profilePicture}
                 </p>
               )}
