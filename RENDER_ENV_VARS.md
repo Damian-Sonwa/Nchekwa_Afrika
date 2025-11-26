@@ -48,7 +48,9 @@ You'll see a section called **"Environment Variables"** with:
 
    **Variable 3: EMAIL_FROM**
    - **Key:** `EMAIL_FROM`
-   - **Value:** `noreply@yourdomain.com` (replace with your verified domain email)
+   - **Value:** `onboarding@resend.dev` (for testing - no verification needed)
+   - **OR:** `noreply@yourdomain.com` (for production - domain must be verified in Resend)
+   - **Format:** Must be a valid email: `email@domain.com` or `Name <email@domain.com>`
    - Click **"Save"** or **"Add"**
 
    **Variable 4: FRONTEND_URL**

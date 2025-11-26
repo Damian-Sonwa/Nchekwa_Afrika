@@ -105,11 +105,13 @@ FRONTEND_URL=https://your-frontend-url.vercel.app
 - **Cause:** RESEND_API_KEY is incorrect or expired
 - **Fix:** Generate a new API key in Resend and update it in Render
 
-### Error: "Domain not verified"
-- **Cause:** EMAIL_FROM uses a domain that isn't verified in Resend
+### Error: "Invalid `from` field" or "Domain not verified"
+- **Cause:** EMAIL_FROM is not set, invalid format, or uses a domain that isn't verified in Resend
 - **Fix:** 
-  - Use `onboarding@resend.dev` for testing (no verification needed)
-  - Or verify your domain in Resend dashboard
+  - **For testing:** Use `onboarding@resend.dev` (no verification needed)
+  - **For production:** Verify your domain in Resend dashboard and use `noreply@yourdomain.com`
+  - **Format:** Must be valid email format: `email@domain.com` or `Name <email@domain.com>`
+  - **Note:** The system will automatically use `onboarding@resend.dev` if EMAIL_FROM is not set or invalid
 
 ### Error: "Rate limit exceeded"
 - **Cause:** Too many emails sent in a short time

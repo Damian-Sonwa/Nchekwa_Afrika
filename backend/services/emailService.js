@@ -15,6 +15,35 @@
 const crypto = require('crypto');
 
 /**
+ * Validate and format email address for Resend
+ */
+function validateEmailFormat(email) {
+  if (!email || typeof email !== 'string') {
+    return false;
+  }
+  // Basic email format validation: email@domain.com or Name <email@domain.com>
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const nameEmailRegex = /^[^<]+<[^\s@]+@[^\s@]+\.[^\s@]+>$/;
+  return emailRegex.test(email.trim()) || nameEmailRegex.test(email.trim());
+}
+
+/**
+ * Get valid from email address for Resend
+ */
+function getValidFromEmail() {
+  const emailFrom = process.env.EMAIL_FROM;
+  
+  // If EMAIL_FROM is not set or invalid, use Resend's test domain
+  if (!emailFrom || !validateEmailFormat(emailFrom)) {
+    console.warn('⚠️  EMAIL_FROM is not set or invalid, using Resend test domain');
+    console.warn('💡 Set EMAIL_FROM to a verified domain email, or use onboarding@resend.dev for testing');
+    return 'onboarding@resend.dev';
+  }
+  
+  return emailFrom.trim();
+}
+
+/**
  * Send email confirmation
  * @param {string} email - User's email address
  * @param {string} confirmationLink - Full confirmation URL
@@ -68,6 +97,35 @@ async function sendConfirmationEmail(email, confirmationLink, confirmationToken)
 }
 
 /**
+ * Validate and format email address for Resend
+ */
+function validateEmailFormat(email) {
+  if (!email || typeof email !== 'string') {
+    return false;
+  }
+  // Basic email format validation: email@domain.com or Name <email@domain.com>
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const nameEmailRegex = /^[^<]+<[^\s@]+@[^\s@]+\.[^\s@]+>$/;
+  return emailRegex.test(email.trim()) || nameEmailRegex.test(email.trim());
+}
+
+/**
+ * Get valid from email address for Resend
+ */
+function getValidFromEmail() {
+  const emailFrom = process.env.EMAIL_FROM;
+  
+  // If EMAIL_FROM is not set or invalid, use Resend's test domain
+  if (!emailFrom || !validateEmailFormat(emailFrom)) {
+    console.warn('⚠️  EMAIL_FROM is not set or invalid, using Resend test domain');
+    console.warn('💡 Set EMAIL_FROM to a verified domain email, or use onboarding@resend.dev for testing');
+    return 'onboarding@resend.dev';
+  }
+  
+  return emailFrom.trim();
+}
+
+/**
  * Send email via Resend API
  */
 async function sendViaResend(email, confirmationLink, confirmationToken) {
@@ -83,9 +141,14 @@ async function sendViaResend(email, confirmationLink, confirmationToken) {
     const { Resend } = require('resend');
     const resend = new Resend(resendApiKey);
     
-    const fromEmail = process.env.EMAIL_FROM || 'noreply@nchekwa-afrika.com';
+    const fromEmail = getValidFromEmail();
     console.log(`📧 From: ${fromEmail}`);
     console.log(`📧 To: ${email}`);
+    
+    // Validate recipient email
+    if (!validateEmailFormat(email)) {
+      throw new Error(`Invalid recipient email format: ${email}`);
+    }
     
     const htmlContent = getEmailTemplate(confirmationLink, 'confirm');
     
@@ -301,9 +364,14 @@ async function sendPasswordResetViaResend(email, resetLink, resetToken) {
     const { Resend } = require('resend');
     const resend = new Resend(resendApiKey);
     
-    const fromEmail = process.env.EMAIL_FROM || 'noreply@nchekwa-afrika.com';
+    const fromEmail = getValidFromEmail();
     console.log(`📧 From: ${fromEmail}`);
     console.log(`📧 To: ${email}`);
+    
+    // Validate recipient email
+    if (!validateEmailFormat(email)) {
+      throw new Error(`Invalid recipient email format: ${email}`);
+    }
     
     const htmlContent = getEmailTemplate(resetLink, 'reset');
     
