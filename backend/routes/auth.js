@@ -259,11 +259,16 @@ router.post('/forgot-password', async (req, res) => {
     const resetToken = generateSecureToken();
     const resetTokenExpiry = createTokenExpiry(1); // 1 hour expiry
 
+    console.log('🔑 Generated reset token:', resetToken.substring(0, 16) + '...');
+    console.log('📅 Token expires:', resetTokenExpiry);
+    console.log('⏰ Current time:', new Date());
+
     // Store reset token in user settings
     user.settings = user.settings || {};
     user.settings.resetToken = resetToken;
     user.settings.resetTokenExpiry = resetTokenExpiry;
     await user.save();
+    console.log('✅ Reset token saved to database for user');
 
     // Generate reset link using consistent FRONTEND_URL
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
@@ -273,8 +278,11 @@ router.post('/forgot-password', async (req, res) => {
     } else {
       console.log('✅ Using FRONTEND_URL:', frontendUrl);
     }
-    const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`;
+    // URL encode the token to handle special characters
+    const encodedToken = encodeURIComponent(resetToken);
+    const resetLink = `${frontendUrl}/reset-password?token=${encodedToken}`;
     console.log('🔗 Generated reset link:', resetLink);
+    console.log('🔗 Token in link (first 20 chars):', encodedToken.substring(0, 20) + '...');
     
     // Send password reset email
     try {
@@ -313,16 +321,48 @@ router.get('/reset-password', async (req, res) => {
       return res.status(400).json({ error: 'Reset token is required' });
     }
 
+    console.log('🔍 Validating reset token (GET):', token.substring(0, 16) + '...');
+    console.log('🔍 Full token length:', token.length);
+
     // Find user with matching reset token
     const users = await User.find({ 'settings.resetToken': token });
+    console.log(`📊 Found ${users.length} user(s) with matching token`);
+
+    if (users.length === 0) {
+      console.error('❌ No user found with token:', token.substring(0, 16) + '...');
+      // Try to find users with reset tokens for debugging
+      const allUsers = await User.find({ 'settings.resetToken': { $exists: true } });
+      console.log(`📊 Total users with reset tokens: ${allUsers.length}`);
+      if (allUsers.length > 0) {
+        console.log('📋 Sample tokens:', allUsers.slice(0, 3).map(u => ({
+          token: u.settings?.resetToken?.substring(0, 16) + '...',
+          tokenLength: u.settings?.resetToken?.length,
+          expiry: u.settings?.resetTokenExpiry,
+          expired: u.settings?.resetTokenExpiry ? new Date(u.settings.resetTokenExpiry) < new Date() : 'no expiry'
+        })));
+      }
+      return res.status(400).json({ error: 'Invalid or expired reset token' });
+    }
+
     const user = users.find(u => {
       const expiry = u.settings?.resetTokenExpiry;
-      return expiry && new Date(expiry) > new Date();
+      const isValid = expiry && new Date(expiry) > new Date();
+      if (!isValid) {
+        console.log('⏰ Token expired for user:', {
+          expiry: expiry,
+          now: new Date(),
+          expired: expiry ? new Date(expiry) < new Date() : 'no expiry set'
+        });
+      }
+      return isValid;
     });
 
     if (!user) {
+      console.error('❌ Token expired or invalid');
       return res.status(400).json({ error: 'Invalid or expired reset token' });
     }
+
+    console.log('✅ Token is valid, user can reset password');
 
     // Token is valid - return success (frontend will handle the form)
     res.json({
@@ -332,6 +372,7 @@ router.get('/reset-password', async (req, res) => {
     });
   } catch (error) {
     console.error('Reset password token validation error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ error: 'Failed to validate reset token' });
   }
 });
@@ -349,16 +390,37 @@ router.post('/reset-password', async (req, res) => {
       return res.status(400).json({ error: 'Password must be at least 8 characters' });
     }
 
+    console.log('🔍 Validating reset token (POST):', token.substring(0, 16) + '...');
+    console.log('🔍 Full token length:', token.length);
+
     // Find user with matching reset token
     const users = await User.find({ 'settings.resetToken': token });
+    console.log(`📊 Found ${users.length} user(s) with matching token`);
+
+    if (users.length === 0) {
+      console.error('❌ No user found with token:', token.substring(0, 16) + '...');
+      return res.status(400).json({ error: 'Invalid or expired reset token' });
+    }
+
     const user = users.find(u => {
       const expiry = u.settings?.resetTokenExpiry;
-      return expiry && new Date(expiry) > new Date();
+      const isValid = expiry && new Date(expiry) > new Date();
+      if (!isValid) {
+        console.log('⏰ Token expired for user:', {
+          expiry: expiry,
+          now: new Date(),
+          expired: expiry ? new Date(expiry) < new Date() : 'no expiry set'
+        });
+      }
+      return isValid;
     });
 
     if (!user) {
+      console.error('❌ Token expired or invalid');
       return res.status(400).json({ error: 'Invalid or expired reset token' });
     }
+
+    console.log('✅ Token is valid, resetting password for user');
 
     // Update password and clear reset token (token can only be used once)
     user.passwordHash = await bcrypt.hash(newPassword, 10);
@@ -367,12 +429,15 @@ router.post('/reset-password', async (req, res) => {
     user.lastActive = new Date();
     await user.save();
 
+    console.log('✅ Password reset successfully');
+
     res.json({
       success: true,
       message: 'Password has been reset successfully'
     });
   } catch (error) {
     console.error('Reset password error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ error: 'Failed to reset password' });
   }
 });
