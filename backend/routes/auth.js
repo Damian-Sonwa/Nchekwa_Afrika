@@ -461,7 +461,7 @@ router.post('/resend-confirmation', async (req, res) => {
 
     // Generate confirmation token securely
     const confirmationToken = generateSecureToken();
-    const confirmationExpiry = createTokenExpiry(24 * 7); // 7 days expiry // 7 days expiry
+    const confirmationExpiry = createTokenExpiry(24 * 7); // 7 days expiry
 
     user.settings = user.settings || {};
     user.settings.emailConfirmationToken = confirmationToken;
