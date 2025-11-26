@@ -501,7 +501,7 @@ export default function Auth() {
                               </label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                  <Lock className="w-5 h-5 text-light" />
+                                  <Lock className="w-5 h-5 text-text-secondary dark:text-white/60" />
                                 </div>
                                 <input
                                   id="confirmPassword"
