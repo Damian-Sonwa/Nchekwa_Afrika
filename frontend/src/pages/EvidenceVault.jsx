@@ -147,7 +147,7 @@ export default function EvidenceVault() {
     return (
       <div className="flex flex-col items-center justify-center h-96 space-y-4">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        <p className="text-lg font-body text-text-secondary dark:text-white/80">Loading evidence...</p>
+        <p className="text-lg font-body text-text-secondary">Loading evidence...</p>
       </div>
     )
   }
@@ -156,12 +156,12 @@ export default function EvidenceVault() {
     return (
       <div className="w-full max-w-full overflow-x-hidden box-border space-y-6 pb-20 md:pb-8">
         <div>
-          <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">Evidence Vault</h1>
-          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Secure, encrypted storage for your evidence</p>
+          <h1 className="text-3xl font-heading font-bold text-text-main mb-2">Evidence Vault</h1>
+          <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">Secure, encrypted storage for your evidence</p>
         </div>
         <div className="text-center py-12 bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg">
-          <Lock className="w-16 h-16 text-text-secondary dark:text-white/60 mx-auto mb-4" />
-          <p className="text-lg font-body text-text-secondary dark:text-white/80">Please complete onboarding first</p>
+          <Lock className="w-16 h-16 text-text-secondary dark:text-text-main/60 mx-auto mb-4" />
+          <p className="text-lg font-body text-text-secondary">Please complete onboarding first</p>
         </div>
       </div>
     )
@@ -170,8 +170,8 @@ export default function EvidenceVault() {
   return (
     <div className="container mx-auto px-4 max-w-full overflow-x-hidden space-y-6 pb-20 md:pb-8">
       <div>
-        <h1 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-2">Evidence Vault</h1>
-        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">Secure, encrypted storage for your important documents</p>
+        <h1 className="text-3xl font-heading font-bold text-text-main mb-2">Evidence Vault</h1>
+        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-text-main/80">Secure, encrypted storage for your important documents</p>
       </div>
 
       {/* Error Message */}
@@ -184,13 +184,13 @@ export default function EvidenceVault() {
       {/* Upload & Export Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-full">
         <div className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6">
-        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-primary-light dark:border-primary/30 rounded-xl cursor-pointer hover:bg-background-light dark:hover:bg-primary/10 transition-all duration-300">
+        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-accent/20 rounded-xl cursor-pointer hover:bg-background-light dark:hover:bg-accent/10 transition-all duration-300">
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <Upload className="w-10 h-10 text-text-secondary dark:text-white/60 mb-2" />
-            <p className="text-sm font-body text-text-secondary dark:text-white/80 mb-1">
+            <Upload className="w-10 h-10 text-text-secondary dark:text-text-main/60 mb-2" />
+            <p className="text-sm font-body text-text-secondary mb-1">
               <span className="font-semibold">Click to upload</span> or drag and drop
             </p>
-            <p className="text-xs font-body text-text-secondary dark:text-white/70">Files are encrypted automatically</p>
+            <p className="text-xs font-body text-text-secondary dark:text-text-main/70">Files are encrypted automatically</p>
           </div>
             <input
               type="file"
@@ -204,21 +204,21 @@ export default function EvidenceVault() {
         <motion.div
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="bg-primary rounded-2xl shadow-lg p-6 border border-primary-light flex flex-col items-center justify-center cursor-pointer"
+          className="bg-accent rounded-2xl shadow-lg p-6 border border-primary-light flex flex-col items-center justify-center cursor-pointer"
           onClick={() => handleExport()}
         >
-          <Download className="w-10 h-10 text-white mb-2" />
-          <p className="text-white font-heading font-semibold mb-1">Export Evidence</p>
-          <p className="text-xs font-body text-white/80">Securely export to email, drive, or download</p>
+          <Download className="w-10 h-10 text-text-main mb-2" />
+          <p className="text-text-main font-heading font-semibold mb-1">Export Evidence</p>
+          <p className="text-xs font-body text-text-main/80">Securely export to email, drive, or download</p>
         </motion.div>
       </div>
 
       {/* Evidence List */}
       {evidence.length === 0 ? (
         <div className="text-center py-12 bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg">
-          <Lock className="w-16 h-16 text-text-secondary dark:text-white/60 mx-auto mb-4" />
-          <p className="text-lg font-body text-text-secondary dark:text-white/80">No evidence stored yet</p>
-          <p className="text-sm font-body text-text-secondary dark:text-white/70 mt-2">
+          <Lock className="w-16 h-16 text-text-secondary dark:text-text-main/60 mx-auto mb-4" />
+          <p className="text-lg font-body text-text-secondary">No evidence stored yet</p>
+          <p className="text-sm font-body text-text-secondary dark:text-text-main/70 mt-2">
             Your evidence will be encrypted and stored securely
           </p>
         </div>
@@ -236,29 +236,29 @@ export default function EvidenceVault() {
                 className={cn(
                   "bg-white/90 dark:bg-background-dark rounded-2xl shadow-lg p-4 border-2 transition-all duration-300 cursor-pointer",
                   selectedEvidence.find(e => e._id === item._id)
-                    ? "border-primary bg-primary-light dark:bg-primary/20"
+                    ? "border-primary bg-accent-light dark:bg-accent/20"
                     : "border-primary-light dark:border-primary/20 hover:shadow-xl hover:border-primary"
                 )}
                 onClick={() => toggleEvidenceSelection(item)}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center space-x-3 flex-1">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Icon className="w-6 h-6 text-primary" />
+                    <div className="p-2 bg-accent/10 rounded-lg">
+                      <Icon className="w-6 h-6 text-accent" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-heading font-semibold text-text-main dark:text-white truncate">
+                      <p className="text-sm font-heading font-semibold text-text-main truncate">
                         {item.fileName}
                       </p>
-                      <p className="text-xs font-body text-text-secondary dark:text-white/80">
+                      <p className="text-xs font-body text-text-secondary">
                         {formatFileSize(item.fileSize)}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     {selectedEvidence.find(e => e._id === item._id) && (
-                      <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs">✓</span>
+                      <div className="w-5 h-5 bg-accent rounded-full flex items-center justify-center">
+                        <span className="text-text-main text-xs">✓</span>
                       </div>
                     )}
                     <motion.button
@@ -275,11 +275,11 @@ export default function EvidenceVault() {
                   </div>
                 </div>
                 {item.description && (
-                  <p className="text-xs font-body text-text-secondary dark:text-white/80 mt-2 line-clamp-2">
+                  <p className="text-xs font-body text-text-secondary mt-2 line-clamp-2">
                     {item.description}
                   </p>
                 )}
-                <p className="text-xs font-body text-text-secondary dark:text-white/70 mt-2">
+                <p className="text-xs font-body text-text-secondary dark:text-text-main/70 mt-2">
                   {new Date(item.createdAt).toLocaleDateString()}
                 </p>
               </motion.div>
@@ -307,18 +307,18 @@ export default function EvidenceVault() {
                 className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6 box-border"
               >
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-heading font-bold text-text-main dark:text-white">Export Evidence</h2>
+                  <h2 className="text-2xl font-heading font-bold text-text-main">Export Evidence</h2>
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setShowExportModal(false)}
-                    className="p-2 hover:bg-background-light dark:hover:bg-primary/20 rounded-lg transition-colors"
+                    className="p-2 hover:bg-background-light dark:hover:bg-accent/20 rounded-lg transition-colors"
                   >
-                    <X className="w-5 h-5 text-text-secondary dark:text-white/80" />
+                    <X className="w-5 h-5 text-text-secondary" />
                   </motion.button>
                 </div>
 
-                <p className="text-sm font-body text-text-secondary dark:text-white/80 mb-4">
+                <p className="text-sm font-body text-text-secondary mb-4">
                   {selectedEvidence.length > 0
                     ? `Exporting ${selectedEvidence.length} selected item(s)`
                     : `Exporting all ${evidence.length} item(s)`}
@@ -332,12 +332,12 @@ export default function EvidenceVault() {
                     className={cn(
                       "w-full flex items-center space-x-3 p-4 rounded-lg border-2 transition-all duration-300",
                       exportMethod === 'email'
-                        ? "border-primary bg-primary-light dark:bg-primary/20"
+                        ? "border-primary bg-accent-light dark:bg-accent/20"
                         : "border-primary-light dark:border-primary/20 hover:border-primary"
                     )}
                   >
-                    <Mail className="w-5 h-5 text-primary" />
-                    <span className="font-body font-medium text-text-main dark:text-white">Email</span>
+                    <Mail className="w-5 h-5 text-accent" />
+                    <span className="font-body font-medium text-text-main">Email</span>
                   </motion.button>
 
                   <motion.button
@@ -347,12 +347,12 @@ export default function EvidenceVault() {
                     className={cn(
                       "w-full flex items-center space-x-3 p-4 rounded-lg border-2 transition-all duration-300",
                       exportMethod === 'drive'
-                        ? "border-primary bg-primary-light dark:bg-primary/20"
+                        ? "border-primary bg-accent-light dark:bg-accent/20"
                         : "border-primary-light dark:border-primary/20 hover:border-primary"
                     )}
                   >
-                    <Cloud className="w-5 h-5 text-primary" />
-                    <span className="font-body font-medium text-text-main dark:text-white">Google Drive</span>
+                    <Cloud className="w-5 h-5 text-accent" />
+                    <span className="font-body font-medium text-text-main">Google Drive</span>
                   </motion.button>
 
                   <motion.button
@@ -362,12 +362,12 @@ export default function EvidenceVault() {
                     className={cn(
                       "w-full flex items-center space-x-3 p-4 rounded-lg border-2 transition-all duration-300",
                       exportMethod === 'whatsapp'
-                        ? "border-primary bg-primary-light dark:bg-primary/20"
+                        ? "border-primary bg-accent-light dark:bg-accent/20"
                         : "border-primary-light dark:border-primary/20 hover:border-primary"
                     )}
                   >
-                    <MessageCircle className="w-5 h-5 text-primary" />
-                    <span className="font-body font-medium text-text-main dark:text-white">WhatsApp</span>
+                    <MessageCircle className="w-5 h-5 text-accent" />
+                    <span className="font-body font-medium text-text-main">WhatsApp</span>
                   </motion.button>
 
                   <motion.button
@@ -377,18 +377,18 @@ export default function EvidenceVault() {
                     className={cn(
                       "w-full flex items-center space-x-3 p-4 rounded-lg border-2 transition-all duration-300",
                       exportMethod === 'download'
-                        ? "border-primary bg-primary-light dark:bg-primary/20"
+                        ? "border-primary bg-accent-light dark:bg-accent/20"
                         : "border-primary-light dark:border-primary/20 hover:border-primary"
                     )}
                   >
-                    <Download className="w-5 h-5 text-primary" />
-                    <span className="font-body font-medium text-text-main dark:text-white">Download Encrypted File</span>
+                    <Download className="w-5 h-5 text-accent" />
+                    <span className="font-body font-medium text-text-main">Download Encrypted File</span>
                   </motion.button>
                 </div>
 
                 {exportMethod === 'email' && (
                   <div className="mb-4">
-                    <label className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
+                    <label className="block text-sm font-body font-medium text-text-main mb-2">
                       Email Address
                     </label>
                     <input
@@ -396,14 +396,14 @@ export default function EvidenceVault() {
                       value={exportEmail}
                       onChange={(e) => setExportEmail(e.target.value)}
                       placeholder="recipient@example.com"
-                      className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
+                      className="w-full px-4 py-2 border-2 border-accent/20 rounded-lg bg-background text-text-main font-body focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
                     />
                   </div>
                 )}
 
                 {exportMethod === 'whatsapp' && (
                   <div className="mb-4">
-                    <label className="block text-sm font-body font-medium text-text-main dark:text-white mb-2">
+                    <label className="block text-sm font-body font-medium text-text-main mb-2">
                       Phone Number (with country code)
                     </label>
                     <input
@@ -411,7 +411,7 @@ export default function EvidenceVault() {
                       value={exportPhone}
                       onChange={(e) => setExportPhone(e.target.value)}
                       placeholder="+1234567890"
-                      className="w-full px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg bg-white dark:bg-background-dark text-text-main dark:text-white font-body focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
+                      className="w-full px-4 py-2 border-2 border-accent/20 rounded-lg bg-background text-text-main font-body focus:ring-2 focus:ring-accent focus:border-primary transition-all duration-300"
                     />
                   </div>
                 )}
@@ -421,7 +421,7 @@ export default function EvidenceVault() {
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => setShowExportModal(false)}
-                    className="flex-1 px-4 py-2 border-2 border-primary-light dark:border-primary/30 rounded-lg font-body font-medium text-text-main dark:text-white hover:bg-background-light dark:hover:bg-primary transition-all duration-300"
+                    className="flex-1 px-4 py-2 border-2 border-accent/20 rounded-lg font-body font-medium text-text-main hover:bg-background-light dark:hover:bg-accent transition-all duration-300"
                   >
                     Cancel
                   </motion.button>
@@ -430,13 +430,13 @@ export default function EvidenceVault() {
                     whileTap={{ scale: 0.97 }}
                     onClick={handleExportSubmit}
                     disabled={!exportMethod || (exportMethod === 'email' && !exportEmail) || (exportMethod === 'whatsapp' && !exportPhone)}
-                    className="flex-1 px-4 py-2 rounded-lg bg-primary text-white font-heading font-semibold hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-4 py-2 rounded-lg bg-accent text-text-main font-heading font-semibold hover:bg-accent-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Export
                   </motion.button>
                 </div>
 
-                <p className="text-xs font-body text-text-secondary dark:text-white/70 mt-4 text-center">
+                <p className="text-xs font-body text-text-secondary dark:text-text-main/70 mt-4 text-center">
                   🔒 All exports are encrypted for your security
                 </p>
               </motion.div>
