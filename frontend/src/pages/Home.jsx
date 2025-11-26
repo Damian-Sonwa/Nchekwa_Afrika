@@ -21,14 +21,14 @@ const quickActions = [
     name: 'Chat Support', 
     icon: MessageSquare, 
     href: '/app/chat', 
-    color: 'bg-primary',
+    color: 'bg-accent',
     description: 'Connect with counselors'
   },
   { 
     name: 'Resources', 
     icon: MapPin, 
     href: '/app/resources', 
-    color: 'bg-primaryLight',
+    color: 'bg-accentLight',
     description: 'Find help near you'
   },
   { 
@@ -42,7 +42,7 @@ const quickActions = [
     name: 'Evidence Vault', 
     icon: Lock, 
     href: '/app/evidence', 
-    color: 'bg-primary',
+    color: 'bg-accent',
     description: 'Secure storage'
   },
 ]
@@ -127,7 +127,7 @@ export default function Home() {
       icon: FileText,
       label: 'Evidence Items',
       value: stats.evidenceCount,
-      color: 'bg-primary',
+      color: 'bg-accent',
       href: '/app/evidence'
     },
     {
@@ -148,7 +148,7 @@ export default function Home() {
       value: stats.lastActivity 
         ? new Date(stats.lastActivity).toLocaleDateString()
         : 'Today',
-      color: 'bg-primary',
+      color: 'bg-accent',
       subtitle: 'Keep building your safety'
     },
   ]
@@ -161,10 +161,10 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-2"
       >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-main dark:text-white">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-main">
           Welcome back, you're safe here
         </h1>
-        <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+        <p className="text-lg font-body text-text-secondary leading-relaxed text-text-secondary">
           How can we support you today?
         </p>
       </motion.div>
@@ -197,7 +197,7 @@ export default function Home() {
         >
           {/* Main button - with glass morphism */}
           <div 
-            className="relative rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-row items-center justify-between text-white transform transition-all duration-300 hover:shadow-error/50 disabled:opacity-75 border-2 border-white/20 dark:border-white/10 min-h-[100px] sm:min-h-[120px] md:min-h-[140px] w-full max-w-full box-border"
+            className="relative rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-row items-center justify-between text-text-main transform transition-all duration-300 hover:shadow-error/50 disabled:opacity-75 border-2 border-accent/20 min-h-[100px] sm:min-h-[120px] md:min-h-[140px] w-full max-w-full box-border"
             style={{
               background: 'rgba(239, 68, 68, 0.95)',
               backdropFilter: 'blur(20px) saturate(180%)',
@@ -210,13 +210,13 @@ export default function Home() {
               <img 
                 src="/StockCake-someone_pressing_an_emergency_button_Images_and_Photos_1763940162.jpg"
                 alt="Emergency button"
-                className="w-full h-full object-cover opacity-30 dark:opacity-25"
+                className="w-full h-full object-cover opacity-30"
                 onError={(e) => {
                   e.target.style.display = 'none'
                 }}
               />
               {/* Lighter overlay for better text readability while keeping image visible */}
-              <div className="absolute inset-0 bg-error/85 dark:bg-error/90" />
+              <div className="absolute inset-0 bg-error/85" />
             </div>
             
             {/* Shine effect on hover */}
@@ -240,7 +240,7 @@ export default function Home() {
                       repeat: Infinity,
                       ease: "easeInOut"
                     }}
-                    className="absolute inset-0 bg-white/20 rounded-full blur-sm"
+                    className="absolute inset-0 bg-accent/20 rounded-full blur-sm"
                   />
                   <motion.div
                     animate={sosPressed ? {
@@ -267,18 +267,18 @@ export default function Home() {
                       duration: 0.5,
                       repeat: sosPressed ? Infinity : 0,
                     }}
-                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-heading font-extrabold mb-1 drop-shadow-lg tracking-tight break-words text-white"
+                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-heading font-extrabold mb-1 drop-shadow-lg tracking-tight break-words text-text-main"
                     style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
                   >
                     EMERGENCY SOS
                   </motion.h2>
                   
-                  <p className="text-xs sm:text-sm md:text-base font-body font-medium text-white break-words drop-shadow-md">
+                  <p className="text-xs sm:text-sm md:text-base font-body font-medium text-text-main break-words drop-shadow-md">
                     {sosPressed ? 'Sending alert...' : 'Tap for immediate help'}
                   </p>
                   
                   {/* Urgency indicator - compact */}
-                  <div className="mt-1 sm:mt-2 flex items-center space-x-1.5 text-[10px] sm:text-xs font-body font-semibold text-white drop-shadow-sm">
+                  <div className="mt-1 sm:mt-2 flex items-center space-x-1.5 text-[10px] sm:text-xs font-body font-semibold text-text-main drop-shadow-sm">
                     <motion.div
                       animate={{
                         opacity: [1, 0.5, 1],
@@ -287,7 +287,7 @@ export default function Home() {
                         duration: 1,
                         repeat: Infinity,
                       }}
-                      className="w-1.5 h-1.5 bg-white rounded-full shadow-sm"
+                      className="w-1.5 h-1.5 bg-accent rounded-full shadow-sm"
                     />
                     <span>24/7 Available</span>
                   </div>
@@ -303,7 +303,7 @@ export default function Home() {
                   <img 
                     src="/StockCake-someone_pressing_an_emergency_button_Images_and_Photos_1763940162.jpg"
                     alt="Emergency assistance"
-                    className="w-full h-full rounded-xl shadow-lg border-2 border-white/40 dark:border-white/30 object-cover"
+                    className="w-full h-full rounded-xl shadow-lg border-2 border-accent/30 object-cover"
                     onError={(e) => {
                       e.target.style.display = 'none'
                     }}
@@ -318,8 +318,8 @@ export default function Home() {
 
       {/* Stats Cards */}
       <div className="w-full">
-        <h2 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-3 sm:mb-4 md:mb-5 flex items-center">
-          <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-primary dark:text-primary-light" />
+        <h2 className="text-3xl font-heading font-bold text-text-main mb-3 sm:mb-4 md:mb-5 flex items-center">
+          <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-accent" />
           Your Progress
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 w-full max-w-full">
@@ -333,31 +333,31 @@ export default function Home() {
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.03, y: -4 }}
                 onClick={() => stat.href && navigate(stat.href)}
-                className={`bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 ${
+                className={`bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 ${
                   stat.href ? 'cursor-pointer hover:border-primary' : ''
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10">
-                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-accent" />
                   </div>
                   {stat.href && (
                     <motion.div
                       whileHover={{ x: 5 }}
-                      className="text-light dark:text-white/60 text-xl"
+                      className="text-text-secondary text-xl"
                     >
                       →
                     </motion.div>
                   )}
                 </div>
-                <h3 className="text-base font-body font-medium text-text-secondary dark:text-white/80 mb-2">
+                <h3 className="text-base font-body font-medium text-text-secondary mb-2">
                   {stat.label}
                 </h3>
-                <p className="text-2xl sm:text-3xl font-heading font-bold text-text-main dark:text-white mb-1">
+                <p className="text-2xl sm:text-3xl font-heading font-bold text-text-main mb-1">
                   {stat.value}
                 </p>
                 {stat.subtitle && (
-                  <p className="text-sm font-body text-text-secondary dark:text-white/70 mt-1">
+                  <p className="text-sm font-body text-text-secondary text-text-secondary mt-1">
                     {stat.subtitle}
                   </p>
                 )}
@@ -369,8 +369,8 @@ export default function Home() {
 
       {/* Quick Actions */}
       <div className="w-full">
-        <h2 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-3 sm:mb-4 md:mb-5 flex items-center">
-          <Clock className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-accent dark:text-accent" />
+        <h2 className="text-3xl font-heading font-bold text-text-main mb-3 sm:mb-4 md:mb-5 flex items-center">
+          <Clock className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-accent" />
           Quick Access
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full max-w-full">
@@ -383,7 +383,7 @@ export default function Home() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(action.href)}
-              className="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-xl bg-primary text-white font-heading font-semibold shadow-md hover:bg-primary-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent"
+              className="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-xl bg-accent text-text-main font-heading font-semibold shadow-md hover:bg-accent-dark hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent"
             >
               <action.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 mb-2 mx-auto" />
               <p className="text-xs sm:text-sm font-body font-semibold mb-1 break-words">{action.name}</p>
@@ -400,15 +400,15 @@ export default function Home() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.4 }}
-          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+          className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
       >
         <div className="flex items-start space-x-4">
-            <div className="flex-shrink-0 p-3 rounded-xl bg-accent/20 dark:bg-accent/30">
-              <Heart className="w-6 h-6 sm:w-7 sm:h-7 text-accent dark:text-accent" />
+            <div className="flex-shrink-0 p-3 rounded-xl bg-accent/20">
+              <Heart className="w-6 h-6 sm:w-7 sm:h-7 text-accent" />
           </div>
           <div>
-              <h3 className="font-heading font-semibold text-lg sm:text-xl text-text-main dark:text-white mb-2">Remember</h3>
-              <p className="text-lg font-body text-text-secondary leading-relaxed dark:text-white/80">
+              <h3 className="font-heading font-semibold text-lg sm:text-xl text-text-main mb-2">Remember</h3>
+              <p className="text-lg font-body text-text-secondary leading-relaxed text-text-secondary">
               You can exit quickly using the quick exit button. Your privacy and safety are our top priorities.
             </p>
           </div>
@@ -420,11 +420,11 @@ export default function Home() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5 }}
-          className="bg-white/90 dark:bg-background-dark border border-primary-light rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
+          className="bg-background/90 border border-accent/20 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
         >
-          <h3 className="text-3xl font-heading font-bold text-text-main dark:text-white mb-4 sm:mb-6 flex items-center">
-            <div className="p-2 rounded-lg bg-primary/10 dark:bg-primary/20 mr-3">
-              <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-primary dark:text-primary-light" />
+          <h3 className="text-3xl font-heading font-bold text-text-main mb-4 sm:mb-6 flex items-center">
+            <div className="p-2 rounded-lg bg-accent/10 mr-3">
+              <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
             </div>
           Emergency Contacts
         </h3>
@@ -433,20 +433,20 @@ export default function Home() {
               href="tel:1-800-799-7233"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="flex justify-between items-center p-4 bg-background-light dark:bg-background-dark border border-primary-light rounded-xl hover:shadow-md transition-all duration-300 group"
+              className="flex justify-between items-center p-4 bg-background border border-accent/20 rounded-xl hover:shadow-md transition-all duration-300 group"
             >
-              <span className="text-lg font-body text-text-main dark:text-white">National Helpline</span>
-              <span className="text-primary dark:text-primary-light font-body font-semibold group-hover:underline">
+              <span className="text-lg font-body text-text-main">National Helpline</span>
+              <span className="text-accent font-body font-semibold group-hover:underline">
               1-800-799-7233
               </span>
             </motion.a>
             <motion.div
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="flex justify-between items-center p-4 bg-background-light dark:bg-background-dark border border-primary-light rounded-xl hover:shadow-md transition-all duration-300"
+              className="flex justify-between items-center p-4 bg-background border border-accent/20 rounded-xl hover:shadow-md transition-all duration-300"
             >
-              <span className="text-lg font-body text-text-main dark:text-white">Crisis Text Line</span>
-              <span className="text-primary dark:text-primary-light font-body font-semibold">Text HOME to 741741</span>
+              <span className="text-lg font-body text-text-main">Crisis Text Line</span>
+              <span className="text-accent font-body font-semibold">Text HOME to 741741</span>
             </motion.div>
           </div>
         </motion.div>
