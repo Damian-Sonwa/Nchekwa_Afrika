@@ -48,7 +48,7 @@ async function checkUserAuth() {
         console.log(`   Has Email Hash: ${user.emailHash ? 'Yes' : 'No'}`);
         console.log(`   Has Password Hash: ${user.passwordHash ? 'Yes (' + user.passwordHash.length + ' chars)' : 'No'}`);
         console.log(`   Has Google ID: ${user.googleId ? 'Yes' : 'No'}`);
-        console.log(`   Has Apple ID: ${user.appleId ? 'Yes' : 'No'}`);
+        console.log(`   Has Fingerprint ID: ${user.fingerprintId ? 'Yes' : 'No'}`);
         console.log(`   Created: ${user.createdAt}`);
         console.log(`   Last Active: ${user.lastActive}`);
       }
@@ -66,7 +66,7 @@ async function checkUserAuth() {
         console.log(`   Email Hash: ${user.emailHash?.substring(0, 16)}...`);
         console.log(`   Has Password: ${user.passwordHash ? 'Yes' : 'No'}`);
         console.log(`   Has Google ID: ${user.googleId ? 'Yes' : 'No'}`);
-        console.log(`   Has Apple ID: ${user.appleId ? 'Yes' : 'No'}`);
+        console.log(`   Has Fingerprint ID: ${user.fingerprintId ? 'Yes' : 'No'}`);
         console.log(`   Created: ${user.createdAt}`);
         console.log('');
       });

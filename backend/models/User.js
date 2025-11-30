@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
     required: false,
     index: true
   },
-  appleId: {
+  fingerprintId: {
     type: String,
     required: false,
     index: true

@@ -39,12 +39,12 @@ This guide will help you set up Supabase OAuth, email confirmation, and password
 5. Paste Client ID and Client Secret in Supabase
 6. Click **Save**
 
-### Apple OAuth Setup (Optional)
+### Fingerprint Authentication Setup (Optional)
 
 1. Go to **Authentication** → **Providers** in Supabase dashboard
-2. Click on **Apple**
-3. Enable Apple provider
-4. Follow Apple's OAuth setup instructions
+2. Click on **Apple** (used as placeholder for Fingerprint authentication)
+3. Enable Apple provider (used as placeholder for Fingerprint authentication)
+4. Follow Fingerprint authentication setup instructions
 5. Add redirect URI: `https://your-project-ref.supabase.co/auth/v1/callback`
 
 ## 📧 Step 4: Configure Email Settings
@@ -161,7 +161,7 @@ In Supabase dashboard → **Authentication** → **URL Configuration**:
 ### OAuth Not Working
 
 - ✅ Verify OAuth provider is enabled in Supabase dashboard
-- ✅ Check that redirect URI is added to both Supabase and OAuth provider (Google/Apple)
+- ✅ Check that redirect URI is added to both Supabase and OAuth provider (Google/Fingerprint)
 - ✅ Ensure redirect URI matches exactly: `https://your-project-ref.supabase.co/auth/v1/callback`
 
 ### Password Reset Not Working

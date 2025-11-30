@@ -43,13 +43,13 @@ async function fixUsersWithoutPasswords() {
         console.log(`   Anonymous ID: ${user.anonymousId}`);
         console.log(`   Email Hash: ${user.emailHash?.substring(0, 16)}...`);
         console.log(`   Has Google ID: ${user.googleId ? 'Yes' : 'No'}`);
-        console.log(`   Has Apple ID: ${user.appleId ? 'Yes' : 'No'}`);
+        console.log(`   Has Fingerprint ID: ${user.fingerprintId ? 'Yes' : 'No'}`);
         console.log(`   Created: ${user.createdAt}`);
       });
 
       console.log('\n💡 These users can:');
       console.log('   - Register again with the same email to set a password');
-      console.log('   - Use social login if they have googleId or appleId');
+      console.log('   - Use social login if they have googleId or fingerprintId');
       console.log('   - Or you can delete these users if they are test accounts');
     } else {
       console.log('\n✅ All users with email have passwords set!');

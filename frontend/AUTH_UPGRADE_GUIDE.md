@@ -5,14 +5,14 @@
 ### 1. **Backend Authentication Endpoints**
 - ✅ Added `/api/auth/register` - Email/password registration
 - ✅ Added `/api/auth/login` - Email/password login
-- ✅ Added `/api/auth/social` - Social login (Google/Apple)
+- ✅ Added `/api/auth/social` - Social login (Google/Fingerprint)
 - ✅ Updated User model to support email/password and social providers
 - ✅ Email is hashed (SHA-256) for privacy - cannot be reversed
 
 ### 2. **Frontend Authentication**
 - ✅ Fixed sign up functionality - now actually calls backend API
 - ✅ Fixed login functionality - validates credentials
-- ✅ Fixed social login - Google and Apple buttons now work
+- ✅ Fixed social login - Google and Fingerprint buttons now work
 - ✅ Proper error handling with trauma-informed messages
 - ✅ Success animations before redirect
 
@@ -125,7 +125,7 @@ To use a Lottie animation instead of the SVG:
 8. Redirects to `/app`
 
 ### Social Login
-1. User clicks Google/Apple button
+1. User clicks Google/Fingerprint button
 2. Frontend calls `/api/auth/social`
 3. Backend creates/finds user by provider ID
 4. Returns anonymous ID
@@ -134,7 +134,7 @@ To use a Lottie animation instead of the SVG:
 
 **Note:** Currently uses mock provider IDs. For production:
 - Integrate Google Sign-In SDK
-- Integrate Apple Sign-In SDK
+- Integrate Fingerprint Authentication SDK
 - Pass real provider IDs to backend
 
 ## 🎨 Customization
@@ -172,7 +172,7 @@ Adjust Framer Motion variants:
    - Should redirect to `/app`
 
 3. **Test Social Login:**
-   - Click Google or Apple button
+   - Click Google or Fingerprint button
    - Should create account and redirect
    - (Currently uses mock IDs)
 
@@ -194,7 +194,7 @@ Adjust Framer Motion variants:
 
 - [ ] Replace hero illustration with final design
 - [ ] Integrate real Google Sign-In SDK
-- [ ] Integrate real Apple Sign-In SDK
+- [ ] Integrate real Fingerprint Authentication SDK
 - [ ] Add email verification (optional)
 - [ ] Add password reset flow
 - [ ] Add rate limiting for auth endpoints

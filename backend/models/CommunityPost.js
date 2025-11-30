@@ -100,3 +100,4 @@ communityPostSchema.index({ likes: -1 }); // Sort by popularity
 module.exports = mongoose.model('CommunityPost', communityPostSchema);
 
 
+

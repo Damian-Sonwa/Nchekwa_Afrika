@@ -48,8 +48,8 @@ router.get('/', (req, res) => {
       social: {
         method: 'POST',
         path: '/api/auth/social',
-        description: 'Social login (Google/Apple)',
-        body: { provider: 'google|apple', providerId: 'string', email: 'string (optional)' }
+        description: 'Social login (Google/Fingerprint)',
+        body: { provider: 'google|fingerprint', providerId: 'string', email: 'string (optional)' }
       },
       forgotPassword: {
         method: 'POST',
@@ -267,7 +267,7 @@ router.post('/social', async (req, res) => {
       return res.status(400).json({ error: 'Provider and provider ID are required' });
     }
 
-    const providerField = provider === 'google' ? 'googleId' : 'appleId';
+    const providerField = provider === 'google' ? 'googleId' : 'fingerprintId';
     
     // Find existing user by provider ID
     let user = await User.findOne({ [providerField]: providerId });
@@ -330,7 +330,7 @@ router.post('/forgot-password', async (req, res) => {
 
     // Check if user has a password set
     const hasPassword = !!user.passwordHash;
-    const hasSocialLogin = !!(user.googleId || user.appleId);
+    const hasSocialLogin = !!(user.googleId || user.fingerprintId);
     
     if (!hasPassword && hasSocialLogin) {
       console.log('ℹ️  User signed up with social login, allowing password creation via reset flow');
@@ -697,7 +697,7 @@ router.post('/reset-password', async (req, res) => {
 
     // Check if user had a password before (for logging)
     const hadPassword = !!user.passwordHash;
-    const hasSocialLogin = !!(user.googleId || user.appleId);
+    const hasSocialLogin = !!(user.googleId || user.fingerprintId);
     
     if (!hadPassword) {
       console.log('ℹ️  User is setting a password for the first time');
@@ -730,7 +730,7 @@ router.post('/reset-password', async (req, res) => {
     if (!hadPassword) {
       message = 'Password has been set successfully. You can now log in with your email and password.';
       if (hasSocialLogin) {
-        message = 'Password has been set successfully. You can now log in with your email and password, or continue using Google/Apple sign-in.';
+        message = 'Password has been set successfully. You can now log in with your email and password, or continue using Google/Fingerprint authentication.';
       }
     }
 

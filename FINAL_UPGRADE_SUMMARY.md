@@ -168,7 +168,7 @@ userDetails: {
 ### Existing Endpoints (Fixed)
 - `POST /api/auth/register` - Register with email/password (fixed error handling)
 - `POST /api/auth/login` - Login with email/password (fixed error handling)
-- `POST /api/auth/social` - Social login (Google/Apple)
+- `POST /api/auth/social` - Social login (Google/Fingerprint)
 
 ## Testing Checklist
 

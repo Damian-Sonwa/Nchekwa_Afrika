@@ -245,7 +245,7 @@
 					}
 				},
 				{
-					"name": "Social Login (Google/Apple)",
+					"name": "Social Login (Google/Fingerprint)",
 					"request": {
 						"method": "POST",
 						"header": [

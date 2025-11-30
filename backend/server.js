@@ -140,8 +140,8 @@ app.get('/api', (req, res) => {
           social: {
             method: 'POST',
             path: '/api/auth/social',
-            description: 'Social login (Google/Apple)',
-            body: { provider: 'google|apple', providerId: 'string', email: 'string (optional)' }
+            description: 'Social login (Google/Fingerprint)',
+            body: { provider: 'google|fingerprint', providerId: 'string', email: 'string (optional)' }
           },
           forgotPassword: {
             method: 'POST',

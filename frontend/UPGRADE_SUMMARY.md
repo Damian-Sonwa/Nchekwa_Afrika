@@ -23,7 +23,7 @@
 - ✅ Clark-style authentication design
 - ✅ Email/password forms
 - ✅ Magic link option
-- ✅ Social login placeholders (Google, Apple)
+- ✅ Social login placeholders (Google, Fingerprint)
 - ✅ Smooth input focus transitions
 - ✅ Button feedback animations
 - ✅ Trauma-informed microcopy
